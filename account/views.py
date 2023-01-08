@@ -6,9 +6,9 @@ from membre.models import Video
 
 
 def index(request):
-    mesvideos = Video.objects.all()
+    mes_videos = Video.objects.all()
     context = {
-        'mesvideos': mesvideos
+        'mes_videos': mes_videos,
     }
     return render(request, 'index.html', context)
 
