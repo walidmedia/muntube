@@ -134,12 +134,12 @@ def pay_success(request):
 def pay_cancel(request):
 	return render(request, 'membre/cancel.html')
 
-def video(request,id):
-	video = vdeo.objects.filter(id=id)
+def video(request):
+	"""video = vdeo.objects.filter(id=id)
 	all_video = vdeo.objects.all()
 	context={
 		'video' : video,
 		'all_video' : all_video
-	}
-	return render(request, 'video.html',context)
+	}"""
+	return render(request, 'video.html')
 
