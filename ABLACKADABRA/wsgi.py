@@ -12,12 +12,12 @@ import sys
 
 from django.core.wsgi import get_wsgi_application
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+"""sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
                                                 'ABLACKADABRA')))
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ABLACKADABRA.settings')
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
+"""
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ABLACKADABRA.settings')
 
-"""os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ABLACKADABRA.settings')
-
-application = get_wsgi_application()"""
+application = get_wsgi_application()
