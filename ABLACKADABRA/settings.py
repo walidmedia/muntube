@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from distutils.command.config import config
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,11 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+"""# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-qx1abqq-kod&c7&%@%(y_w99)+tuswbte2a4g6z6^uqiqbotpf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True"""
 
 ALLOWED_HOSTS = ["*"]
 
@@ -139,13 +144,13 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media/")
 STATIC_URL = '/static/'
 """
 STATIC_URL = '/static/'
-STATIC_ROOT=os.path.join(BASE_DIR,"staticfiles")
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # Default primary key field type
