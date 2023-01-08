@@ -7,10 +7,17 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 """
 
-from whitenoise import WhiteNoise
+import os
+import sys
 
-from ABLACKADABRA import wsgi
+from django.core.wsgi import get_wsgi_application
 
-application = wsgi()
-application = WhiteNoise(application, root="/path/to/static/files")
-application.add_files("/path/to/more/static/files", prefix="more-files/")
+"""sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                                'ABLACKADABRA')))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ABLACKADABRA.settings')
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+"""
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ABLACKADABRA.settings')
+
+application = get_wsgi_application()
