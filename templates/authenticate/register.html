@@ -1,0 +1,16 @@
+<!-- Button to open the modal -->
+        <span>
+            {% if msg %}
+                {{ msg | safe }}
+            {% else %}
+                Add your credentials
+            {% endif %}
+</span>
+<div id="id01" class="modal">
+  <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">times;</span>
+  <form method="post" class="modal-content" action="">
+        {% csrf_token %}
+        {{ form }}
+    <input type="submit" value="Submit">
+  </form>
+</div>

@@ -1,0 +1,55 @@
+{% load static %}
+{% include 'base.html' %}
+{% block content %}
+<div class="layout-overlay layout-menu-toggle"></div>
+<!--Container Main start-->
+
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+              <!-- Basic Bootstrap Table -->
+              <div class="card border">
+                <div style="background-color: #fae5d3" class="card-body">
+                    <h1 style="color: #6e4f04"><strong>Bienvenue sur MunTube</strong></h1>
+                </div>
+              </div>
+    <br><br>
+	<div class="row">
+{% for v in mesvideos %}
+		<div class="col-md-6 col-lg-3 col-xl-3 order-0 mb-4">
+			<div href="">
+				<div class="card">
+                    <video class="embed-responsive embed-responsive-16by9" controls="controls" >
+                        <source src="{{ v.vid.url }}" type="video/mp4" />
+                    </video>
+
+					<div class="row">
+                        {% if v.img %}
+						<div class="col-2 mt-3">
+							<img id="img" width="32" src="https://i.imgur.com/hczKIze.jpg" class="rounded-circle">
+						</div>
+                        {% endif %}
+						<div class="col-10 mt-3">
+							<a href="{% url 'video' v.id %}" class="text-dark mb-2" title="{{ v.title }}">{{ v.title }}</a>
+							<p style="color:#606060;">
+								T-Series <i class="fas fa-check-circle"></i><br>
+								70M views 7 months ago
+							</p>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+        {% endfor %}
+	</div>
+</div>
+	<!-- Trending Section -->
+<div class="layout-overlay layout-menu-toggle"></div>
+{% endblock %}
+
+
+{% include 'footer.html' %}

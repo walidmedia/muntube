@@ -1,0 +1,1 @@
+web: gunicorn ABLACKADABRA.wsgi --log-file -

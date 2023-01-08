@@ -1,0 +1,16 @@
+<span>
+    {% if msg %}
+        {{ msg | safe }}
+    {% else %}
+        Add your credentials
+    {% endif %}
+</span>
+{% if request.user.is_authenticated %}
+<form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to logout?</p>
+    <button type="submit">Yes, LogOut</button>
+</form>
+{% else %}
+<p>You're not logged in, would you like to <a href="{% url 'login_view' %}">LogIn</a></p>
+{% endif %}

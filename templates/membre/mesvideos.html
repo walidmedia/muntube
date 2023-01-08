@@ -1,0 +1,48 @@
+{% load static %}
+
+{% block content %}
+{% include 'membre/base.html' %}
+
+<div class="height-100 bg-light">
+
+<!-- main content -->
+<div class="row main_container">
+
+	<!-- Recommended section -->
+<div class="container-fluid">
+{{ size }}
+    <div class="grid_title"><h2>Mes vidéos</h2></div>
+	<div class="row">
+        {% for v in mesvideos %}
+		<div class="col-md-4 p-2">
+			<div href="">
+				<div class="card">
+                    <video class="embed-responsive embed-responsive-16by9" controls="controls" >
+                        <source src="{{ v.vid.url }}" type="video/mp4" />
+                    </video>
+
+					<div class="row">
+                        {% if v.img %}
+						<div class="col-2 mt-3">
+							<img id="img" width="48" src="{{ user.photo }}" class="rounded-circle">
+						</div>
+                        {% endif %}
+						<div class="col-10 mt-3">
+							<p class="text-dark mb-2" title="{{ v.title }}">{{ v.title }}</p>
+							<p style="color:#606060;">
+								T-Series <i class="fas fa-check-circle"></i><br>
+								70M views 7 months ago
+							</p>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+        {% endfor %}
+	</div>
+</div>
+
+</div>
+</div>
+{% endblock %}
