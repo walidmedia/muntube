@@ -22,9 +22,13 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            form.save()
+            email = form.cleaned_data.get('email')
+            raw_password = form.cleaned_data.get('password1')
+            #user = authenticate(email=email, password=raw_password)
+            #Login_process(request, user)
             msg = 'user created'
-            return redirect('signin')
+            return redirect('login')
         else:
             msg= 'form is not valid'
     else:
@@ -39,12 +43,12 @@ def login(request):
     if request.method == "POST":
 
         if form.is_valid():
-            username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
             #   email = form.cleaned_data.get("email")
             #username = request.POST['username']
             #password = request.POST['password']
-            user = authenticate(username=username, password=password)
+            user = authenticate(email=email, password=password)
             if user is not None :
                 Login_process(request, user)
                 return redirect("index")
