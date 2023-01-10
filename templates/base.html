@@ -39,8 +39,8 @@
 </head>
 <style>
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-    color: #6e4f04;
-    background-color: rgb(227, 212, 189) !important;
+    color: #f3efe5;
+    background-color: rgba(0, 0, 0, 0.25) !important;
 }
 
 .app-brand .layout-menu-toggle {
@@ -62,20 +62,87 @@
 .layout-navbar {
     background-color: rgb(231, 220, 212) !important;
 }
+    .sidebarmuntube {
+/* fallback for old browsers */
+background: #533f03;
 
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, #DEA98A, #ba7900);
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #ba7900, #DEA98A)
+}
+
+    .navmuntube {
+/* fallback for old browsers */
+background: #533f03;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, #ba7900, #DEA98A);
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #DEA98A, #ba7900)
+}
+.bg-navbar-theme {
+    color: #000000;
+}
+
+element.style {
+}
+.bx {
+    vertical-align: middle;
+    font-size: 1.15rem;
+    line-height: 1;
+}
+.bx-sm {
+    font-size: 1.55rem !important;
+}
+.bx {
+    font-family: "boxicons" !important;
+    font-weight: normal;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    display: inline-block;
+    text-transform: none;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+user agent stylesheet
+i {
+    font-style: italic;
+}
+.bg-navbar-theme .navbar-nav > .nav-link, .bg-navbar-theme .navbar-nav > .nav-item > .nav-link, .bg-navbar-theme .navbar-nav > .nav > .nav-item > .nav-link {
+    color: #000000;
+}
+.bodyy {
+/* fallback for old browsers */
+background: #533f03;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, #ffffff, #c7c0c0);
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, #c7c0c0, #ffffff)
+}
 </style>
-<body>
+<body class="bodyy">
 
 <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
 <!-- Menu -->
 
-        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <aside id="layout-menu" class="sidebarmuntube overflow-hidden layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo">
             <a href="{% url 'index' %}" class="app-brand-link">
 
               <span class="app-brand-text demo menu-text fw-bolder ms-2">
-                   <img width="180" src="{% static 'images/logo.png' %}">
+                   <img width="180" src="{% static 'images/MunTube.png' %}">
               </span>
             </a>
 
@@ -168,7 +235,7 @@
           <!-- Navbar -->
 
           <nav
-            class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+            class="navmuntube layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
             id="layout-navbar"
           >
             <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -203,7 +270,7 @@
                       <img src="{% static 'images/claude.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
+                  <ul class="navmuntube dropdown-menu dropdown-menu-end">
                     <li>
                       <a class="dropdown-item" href="#">
                         <div class="d-flex">
@@ -213,7 +280,7 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <span class="fw-semibold d-block">John Doe</span>
+                            <span class="fw-semibold d-block text-white">{{ user.username }}</span>
                             <small class="text-muted">pseudonyme</small>
                           </div>
                         </div>
@@ -225,20 +292,20 @@
                     <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">Mon Profile</span>
+                        <span class="align-middle text-white">Mon Profile</span>
                       </a>
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Pramètres</span>
+                        <span class="align-middle text-white">Pramètres</span>
                       </a>
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">
                         <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                          <span class="flex-grow-1 align-middle">Paiement</span>
+                          <i class="flex-shrink-0 bx bx-credit-card white me-2"></i>
+                          <span class="flex-grow-1 align-middle text-white">Paiement</span>
                           <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">1</span>
                         </span>
                       </a>
@@ -249,7 +316,7 @@
                     <li>
                       <a class="dropdown-item" href="{% url 'logout_view' %}">
                         <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle">Log Out</span>
+                        <span class="align-middle text-white">Log Out</span>
                       </a>
                     </li>
                   </ul>
@@ -267,17 +334,17 @@
                       <img src="{% static 'images/profile1.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
-                  <ul class="dropdown-menu dropdown-menu-end">
+                  <ul class="navmuntube dropdown-menu dropdown-menu-end">
                     <li>
                       <a class="dropdown-item" href="#">
-                        <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Parametres</span>
+                        <i style="color: white"  class="bx bx-cog me-2"></i>
+                        <span class="align-middle text-white">Parametres</span>
                       </a>
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">
-                        <i class="bx bx-help-circle me-2"></i>
-                        <span class="align-middle">Aide</span>
+                        <i style="color: white"  class="bx bx-help-circle me-2"></i>
+                        <span class="align-middle text-white">Aide</span>
                       </a>
                     </li>
 
@@ -286,8 +353,8 @@
                     </li>
                     <li>
                       <a class="dropdown-item" href="{% url 'login' %}">
-                        <i class="bx bx-log-in me-2"></i>
-                        <span class="align-middle">Se connecter</span>
+                        <i style="color: white" class="bx bx-log-in me-2"></i>
+                        <span class="align-middle text-white">Se connecter</span>
                       </a>
                     </li>
                   </ul>
