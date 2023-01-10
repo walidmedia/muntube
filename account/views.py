@@ -25,10 +25,10 @@ def register(request):
             form.save()
             email = form.cleaned_data.get('email')
             raw_password = form.cleaned_data.get('password1')
-            #user = authenticate(email=email, password=raw_password)
-            #Login_process(request, user)
+            user = authenticate(email=email, password=raw_password)
+            login(request, user)
             msg = 'user created'
-            return redirect('login')
+            return redirect('login',msg)
         else:
             msg= 'form is not valid'
     else:
@@ -43,9 +43,9 @@ def login(request):
     if request.method == "POST":
 
         if form.is_valid():
-            email = form.cleaned_data.get("email")
+            #username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
-            #   email = form.cleaned_data.get("email")
+            email = form.cleaned_data.get("email")
             #username = request.POST['username']
             #password = request.POST['password']
             user = authenticate(email=email, password=password)
