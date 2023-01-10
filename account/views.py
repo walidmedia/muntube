@@ -47,7 +47,7 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user is not None :
                 Login_process(request, user)
-                return redirect("mesvideos")
+                return redirect("index")
             else:
                 msg = 'Invalid credentials'
         else:

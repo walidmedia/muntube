@@ -17,6 +17,6 @@ urlpatterns = [
         path('checkout_session/<int:plan_id>',checkout_session,name='checkout_session'),
         path('pay_success', pay_success, name='pay_success'),
         path('pay_cancel', pay_cancel, name='pay_cancel'),
-        path('video/', video, name='video'),
+        path('video/<int:id>', video, name='video'),
 
 ]

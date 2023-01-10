@@ -40,8 +40,9 @@
 <style>
 .bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
     color: #6e4f04;
-    background-color: rgba(105, 108, 255, 0.16) !important;
+    background-color: rgb(227, 212, 189) !important;
 }
+
 .app-brand .layout-menu-toggle {
     background-color: #6e4f04;
     border: 7px solid #f5f5f9;
@@ -51,6 +52,15 @@
 }
 .bg-menu-theme .menu-link, .bg-menu-theme .menu-horizontal-prev, .bg-menu-theme .menu-horizontal-next {
     color: #000000;
+}
+
+
+.bg-menu-theme {
+    background-color: #efe8e2 !important;
+    color: #3f2002;
+}
+.layout-navbar {
+    background-color: rgb(231, 220, 212) !important;
 }
 
 </style>
@@ -81,54 +91,71 @@
             <li class="menu-item active">
               <a href="{% url 'index' %}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics">Accueil</div>
+                <div data-i18n="Analytics"><strong>Accueil</strong></div>
               </a>
             </li>
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-book"></i>
-                <div data-i18n="Analytics">Bibliothèque</div>
+                <div data-i18n="Analytics"><strong>Bibliothèque</strong></div>
                   <span class="badge rounded-pill bg-label-info">bientôt</span>
               </a>
             </li>
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-history"></i>
-                <div data-i18n="Analytics">Historique</div>
+                <div data-i18n="Analytics"><strong>Historique</strong></div>
                   <span class="badge rounded-pill bg-label-info">bientôt</span>
               </a>
             </li>
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-like"></i>
-                <div data-i18n="Analytics">Favoris</div>
+                <div data-i18n="Analytics"><strong>Favoris</strong></div>
                   <span class="badge rounded-pill bg-label-info">bientôt</span>
               </a>
+            </li>
+              <li>
+              <div class="dropdown-divider"></div>
             </li>
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-radio"></i>
-                <div data-i18n="Analytics">Chaîne</div>
+                <div data-i18n="Analytics"><strong>Chaîne</strong></div>
                   <span class="badge rounded-pill bg-label-info">bientôt</span>
               </a>
             </li>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Outils</span>
+            <li>
+              <div class="dropdown-divider"></div>
             </li>
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bxs-devices"></i>
-                <div data-i18n="Analytics">Paramètres</div>
+                <div data-i18n="Analytics"><strong>Paramètres</strong></div>
                   <span class="badge rounded-pill bg-label-info">bientôt</span>
               </a>
             </li>
-              <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Termes et conditions</span>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-bell"></i>
+                <div data-i18n="Analytics"><strong>Notifications</strong></div>
+                  <span class="badge rounded-pill bg-label-info">bientôt</span>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-link">
+                <i class="menu-icon tf-icons bx bxs-help-circle"></i>
+                <div data-i18n="Analytics"><strong>Aide</strong></div>
+                  <span class="badge rounded-pill bg-label-info">bientôt</span>
+              </a>
+            </li>
+             <li>
+              <div class="dropdown-divider"></div>
             </li>
             <li class="menu-item">
               <a href="#" class="menu-link">
                 <i class="menu-icon tf-icons bx bxs-traffic-cone"></i>
-                <div data-i18n="Analytics">Termes et conditions</div>
+                  <div data-i18n="Analytics"><strong>Termes et conditions</strong></div>
               </a>
             </li>
 
@@ -156,26 +183,24 @@
                 <div class="nav-item d-flex align-items-center">
                   <i class="bx bx-search fs-4 lh-0"></i>
                   <input
+                          style="background-color: #fcfbfb !important;"
                     type="text"
                     class="form-control border-0 shadow-none"
-                    placeholder="Search..."
-                    aria-label="Search..."
+                    placeholder="Rechercher..."
+                    aria-label="Rechercher..."
                   />
                 </div>
               </div>
               <!-- /Search -->
-
+            {% if request.user.is_authenticated %}
               <ul class="navbar-nav flex-row align-items-center ms-auto">
                 <!-- Place this tag where you want the button to render. -->
-                <li class="nav-item lh-1 me-3">
-                  <a href="{% url 'login' %}" type="button" class="btn rounded-pill btn-outline-warning"
-                           style="background: #fff6e0; color: #6e4f04">SeConnecter</a>
-                </li>
+
                 <!-- User -->
-                <!--<li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
                   <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                      <img src="{% static 'assets/img/avatars/1.png' %}" alt class="w-px-40 h-auto rounded-circle" />
+                      <img src="{% static 'images/claude.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
                     </div>
                   </a>
                   <ul class="dropdown-menu dropdown-menu-end">
@@ -184,12 +209,12 @@
                         <div class="d-flex">
                           <div class="flex-shrink-0 me-3">
                             <div class="avatar avatar-online">
-                              <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                              <img src="{% static 'images/claude.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
                             </div>
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block">John Doe</span>
-                            <small class="text-muted">Admin</small>
+                            <small class="text-muted">pseudonyme</small>
                           </div>
                         </div>
                       </a>
@@ -200,21 +225,21 @@
                     <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-user me-2"></i>
-                        <span class="align-middle">My Profile</span>
+                        <span class="align-middle">Mon Profile</span>
                       </a>
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">
                         <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle">Settings</span>
+                        <span class="align-middle">Pramètres</span>
                       </a>
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">
                         <span class="d-flex align-items-center align-middle">
                           <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                          <span class="flex-grow-1 align-middle">Billing</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+                          <span class="flex-grow-1 align-middle">Paiement</span>
+                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">1</span>
                         </span>
                       </a>
                     </li>
@@ -228,9 +253,48 @@
                       </a>
                     </li>
                   </ul>
-                </li>-->
+                </li>
                 <!--/ User -->
               </ul>
+            {% else %}
+                <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <!-- Place this tag where you want the button to render. -->
+
+                <!-- User -->
+                <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                    <div class="avatar avatar-away">
+                      <img src="{% static 'images/profile1.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-cog me-2"></i>
+                        <span class="align-middle">Parametres</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <i class="bx bx-help-circle me-2"></i>
+                        <span class="align-middle">Aide</span>
+                      </a>
+                    </li>
+
+                    <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="{% url 'login' %}">
+                        <i class="bx bx-log-in me-2"></i>
+                        <span class="align-middle">Se connecter</span>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <!--/ User -->
+              </ul>
+            {% endif %}
             </div>
           </nav>
 

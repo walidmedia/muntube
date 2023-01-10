@@ -1,183 +1,41 @@
 {% load static %}
-<div class="height-100 bg-light">
+<style>
 
-<!-- main content -->
-<div class="row main_container">
+</style>
+{% block content %}
+<body>
+<!--Container Main start-->
 
-	<!-- Recommended section -->
-<div class="container-fluid">
-    <div class="grid_title"><h2>Mes vidéos</h2></div>
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+              <!-- Basic Bootstrap Table
+              <div class="card border">
+                <div style="background-color: #fae5d3" class="card-body">
+                    <h1 style="color: #6e4f04"><strong>Bienvenue sur MunTube</strong></h1>
+                </div>
+              </div>-->
+
 	<div class="row">
-		<div class="col-md-4 col-sx-10 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Un Modèle Économique Profitable À Tous</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
+{% for v in mesvideos %}
+		<div class="col-md-6 col-lg-3 col-xl-3 order-0 mb-4">
+			<div href="{% url 'video' v.id %}">
+				<div style="background-color: rgba(255,248,233,0); " class="card">
+                    <video class="card embed-responsive embed-responsive-16by9" controls="controls" >
+                        <source src="{{ v.vid.url }}" type="video/mp4" />
+                    </video>
 
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
 					<div class="row">
+                        {% if v.img %}
 						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
+							<img id="img" width="40" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
 						</div>
+                        {% endif %}
 						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-        <div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-        <div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-        <div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir</p>
-							<p style="color:#606060;">
-								T-Series <i class="fas fa-check-circle"></i><br>
-								70M views 7 months ago
-							</p>
-						</div>
-
-					</div>
-				</div>
-			</a>
-		</div>
-		<div class="col-md-4 p-2">
-			<a href="">
-				<div class="card">
-					<img src="{% static 'images/ABLACKADABRA.png' %}" alt="image" height="174" />
-					<div class="row">
-						<div class="col-2 mt-3">
-							<img id="img" width="48" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
-						</div>
-						<div class="col-10 mt-3">
-							<p class="text-dark mb-2" title="Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale. Plus qu’un simple site Internet, c’est un lieu de participation collaborative dédié à l’émancipation intellectuelle, financière et spirituelle du Peuple Noir">Ablackadabra est un site exclusivement dédié à la Communauté Noire internationale.</p>
+							<a href="{% url 'video' v.id %}" class="text-dark mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
 							<p style="color:#606060;">
 								T-Series <i class="fas fa-check-circle"></i><br>
 								70M views 7 months ago
@@ -185,12 +43,13 @@
 						</div>
 					</div>
 				</div>
-			</a>
+			</div>
 		</div>
-
+        {% endfor %}
 	</div>
 </div>
+	<!-- Trending Section -->
+<div class="layout-overlay layout-menu-toggle"></div>
+{% endblock %}
 
-</div>
-</div>
 

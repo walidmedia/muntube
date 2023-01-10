@@ -38,10 +38,11 @@ def addvideo(request):
 			return render(request,'membre/mesvideos.html',{'error':error})"""
 
 def success_upload(request):
-
+	mesvideos = vdeo.objects.filter(user_id= request.user.id)
 	context={
+		'mesvideos' : mesvideos
 	}
-	return render(request, 'membre/profile.html', context)
+	return render(request, 'membre/accueilmembre.html', context)
 
 def mesvideos(request):
 	mesvideos = vdeo.objects.filter(user_id= request.user.id)
@@ -134,12 +135,12 @@ def pay_success(request):
 def pay_cancel(request):
 	return render(request, 'membre/cancel.html')
 
-def video(request):
-	"""video = vdeo.objects.filter(id=id)
+def video(request,id):
+	video = vdeo.objects.filter(id=id)
 	all_video = vdeo.objects.all()
 	context={
 		'video' : video,
 		'all_video' : all_video
-	}"""
-	return render(request, 'video.html')
+	}
+	return render(request, 'video.html',context)
 
