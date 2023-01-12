@@ -1,27 +1,32 @@
 {% load static %}
 
 {% block content %}
-{% include 'membre/base.html' %}
+{% include 'base.html' %}
 
 <div class="text-center">
     <i class="fa fa-cloud"style="font-size:80px;color: #e0a800"></i>
     <br><br>
-    <h3>Vous disposez de 15 Go d'espace de stockage</h3>
-    <h4 class="text-muted center">
+    <h3 style="color: black">Vous disposez de 15 Go d'espace de stockage</h3>
+    <h4 style="color: black" class="center">
         Votre espace de stockage est partagé entre Google Drive, Gmail et Google Photos.
         Gérez votre espace de stockage en libérant de l'espace ou passez à un forfait Google
         One pour augmenter sa capacité.
     </h4>
-        <a href="#plan" class="btn btn-warning center"><strong>Augmenter l'espace de stockage</strong></a>
+        <a href="#plan" class="btn btn-warning center text-black"><strong>Augmenter l'espace de stockage</strong></a>
     <br><br><br><br>
-    <h2 class="text-muted center">Espace de stockage utilisé : 0,16 Go sur 15 Go</h2>
-    <div class="progress">
-      <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" style="width: 12%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    <h2 class="text-black center">Espace de stockage utilisé : 16 Go sur 500 Go</h2>
+    <div class="row col-12">
+        <div class="col-md-2"></div>
+        <div class="progress col-md-8">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 7%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="col-md-2"></div>
     </div>
+
     <br><br><br><br>
     <br><br>
     <div id="plan">
-        <h3 class="text-muted center">Choisissez le forfait MunTube qui vous convient</h3>
+        <h3 class="text-black center">Choisissez le forfait MunTube qui vous convient</h3>
         <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-icons.css' %}" />
 
 <section class="container my-4">
@@ -34,7 +39,7 @@
     <div class="col">
       <div class="card mb-4 rounded-3 shadow-sm {% if plan.highlight_status %} border-primary {% endif %}">
         {% if plan.highlight_status %}
-        <div class="card-header py-3 text-white bg-primary border-primary">
+        <div class="card-header py-3 text-white bg-warning border-primary">
           {% else %}
         <div class="card-header py-3">
           {% endif %}
@@ -63,27 +68,27 @@
     {% endfor %}
   </div>
 
-  <h2 class="display-6 text-center mb-4">Compare plans</h2>
+  <h2 class="display-6 text-center mb-4 text-black">Compare plans</h2>
   <div class="table-responsive">
     <table class="table text-center">
       <thead>
         <tr>
           <th style="width: 34%;"></th>
           {% for plan in plans %}
-          <th style="width: 22%;">{{plan.title}}</th>
+          <th style="width: 22%;color: black">{{plan.title}}</th>
           {% endfor %}
         </tr>
       </thead>
       <tbody>
         {% for feature in dfeatures %}
         <tr>
-          <th scope="row" class="text-start">{{feature.title}}</th>
+          <th style="color: black" scope="row">{{feature.title}}</th>
           {% for plan in plans %}
           <td>
             {% if plan in feature.subplan.all %}
-                <i class="bi bi-check-lg">1</i>
+                <i class="bx bx-check "></i>
             {% else %}
-                <i class="bi bi-x-lg text-danger">x</i>
+                <i class="bx bx-x text-danger"></i>
             {% endif %}
           </td>
           {% endfor %}
@@ -92,7 +97,6 @@
       </tbody>
     </table>
   </div></div>
-</div>
 </div>
 
 </section>

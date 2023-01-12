@@ -28,8 +28,8 @@
 	color: #828282;
 }
 .btn-outline-secondary:hover{
-	background: #f8f8f8;
-	border:solid 1px #d3d3d3;
+	background: #c98a09;
+	border:solid 1px rgba(70, 40, 9, 0.81);
 	color:#333;
 }
 
@@ -578,6 +578,14 @@ element.style {
     box-shadow: 0 2px 4px 0 rgba(70, 40, 9, 0.81);
 }
 .link-muted { color: #aaa; } .link-muted:hover { color: #8c5a0d; }
+
+.btn-outline-secondary {
+    font-size: 14px;
+    background: #dedede;
+    border: solid 1px #333;
+    color: #fcfdfd;
+}
+
 </style>
 
 {% block content %}
@@ -590,7 +598,7 @@ element.style {
 
 	<!-- main content -->
 	<div class="container-fluid">
-		<div class="row pt-4">
+		<div class="row pt-3">
 
         {% for v in video %}
 			<div class="row col-12 video_box">
@@ -599,7 +607,7 @@ element.style {
                     </video>
 
                 <div class="col-12">
-                  <div class="card mb-4">
+                  <div class="card mb-2">
                     <h5 class="card-header">{{ v.title }}</h5>
                     <div class="card-body">
                       <div class="row gy-3">
@@ -608,6 +616,7 @@ element.style {
                                 <span class="text-secondary fw-semibold">2313 views • Sep 26, 2019</span>
                             </div>
                             <div class="col-md-2">
+
                                 <a href="#" style="color:#606060;" title="I like this">
                                 <i class="bx bx-heart me-2"></i>
                                 <span class="align-middle text-right">2128 J'aime</span>
@@ -631,20 +640,21 @@ element.style {
                             <div class="col-md-1 col-sm-6 pr-0 w-2 ">
                                 <img id="img" width="48" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
                             </div>
-                            <div class="col-md-4 col-sm-6 pl-0">
+                            <div class="col-md-2 col-sm-6 pl-0">
                                 <p style="color:#303030;">
                                     <b>Mockup World</b> <i class="fas fa-check"></i><br>
                                     <span style="color:#606060">364 k abonnés</span>
                                 </p>
                             </div>
-                            <div class="col-md-2 col-sm-12 text-right">
+                            <div class="col-md-3 col-sm-12 text-right">
                                 <button type="button" class="btn rounded-pill btn-outline-secondary">
-                                      <span class="tf-icons bx bx-bell"></span>&nbsp; S'abonner
+                                    <span style="color: black" class="tf-icons bx bx-bell"></span><span style="color: black">S'abonner</span>
                                     </button>
                             </div>
                         </div>
                             <div class="col-md-12">
-                                <p>Presenting the full video "KHAIRIYAT (BONUS TRACK)" from the Bollywood movie "CHHICHHORE". The film is directed by Nitesh Tiwari and produced by Sajid Nadiadwala under the banner of Nadiadwala Grandson Entertainment. The film stars Sushant Singh Rajput, Shraddha Kapoor, Varun Sharma, Prateik Babbar and follows the lives of seven friends from 1992 to present day.<span id="dots">...</span>
+                                <p>Presenting the full video "KHAIRIYAT (BONUS TRACK)" from the Bollywood movie "CHHICHHORE". The film is directed by Nitesh Tiwari and produced by Sajid Nadiadwala under the banner of Nadiadwala Grandson Entertainment. The film stars Sushant Singh Rajput, Shraddha Kapoor, Varun Sharma, Prateik Babbar and follows the lives of seven friends from 1992 to present day.
+                                    <span id="dots">...</span>
                                     <span id="more">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span>
                                 </p>
                             </div>
@@ -682,126 +692,66 @@ element.style {
 
 					<!-- commentaires -->
                     <section style="background-color: #f6dbc5;">
-                      <div class="my-5 ">
+                      <div class="my-2 ">
                         <div class="row d-flex justify-content-center">
                           <div class="col-md-12 col-lg-12">
                             <div class="card text-dark">
-                              <div class="card-body p-4">
-                                <h4 class="mb-0">
-                                    <p style="color: black">9408 commentaires</p>
-                                </h4>
-                                <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
 
-                                <div class="d-flex flex-start">
-                                  <img class="rounded-circle shadow-1-strong me-3"
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
-                                    height="60" />
-                                  <div>
-                                    <h6 class="fw-bold mb-1">Maggie Marsh</h6>
-                                    <div class="d-flex align-items-center mb-3">
-                                      <p class="mb-0">
-                                        March 07, 2021
-                                        <!--<span class="badge bg-primary">Pending</span>-->
-                                      </p>
-                                      <a href="#!" class="link-muted"><i class="bx bx-pencil ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-redo ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
+                                  <div class="card-body p-4">
+                                    <h4 class="mb-0">
+                                        <p style="color: black">{{ v.total_comments }} commentaires</p>
+                                    </h4>
+                                  <form action="{% url 'commenter' v.id %}" method="post">
+                                          {% csrf_token %}
+                                          <div class="d-flex flex-start mb-4">
+                                            <img src="{{ user.photo }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                            <input name="commentaire" type="text" class="form-control" placeholder="Enter your comment...">
+                                            <input name="video" type="hidden" value="{{ v.id }}">
+                                            <input name="sujet" type="hidden" value="{{ c.name }}">
+                                            <input type="submit" value="Commenter" class="btn rounded-pill btn-video">
+                                          </div>
+                                      </form>
+                                      {% for c in comm %}
+                                          {% if c.video.id == v.id %}
+                                    <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
+
+                                    <div class="d-flex flex-start">
+                                      <img class="rounded-circle shadow-1-strong me-3"
+                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
+                                        height="60" />
+                                      <div>
+                                        <h6 class="fw-bold mb-1">{{ user.username }}</h6>
+                                        <div class="d-flex align-items-center mb-3">
+                                          <p class="mb-0">
+                                            {{ c.date_added }}
+                                            <!--<span class="badge bg-primary">Pending</span>-->
+                                          </p>
+
+                                           <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
+                                            <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
+                                        </div>
+                                        <p class="mb-3">
+                                          {{ c.contenue }}
+                                        </p>
+                                          <span id="repinput">
+                                              <div class="d-flex flex-start mb-4">
+                                              <img src="{{ user.photo }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                              <input  class="form-control" placeholder="Votre reponse .." >
+                                              <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
+                                          </div>
+                                          </span>
+
+                                      </div>
                                     </div>
-                                    <p class="mb-0">
-                                      Lorem Ipsum is simply dummy text of the printing and typesetting
-                                      industry. Lorem Ipsum has been the industry's standard dummy text ever
-                                      since the 1500s, when an unknown printer took a galley of type and
-                                      scrambled it.
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <hr class="my-0" />
-
-                              <div class="card-body p-4">
-                                <div class="d-flex flex-start">
-                                  <img class="rounded-circle shadow-1-strong me-3"
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(26).webp" alt="avatar" width="60"
-                                    height="60" />
-                                  <div>
-                                    <h6 class="fw-bold mb-1">Lara Stewart</h6>
                                     <div class="d-flex align-items-center mb-3">
-                                      <p class="mb-0">
-                                        March 15, 2021
-                                        <!--<span class="badge bg-success">Approved</span>-->
-                                      </p>
-                                      <a href="#!" class="link-muted"><i class="bx bx-pencil ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-redo ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
-                                    </div>
-                                    <p class="mb-0">
-                                      Contrary to popular belief, Lorem Ipsum is not simply random text. It
-                                      has roots in a piece of classical Latin literature from 45 BC, making it
-                                      over 2000 years old. Richard McClintock, a Latin professor at
-                                      Hampden-Sydney College in Virginia, looked up one of the more obscure
-                                      Latin words, consectetur, from a Lorem Ipsum passage, and going through
-                                      the cites.
-                                    </p>
+                                          <a href="#!" class="link-muted"><i class="bx bx-like ms-2"></i>232</a>
+                                          <a href="#!" class="link-muted"><i class="bx bx-dislike ms-2"></i>122</a>
+                                        </div>
+                                          {% endif %}
+                                          {% endfor %}
                                   </div>
-                                </div>
-                              </div>
+                                  <hr class="my-0" />
 
-                              <hr class="my-0" style="height: 1px;" />
-
-                              <div class="card-body p-4">
-                                <div class="d-flex flex-start">
-                                  <img class="rounded-circle shadow-1-strong me-3"
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(33).webp" alt="avatar" width="60"
-                                    height="60" />
-                                  <div>
-                                    <h6 class="fw-bold mb-1">Alexa Bennett</h6>
-                                    <div class="d-flex align-items-center mb-3">
-                                      <p class="mb-0">
-                                        March 24, 2021
-                                        <!--<span class="badge bg-danger">Rejected</span>-->
-                                      </p>
-                                      <a href="#!" class="link-muted"><i class="bx bx-pencil ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-redo ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
-                                    </div>
-                                    <p class="mb-0">
-                                      There are many variations of passages of Lorem Ipsum available, but the
-                                      majority have suffered alteration in some form, by injected humour, or
-                                      randomised words which don't look even slightly believable. If you are
-                                      going to use a passage of Lorem Ipsum, you need to be sure.
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-
-                              <hr class="my-0" />
-
-                              <div class="card-body p-4">
-                                <div class="d-flex flex-start">
-                                  <img class="rounded-circle shadow-1-strong me-3"
-                                    src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(24).webp" alt="avatar" width="60"
-                                    height="60" />
-                                  <div>
-                                    <h6 class="fw-bold mb-1">Betty Walker</h6>
-                                    <div class="d-flex align-items-center mb-3">
-                                      <p class="mb-0">
-                                        March 30, 2021
-                                        <!--<span class="badge bg-primary">Pending</span>-->
-                                      </p>
-                                      <a href="#!" class="link-muted"><i class="bx bx-pencil ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-redo ms-2"></i></a>
-                                      <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
-                                    </div>
-                                    <p class="mb-0">
-                                      It uses a dictionary of over 200 Latin words, combined with a handful of
-                                      model sentence structures, to generate Lorem Ipsum which looks
-                                      reasonable. The generated Lorem Ipsum is therefore always free from
-                                      repetition, injected humour, or non-characteristic words etc.
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
                             </div>
                           </div>
                         </div>
@@ -825,7 +775,7 @@ element.style {
 							<div><b>Vasudha Deshpande</b> 3 months ago</div>
 							<div>Mummy ke taane aur arijit ke gaane... Dil ko chhu jaate hain❤😘</div>
 						</div>
-					</div> -->
+					</div>
 				</div>
 			</div>
         {% endfor %}
@@ -880,7 +830,19 @@ function myFunction() {
     moreText.style.display = "inline";
   }
 }
+function myFunctionReply() {
+  var replyinput = document.getElementById("repinput");
+  var btnTextRep = document.getElementById("myBtnRep");
 
+  if (btnTextRep.innerHTML === "Repondre") {
+    replyinput.style.display = "inline";
+    btnTextRep.innerHTML = "Annuler";
+
+  } else {
+    replyinput.style.display = "none";
+    btnTextRep.innerHTML = "Repondre";
+  }
+}
 
 </script>
 {% endblock %}

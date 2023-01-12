@@ -4,8 +4,12 @@ from django.contrib import admin
 from membre import models
 
 
+class CommentAdmin(admin.ModelAdmin):
+	list_display=('video','name','contenue','date_added')
+admin.site.register(models.comment,CommentAdmin)
+
 class VideoAdmin(admin.ModelAdmin):
-	list_display=('user','title','detail','vid','img')
+	list_display=('user','title','detail','vid','miniature','playlists','total_likes','total_comments')
 admin.site.register(models.Video,VideoAdmin)
 
 class GalleryVideoAdmin(admin.ModelAdmin):

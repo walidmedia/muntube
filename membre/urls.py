@@ -3,7 +3,7 @@ from django.urls import path
 
 from ABLACKADABRA import settings
 from .views import checkout, upload, success_upload, addvideo, mesvideos, checkout_session, machaine, stockage, \
-        pay_success, pay_cancel, video
+        pay_success, pay_cancel, video, displaycomment, commenter
 
 urlpatterns = [
         #path('pricing/', pricing, name='pricing'),
@@ -18,5 +18,6 @@ urlpatterns = [
         path('pay_success', pay_success, name='pay_success'),
         path('pay_cancel', pay_cancel, name='pay_cancel'),
         path('video/<int:id>', video, name='video'),
+        path('commenter/<int:id>', commenter, name='commenter'),
 
 ]

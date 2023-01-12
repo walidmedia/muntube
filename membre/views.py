@@ -5,7 +5,7 @@ from django.template.loader import get_template
 
 from ABLACKADABRA import settings
 from account.models import User
-from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription
+from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment
 import stripe
 
 
@@ -22,7 +22,7 @@ def addvideo(request):
 		titre = request.POST.get('titre')
 		description = request.POST.get('description')
 		v = vdeo(user=User.objects.get(id=id),
-				 vid=video, img=image, detail=description, title=titre)
+				 vid=video, miniature=image, detail=description, title=titre)
 		v.save()
 		size = video.size
 		return render(request, 'membre/mesvideos.html', {'size': size})
@@ -136,11 +136,29 @@ def pay_cancel(request):
 	return render(request, 'membre/cancel.html')
 
 def video(request,id):
+	comm = comment.objects.all()
 	video = vdeo.objects.filter(id=id)
 	all_video = vdeo.objects.all()
 	context={
 		'video' : video,
-		'all_video' : all_video
+		'all_video' : all_video,
+		'comm': comm,
 	}
 	return render(request, 'video.html',context)
 
+def displaycomment(request):
+	comm = comment.objects.all()
+	context={
+		'comm' : comm,
+	}
+	return render(request, 'video.html',context)
+
+def commenter(request,id):
+	if request.method == "POST":
+		video = request.POST.get('video')
+		sujet = request.POST.get('sujet')
+		coment = request.POST.get('commentaire')
+		c = comment(video=vdeo.objects.get(id=video),name=sujet,contenue=coment)
+		c.save()
+		id=id
+		return redirect('video',id)

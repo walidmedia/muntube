@@ -25,13 +25,13 @@
 {% for v in mes_videos %}
 		<div class="col-md-6 col-lg-3 col-xl-3 order-0 mb-4">
 			<div class="justify-content-between" href="{% url 'video' v.id %}">
-				<div style="background-color: rgba(255,248,233,0); " class="card card h-100">
-                    <video class="card embed-responsive embed-responsive-16by9" controls="controls" >
+				<div style="background-color: rgba(255,254,253,0.32); " class="card card h-100">
+                    <video width="100%" height="120" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
                         <source src="{{ v.vid.url }}" type="video/mp4" />
                     </video>
 
 					<div class="row">
-                        {% if v.img %}
+                        {% if v.miniature %}
 						<div class="col-2 mt-3">
 							<img id="img" width="40" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
 						</div>
@@ -50,6 +50,7 @@
         {% endfor %}
 	</div>
 </div>
+
 
 	<!-- Trending Section -->
 <div class="layout-overlay layout-menu-toggle"></div>

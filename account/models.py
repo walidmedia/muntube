@@ -59,7 +59,7 @@ class User(AbstractUser):
     gender = models.CharField(max_length=10, default='', choices=user_gender)
     # mobile = models.CharField(max_length=200, null=True)
     photo = models.ImageField(upload_to='users', default="/static/images/profile1.jpg", null=True, blank=True)
-    country = models.CharField(max_length=200, null=True)
+    country = models.CharField(max_length=256, null=True)
     bio = models.TextField(default='', blank=True)
 
     USERNAME_FIELD = 'email'

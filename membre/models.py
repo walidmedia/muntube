@@ -1,26 +1,50 @@
+from datetime import datetime
+
 from django.db import models
 from django.db.models.fields import json
 from django.utils.html import mark_safe
 from account.models import User
-
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
+
+
 class Video(models.Model):
-	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 	title=models.CharField(max_length=150)
 	detail=models.TextField()
 	vid=models.FileField(null=True,blank=True,upload_to='videos')
-	img=models.ImageField(null=True,blank=True,upload_to='imagevid')
+	miniature=models.ImageField(null=True,blank=True,upload_to='imagevid')
+	n_likes=models.ManyToManyField(User, related_name='likes')
+	n_comments=models.ManyToManyField(User, related_name='comments')
+	playlists=models.ForeignKey(User,on_delete=models.CASCADE,related_name='playlist', null=True, blank=True)
+	link=models.TextField(null=True, blank=True)
+	documents=models.FileField(upload_to='filesvideo', null=True, blank=True)
 
 	def __str__(self):
 		return self.title
 
+	def total_likes(self):
+		return self.likes.count()
+
+	def total_comments(self):
+		return self.comments.count()
+
 	def image_tag(self):
-		return mark_safe('<img src="%s" width="80" />' % (self.img.url))
+		return mark_safe('<img src="%s" width="80" />' % (self.miniature.url))
+
+class comment(models.Model):
+	video = models.ForeignKey(Video,related_name='comments',on_delete=models.CASCADE,null=True, blank=True)
+	name = models.CharField(max_length=256)
+	contenue = models.TextField()
+	date_added = models.DateTimeField(default=datetime.today)
+
+	def __str__(self):
+		return '%s - %s' % (self.video.title, self.name)
+
+
 
 # Gallery Images
 class GalleryVideo(models.Model):
