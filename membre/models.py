@@ -17,20 +17,25 @@ class Video(models.Model):
 	detail=models.TextField()
 	vid=models.FileField(null=True,blank=True,upload_to='videos')
 	miniature=models.ImageField(null=True,blank=True,upload_to='imagevid')
-	n_likes=models.ManyToManyField(User, related_name='likes')
-	n_comments=models.ManyToManyField(User, related_name='comments')
+	n_likes=models.ManyToManyField(User, related_name='likes', null=True, blank=True)
+	n_comments=models.ManyToManyField(User, related_name='comments', null=True, blank=True)
 	playlists=models.ForeignKey(User,on_delete=models.CASCADE,related_name='playlist', null=True, blank=True)
+	abonnements=models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
 	link=models.TextField(null=True, blank=True)
 	documents=models.FileField(upload_to='filesvideo', null=True, blank=True)
+	date_created = models.DateTimeField(default=datetime.today)
 
 	def __str__(self):
 		return self.title
 
 	def total_likes(self):
-		return self.likes.count()
+		return self.n_likes.count()
 
 	def total_comments(self):
-		return self.comments.count()
+		return self.n_comments.count()
+
+	def total_abonnés(self):
+		return self.abonnements.count()
 
 	def image_tag(self):
 		return mark_safe('<img src="%s" width="80" />' % (self.miniature.url))

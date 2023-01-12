@@ -613,19 +613,32 @@ element.style {
                       <div class="row gy-3">
                         <div class="row col-md-12">
                             <div class="col-md-6">
-                                <span class="text-secondary fw-semibold">2313 views • Sep 26, 2019</span>
+                                <span class="text-secondary fw-semibold">2313 views • {{ v.date_created.date }}</span>
                             </div>
                             <div class="col-md-2">
+                                {% if user.is_authenticated %}
+                            <form action="{% url 'like_video' v.pk %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                    <i class="bx bx-heart me-2"></i>
+                                </button>
+                                <span class="align-middle text-right">{{ v.total_likes }} J'aime</span>
+                            </form>
+                                {% else %}
+                                <form action="{% url 'login' %}" method="post">
+                                {% csrf_token %}
+                                <button class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                    <i class="bx bx-heart me-2"></i>
+                                </button>
+                                <span class="align-middle text-right">{{ v.total_likes }} J'aime</span>
+                            </form>
+                                {% endif %}
 
-                                <a href="#" style="color:#606060;" title="I like this">
-                                <i class="bx bx-heart me-2"></i>
-                                <span class="align-middle text-right">2128 J'aime</span>
-                                </a>
                             </div>
                             <div class="col-md-2">
                                 <a href="#" style="color:#606060;" title="Share">
-                                <i class="bx bx-share-alt me-2"></i>
-                                <span class="align-middle">Partager</span>
+                                    <i class="bx bx-share-alt me-2"></i>
+                                    <span class="align-middle">Partager</span>
                                 </a>
                             </div>
                             <div class="col-md-2">
@@ -643,13 +656,17 @@ element.style {
                             <div class="col-md-2 col-sm-6 pl-0">
                                 <p style="color:#303030;">
                                     <b>Mockup World</b> <i class="fas fa-check"></i><br>
-                                    <span style="color:#606060">364 k abonnés</span>
+                                    <span style="color:#606060">{{ v.total_abonnés }} abonnés</span>
                                 </p>
                             </div>
                             <div class="col-md-3 col-sm-12 text-right">
-                                <button type="button" class="btn rounded-pill btn-outline-secondary">
-                                    <span style="color: black" class="tf-icons bx bx-bell"></span><span style="color: black">S'abonner</span>
+                                <form action="{% url 'abonni_video' v.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" name="chaine_id" value="{{ v.id }}" class="btn rounded-pill btn-outline-secondary">
+                                        <span style="color: black" class="tf-icons bx bx-bell"></span>
+                                        <span style="color: black">S'abonner</span>
                                     </button>
+                                </form>
                             </div>
                         </div>
                             <div class="col-md-12">
@@ -704,7 +721,7 @@ element.style {
                                   <form action="{% url 'commenter' v.id %}" method="post">
                                           {% csrf_token %}
                                           <div class="d-flex flex-start mb-4">
-                                            <img src="{{ user.photo }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                            <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
                                             <input name="commentaire" type="text" class="form-control" placeholder="Enter your comment...">
                                             <input name="video" type="hidden" value="{{ v.id }}">
                                             <input name="sujet" type="hidden" value="{{ c.name }}">
@@ -717,7 +734,7 @@ element.style {
 
                                     <div class="d-flex flex-start">
                                       <img class="rounded-circle shadow-1-strong me-3"
-                                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(23).webp" alt="avatar" width="60"
+                                        src="{{ user.photo.url }}" alt="avatar" width="60"
                                         height="60" />
                                       <div>
                                         <h6 class="fw-bold mb-1">{{ user.username }}</h6>
@@ -735,7 +752,7 @@ element.style {
                                         </p>
                                           <span id="repinput">
                                               <div class="d-flex flex-start mb-4">
-                                              <img src="{{ user.photo }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                              <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
                                               <input  class="form-control" placeholder="Votre reponse .." >
                                               <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
                                           </div>

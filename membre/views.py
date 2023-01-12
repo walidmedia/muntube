@@ -1,7 +1,9 @@
 from django.contrib import messages
 from django.db.models import Count
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import get_template
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from ABLACKADABRA import settings
 from account.models import User
@@ -162,3 +164,13 @@ def commenter(request,id):
 		c.save()
 		id=id
 		return redirect('video',id)
+
+def like_video(request, pk):
+	video = get_object_or_404(vdeo,id=request.POST.get('video_id'))
+	video.n_likes.add(request.user)
+	return HttpResponseRedirect(reverse('video',args=[str(pk)]))
+
+def abonni_video(request, pk):
+	abonné = get_object_or_404(vdeo,id=request.POST.get('chaine_id'))
+	abonné.abonnements.add(request.user)
+	return HttpResponseRedirect(reverse('video',args=[str(pk)]))
