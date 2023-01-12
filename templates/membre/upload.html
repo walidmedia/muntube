@@ -3,35 +3,55 @@
 	<title>SteamBeam</title>
 {% block content %}
 
-<div class="height-100 bg-light">
+    <div class="mb-5"></div>
+<div class="height-100 ">
 <!-- main content -->
-  <div class="row main_container">
-    <div class="container-fluid">
-        <div class="input-group mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text">Upload</span>
-  </div>
+  <div class="row col-12">
+    <div class="container-fluid col-10">
     <form action="{% url 'addvideo' %}" method="post"enctype="multipart/form-data">
         {% csrf_token %}
-        <div class="custom-file">
         <input name="id" type="hidden" class="custom-file-input" value="{{ user.id }}" id="inputGroupFile01">
-        <input name="video" type="file" class="custom-file-input" id="inputGroupFile01">
-        <label class="custom-file-label" for="inputGroupFile01">Choose video</label><br>
-              <input name="image" type="file" class="custom-file-input" id="inputGroupFile01">
-        <label class="custom-file-label" for="inputGroupFile01">Choose image</label><br>
-              <input name="titre" type="text" class="custom-file-input" id="inputGroupFile01">
-        <label class="custom-file-label" for="inputGroupFile01">title</label><br>
-              <input name="description" type="text" class="custom-file-input" id="inputGroupFile01">
-        <label class="custom-file-label" for="inputGroupFile01">description</label><br>
-      </div>
-        <input class="btn-primary" type="submit">
+        <label for="defaultFormControlInput" class="form-label text-white">Choisir une vidéo</label>
+        <div class="input-group">
+        <input
+          name="video"
+          type="file"
+          class="form-control mb-3"
+          placeholder="Choisir une vidéo"
+          id="defaultFormControlInput"
+          aria-describedby="inputGroupFileAddon04"
+          aria-label="Upload"
+        />
+        </div>
+        <label for="inputGroupFile04" class="form-label text-white">Choisir une miniature</label>
+        <div class="input-group">
+        <input
+          name="image"
+          type="file"
+          class="form-control mb-3"
+          id="inputGroupFile04"
+          aria-describedby="inputGroupFileAddon04"
+          aria-label="Upload"
+        />
+        </div>
+        <div class="input-group">
+            <span class="input-group-text mb-3">Titre de la vidéo</span>
+            <textarea class="form-control mb-3" name="titre" aria-label="With textarea" placeholder="Titre"></textarea>
+          </div>
+         <div class="input-group">
+            <span class="input-group-text mb-3">Description</span>
+            <textarea class="form-control mb-3" name="description" aria-label="With textarea" placeholder="Description"></textarea>
+          </div>
+            <button type="submit" class="btn rounded-pill btn-outline-secondary" style="color: #233446;
+    border-color: #d9dee3;
+    background: #fcfdfd;">Ajouter</button>
     </form>
 
 </div>
     </div>
   </div>
 </div>
- </div>
+
     <script>
     @import "compass/css3";
 
@@ -166,5 +186,5 @@ a {
   }
 }
     </script>
-    {% include 'membre/footer.html' %}
+
 {% endblock %}

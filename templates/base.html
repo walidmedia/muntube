@@ -282,7 +282,7 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                           </div>
                           <div class="flex-grow-1">
                             <span class="fw-semibold d-block text-white">{{ user.username }}</span>
-                            <small class="text-muted">pseudonyme</small>
+                            <!--<small class="text-muted">pseudonyme</small>-->
                           </div>
                         </div>
                       </a>
@@ -295,6 +295,18 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                         <i class="bx bx-user me-2"></i>
                         <span class="align-middle text-white">Mon Profile</span>
                       </a>
+                    </li>
+                      <li>
+                      <div class="dropdown-divider"></div>
+                    </li>
+                      <li>
+                      <a class="dropdown-item" href="{% url 'upload' %}">
+                        <i class="bx bx-video-plus me-2"></i>
+                        <span class="align-middle text-white">Créer une video</span>
+                      </a>
+                    </li>
+                      <li>
+                      <div class="dropdown-divider"></div>
                     </li>
                     <li>
                       <a class="dropdown-item" href="#">
