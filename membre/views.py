@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from ABLACKADABRA import settings
+from ABLACKADABRA.settings import AUTH_USER_MODEL
 from account.models import User
 from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment
 import stripe
@@ -174,3 +175,11 @@ def abonni_video(request, pk):
 	abonné = get_object_or_404(vdeo,id=request.POST.get('chaine_id'))
 	abonné.abonnements.add(request.user)
 	return HttpResponseRedirect(reverse('video',args=[str(pk)]))
+
+def monprofile(request, id):
+	profil = User.objects.all()
+	#video=Video.objects.all().order_by('-id')
+	context = {
+		'profil' : profil,
+	}
+	return render(request, 'membre/account.html',context)

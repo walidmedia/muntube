@@ -291,9 +291,10 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                       <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                      <a class="dropdown-item" href="#">
+                      <a class="dropdown-item" href="{% url 'monprofile' user.id %}">
                         <i class="bx bx-user me-2"></i>
                         <span class="align-middle text-white">Mon Profile</span>
+                        <span class="badge rounded-pill bg-label-primary">Beta</span>
                       </a>
                     </li>
                       <li>
@@ -303,6 +304,7 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                       <a class="dropdown-item" href="{% url 'upload' %}">
                         <i class="bx bx-video-plus me-2"></i>
                         <span class="align-middle text-white">Créer une video</span>
+                        <span class="badge rounded-pill bg-label-primary">Beta</span>
                       </a>
                     </li>
                       <li>
@@ -318,6 +320,7 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                       <a class="dropdown-item" href="{% url 'stockage' %}">
                         <i class="bx bx-cog me-2"></i>
                         <span class="align-middle text-white">Achter un stockage</span>
+                        <span class="badge rounded-pill bg-label-primary">Beta</span>
                       </a>
                     </li>
                     <li>
@@ -336,6 +339,7 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                       <a class="dropdown-item" href="{% url 'logout_view' %}">
                         <i class="bx bx-power-off me-2"></i>
                         <span class="align-middle text-white">Log Out</span>
+                        <span class="badge rounded-pill bg-label-primary">Beta</span>
                       </a>
                     </li>
                   </ul>
@@ -374,6 +378,7 @@ background: linear-gradient(to right, #ba7900, #ffffff)
                       <a class="dropdown-item" href="{% url 'login' %}">
                         <i style="color: white" class="bx bx-log-in me-2"></i>
                         <span class="align-middle text-white">Se connecter</span>
+                        <span class="badge rounded-pill bg-label-primary">Beta</span>
                       </a>
                     </li>
                   </ul>

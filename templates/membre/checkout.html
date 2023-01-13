@@ -1,11 +1,11 @@
 {% load static %}
 
-{% include 'membre/base.html' %}
+{% include 'base.html' %}
 {% block content %}
 <main>
     <!-- Services -->
-    <section class="container my-4">
-        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Checkout</h1>
+    <section class="table-responsive container my-4">
+        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Vérifier</h1>
             <table class="table table-bordered">
                 <thead class="table-warning">
                     <tr>
@@ -71,7 +71,7 @@
                         <td>
                             <form method="post" action="{% url 'checkout_session' plan.id %}">
                                 {% csrf_token %}
-                                <input type="submit" value="Proceed to Payment" class="btn btn-primary" />
+                                <input type="submit" value="Procéder au paiement" class="btn btn-success" />
                             </form>
                         </td>
                     </tr>
