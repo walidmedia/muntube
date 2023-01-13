@@ -92,8 +92,8 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
         'HOST': 'localhost',
         'PORT': '5433',
     }
-}
-"""
+}"""
+
 
 DATABASES = {
     'default': {
