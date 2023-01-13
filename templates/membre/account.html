@@ -16,6 +16,7 @@
                     <!-- Account -->
                     <div class="card-body">
                       <div class="d-flex align-items-start align-items-sm-center gap-4">
+                        {% if v.user.is_superuser %}
                         <img
                           src="{{ user.photo.url }}"
                           alt="user-avatar"
@@ -24,6 +25,16 @@
                           width="100"
                           id="uploadedAvatar"
                         />
+                        {% else %}
+                            <img
+                          src="{{ info.photo.url }}"
+                          alt="user-avatar"
+                          class="d-block rounded"
+                          height="100"
+                          width="100"
+                          id="uploadedAvatar"
+                        />
+                        {% endif %}
                         <div class="button-wrapper">
                           <label for="upload" class="btn btn-secondary me-2 mb-4" tabindex="0">
                             <span class="d-none d-sm-block">Télécharger une nouvelle photo</span>
