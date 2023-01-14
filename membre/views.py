@@ -104,8 +104,8 @@ def checkout_session(request,plan_id):
 	    }],
 	    mode='payment',
 
-	    success_url='https://web-production-f55f.up.railway.app/pay_success?session_id={CHECKOUT_SESSION_ID}',
-	    cancel_url='https://web-production-f55f.up.railway.app/pay_cancel',
+	    success_url='http://web-production-f55f.up.railway.app/pay_success?session_id={CHECKOUT_SESSION_ID}',
+	    cancel_url='http://web-production-f55f.up.railway.app/pay_cancel',
 	    client_reference_id=plan_id
 	)
 	return redirect(session.url, code=303)
