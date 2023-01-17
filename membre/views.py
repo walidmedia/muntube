@@ -27,8 +27,8 @@ def addvideo(request):
 		v = vdeo(user=User.objects.get(id=id),
 				 vid=video, miniature=image, detail=description, title=titre)
 		v.save()
-		size = video.size
-		return render(request, 'index.html', {'size': size})
+		#size = video.size
+		return render(request, 'home.html')
 		#return redirect('success_upload',{'size':size})
 		"""if video.size > 1000:
 			v = vdeo(user=User.objects.get(id=id),
