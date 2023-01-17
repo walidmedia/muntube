@@ -1,591 +1,18 @@
 {% load static %}
 {% include 'base.html' %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" rel="stylesheet"/>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-
 <style>
-    .btn-video {
-    color: #000;
-    background-color: #d3be93;
-    border-color: #594110;
-    box-shadow: 0 0.125rem 0.25rem 0 rgb(255 171 0 / 40%);
-}
-    html,body{
-	font-size: 14px;
-    font-family: Roboto, Arial, sans-serif;
-    background: #f9f9f9;
+    .comment-text {
+    font-size: 13px
 }
 
-.search{
-	    padding: 1px 10px;
+.wish {
+    color: #35b69f
+}
+
+.user-feed {
     font-size: 14px;
+    margin-top: 12px
 }
-.btn-outline-secondary{
-	font-size: 14px;
-	background: #f9f9f9;
-	border:solid 1px #d3d3d3;
-	color: #828282;
-}
-.btn-outline-secondary:hover{
-	background: #c98a09;
-	border:solid 1px rgba(70, 40, 9, 0.81);
-	color:#333;
-}
-
-
-.fa {
-    position: relative;
-    text-align: center;
-    vertical-align: middle;
-    font-size: 20px;
-}
-.fa-2x{
-	padding-left: 30px;
-	padding-right: 20px;
-}
-.main-nav {
-    background: #fff;
-    /*border-right: 1px solid #e5e5e5;*/
-    position: fixed;
-    z-index: 1;
-    margin-top: 58px;
-}
-.main-nav>ul {
-    margin: 0rem 0rem;
-    padding-inline-start: 0px;
-}
-
-nav ul,
-nav li {
-    outline: 0;
-    margin: 0;
-}
-.main-nav li:hover>a,
-nav.main-nav li.active>a{
-    color: #030303;
-    background-color: #f8f8f8;
-}
-
-.main-nav .nav-text, .main-nav li>a{
-  padding: 5px;
-}
-
-.main-nav li>a {
-      border-collapse: collapse;
-      border-spacing: 0;
-      color: #030303;
-      font-size: 1rem;
-      text-decoration: none;
-
-}
-.container-fluid .card{
-	background: #f9f9f9;
-	border:0;
-}
-.container-fluid a{
-	text-decoration: none;
-}
-.container-fluid .card a .title{
-	font-size: 14px;
-	font-weight: bold;
-}
-.main_container{
-	background: #f9f9f9;
-	padding-top: 90px;
-	width: 100%;
-	overflow-x: hidden;
-}
-.main_container .row{
-	background: #f9f9f9;
-}
-.main_container a{
-	text-decoration: none;
-}
-.main_container .card{
-	border:0px;
-}
-.main_container .card p{
-	color:#030303;
-	font-size: 14px;
-    line-height: 1.2rem;
-    max-height: 2.5rem;
-    font-weight: 600;
-    overflow: hidden;
-}
-
-.main_container .grid_title{
-	color: #030303;
-    font-size: 1.4rem;
-    font-weight: 500;
-    line-height: 2.4rem;
-}
-.main_container hr{
-	border-bottom: solid 4px #e0e0e0;
-}
-.card a .title{
-	color: #606060;
-    -webkit-line-clamp: 2;
-    display: block;
-    max-height: 4.8rem;
-    overflow: hidden;
-    font-size: 1.2rem;
-    font-weight: 400;
-    line-height: 1.5rem;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    white-space: normal;
-    display: -webkit-box;
-}
-.card a .subtitle{
-	color: #606060;
-    font-size: 13px;
-    max-height: 1.2rem;
-    font-weight: 400;
-    overflow: hidden;
-}
-.short_description{
-	color: #606060;
-    padding-top: 4px;
-    margin-bottom: 8px;
-    display: block;
-    max-height: 3.2rem;
-    overflow: hidden;
-    font-size: 13px;
-    font-weight: 100;
-}
-.accordion_btn{
-	color: #909090;
-	font-family: inherit;
-	font-size: 14px;
-	font-weight: bold;
-}
-table tr{
-	font-size: 12px;
-	color:#606060;
-}
-
-@media (min-width:35.1em) {
-  .fa, button .fas{
-    display: table-cell;
-    width: 3rem;
-
-  }
-
-  .main-nav:hover,
-nav.main-nav.expanded {
-    width: 16rem;
-    overflow: visible;
-}
-
-  .main-nav{
-    top: 0;
-    bottom: 0;
-    height: 100%;
-    left: 0;
-    /*width: 5rem;*/
-    overflow: hidden;
-    -webkit-transition: width .05s linear;
-    transition: width .05s linear;
-    -webkit-transform: translateZ(0) scale(1, 1);
-  }
-
-
-  .main-nav li {
-    position: relative;
-    display: block;
-    width: 16rem;
-  }
-  .main-nav li>a {
-      position: relative;
-      display: table;
-      -webkit-transform: translateZ(0) scale(1, 1);
-      -webkit-transition: all .1s linear;
-      transition: all .1s linear;
-  }
-
-  .main-nav .nav-text {
-      position: relative;
-      display: table-cell;
-      vertical-align: middle;
-      width: 14rem;
-  }
-}
-
-
-@media (max-width:35em) {
-
-    .main-nav {
-        background: #fff;
-        border-right: 1px solid #e5e5e5;
-        position: fixed;
-        margin: 0;
-        left: 0;
-        bottom: 0;
-        /*height: 5em;*/
-        width: 100%;
-    }
-
-  .main-nav ul{
-    display: table;
-    width: 100%;
-    margin: auto;
-
-  }
-
-    .main-nav li{
-      float: left;
-      width: 20%;
-      list-style-type: none;
-      text-align: center;
-    }
-
-  .main-nav a{
-    display: block;
-    padding: 5px;
-    /*height: 74px;*/
-  }
-
-  .main-nav i, .main-nav span{
-    display: block;
-    margin: auto;
-  }
-
-  .main-nav span{
-    font-size: 14px;
-  }
-}
-
-/*mobile look*/
-@media only screen and (min-width: 600px) {
-	#top_nav{
-		display: block;
-	}
-	#top_nav_mobile{
-		display: none;
-	}
-	.desc_hide{
-		display: none;
-	}
-
-}
-@media only screen and (max-width: 600px) {
-	#top_nav{
-		display: none;
-	}
-	#top_nav_mobile{
-		display: block;
-	}
-	#hide_mobile{
-		display: none;
-	}
-	.border-top{
-		border:0px !important;
-	}
-	.mt-2{
-		margin-top:0px;
-	}
-	#top_nav_mobile ul{
-		text-align: center;
-    margin: 0 auto;
-    padding: 0px;
-    display:table;
-    overflow: hidden;
-	}
-
-	#top_nav_mobile .fa-2x{
-		padding-left: 0px;
-		padding-right: 0px;
-		margin-left: auto;
-	}
-	#top_nav_mobile a{
-		text-align: center;
-	}
-	.short_description{
-		display: none;
-	}
-	.video_responsive{
-		height: 250px;
-	}
-	.video_list_responsive{
-		height:200px;
-		margin-bottom: 5px;
-	}
-	.p-0{
-		margin-left: 20px;
-	}
-	.w-2{
-		max-width: 100px;
-	}
-	.container-fluid .profile{
-		margin-top: 0px;
-		margin-left: 10px;
-		width: 150px;
-		float: left;
-	}
-
-	.change_btn{
-		text-align: left;
-		width: 150px;
-	}
-	.container-fluid .p-4{
-		padding: 0px;
-	}
-	.container-fluid .video_box{
-	padding:0px 0px 0px 0px;
-	margin: 0px;
-	}
-	.video_list{
-		padding:0px;
-	}
-	.video_list .row{
-		margin: 0px;
-	}
-	.watch_video .col-md-4{
-		margin: 0px;
-		padding: 0px;
-	}
-	.watch_video{
-		padding: 0px;
-	}
-	.watch_video .col-md-5{
-		padding: 0px;
-	}
-	.main-nav .mt-2{
-		margin: 0px;
-	}
-	.main_container{
-		padding-left: 0px;
-		padding-right: 0px;
-		margin: 0px;
-	}
-	.main_container .col-md-10{
-		padding: 0px;
-	}
-	.main_container .container-fluid{
-		padding: 0px;
-	}
-	/*.main_container .col-md-3 .img{
-		height:180px;
-	}*/
-
-}
-/*mobile look*/
-
-
-/*switch toggle button*/
-.switch {
-  display: block;
-}
-.switch {
-  position: relative;
-  display: inline-block;
-  vertical-align: top;
-  width: 56px;
-  height: 20px;
-  padding: 3px;
-  background-color: white;
-  border-radius: 18px;
-  box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  background-image: -webkit-linear-gradient(top, #eeeeee, white 25px);
-  background-image: -moz-linear-gradient(top, #eeeeee, white 25px);
-  background-image: -o-linear-gradient(top, #eeeeee, white 25px);
-  background-image: linear-gradient(to bottom, #eeeeee, white 25px);
-}
-
-.switch-input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-}
-
-.switch-label {
-  position: relative;
-  display: block;
-  height: inherit;
-  font-size: 10px;
-  text-transform: uppercase;
-  background: #eceeef;
-  border-radius: inherit;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
-  -webkit-transition: 0.15s ease-out;
-  -moz-transition: 0.15s ease-out;
-  -o-transition: 0.15s ease-out;
-  transition: 0.15s ease-out;
-  -webkit-transition-property: opacity background;
-  -moz-transition-property: opacity background;
-  -o-transition-property: opacity background;
-  transition-property: opacity background;
-}
-.switch-label:before, .switch-label:after {
-  position: absolute;
-  top: 50%;
-  margin-top: -.5em;
-  line-height: 1;
-  -webkit-transition: inherit;
-  -moz-transition: inherit;
-  -o-transition: inherit;
-  transition: inherit;
-}
-.switch-label:before {
-  content: attr(data-off);
-  right: 11px;
-  color: #aaa;
-  text-shadow: 0 1px rgba(255, 255, 255, 0.5);
-}
-.switch-label:after {
-  content: attr(data-on);
-  left: 11px;
-  color: white;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-}
-.switch-input:checked ~ .switch-label {
-  background: #47a8d8;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
-}
-.switch-input:checked ~ .switch-label:before {
-  opacity: 0;
-}
-.switch-input:checked ~ .switch-label:after {
-  opacity: 1;
-}
-
-.switch-handle {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  width: 18px;
-  height: 18px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-  background-image: -webkit-linear-gradient(top, white 40%, #f0f0f0);
-  background-image: -moz-linear-gradient(top, white 40%, #f0f0f0);
-  background-image: -o-linear-gradient(top, white 40%, #f0f0f0);
-  background-image: linear-gradient(to bottom, white 40%, #f0f0f0);
-  -webkit-transition: left 0.15s ease-out;
-  -moz-transition: left 0.15s ease-out;
-  -o-transition: left 0.15s ease-out;
-  transition: left 0.15s ease-out;
-}
-.switch-handle:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin: -6px 0 0 -6px;
-  width: 12px;
-  height: 12px;
-  background: #f9f9f9;
-  border-radius: 6px;
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
-  background-image: -webkit-linear-gradient(top, #eeeeee, white);
-  background-image: -moz-linear-gradient(top, #eeeeee, white);
-  background-image: -o-linear-gradient(top, #eeeeee, white);
-  background-image: linear-gradient(to bottom, #eeeeee, white);
-}
-.switch-input:checked ~ .switch-handle {
-  left: 40px;
-  box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
-}
-
-
-/*switch toggle button*/
-
-.title{
-	font-size: 18px;
-	color:#030303;
-}
-#more {display: none;}
-.slide{
-	overflow:auto;
-	white-space: nowrap;
-}
-.slide a {
-  display: inline-block;
-  color: white;
-  text-align: center;
-  padding: 14px;
-  text-decoration: none;
-}
-::-webkit-scrollbar {
-  height: 6px;              /* height of horizontal scrollbar ← You're missing this */
-  width: 6px;               /* width of vertical scrollbar */
-  border: 1px solid #d5d5d5;
-}
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey;
-  border-radius: 10px;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: black;
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: red;
-}
-
-.input_comment{
-	width: 100%;
-	border:0px;
-	border-bottom: solid 1px #dee2e6;
-	background: transparent;
-}
-.input_comment:focus {
-  outline:none;
-}
-.profile{
-	margin-top: 100px;
-	margin-left: -50px;
-}
-.profile_title{
-	font-size: 18px;
-	font-weight: bold;
-	color:red;
-	text-transform: capitalize;
-}
-.profile_title1{
-	color:#606060;
-}
-.watch_video{
-	padding:0px 20px;
-	margin-top: 60px;
-}
-.video_box{
-	padding:0px 10px 0px 20px;
-	margin: 0px;
-}
-.video_list{
-	padding-left: 0px;
-}
-
-element.style {
-}
-.nav-tabs:not(.nav-fill):not(.nav-justified) .nav-link, .nav-pills:not(.nav-fill):not(.nav-justified) .nav-link {
-    width: 100%;
-}
-.nav-pills .nav-link.active, .nav-pills .nav-link.active:hover, .nav-pills .nav-link.active:focus {
-    background-color: #ba7900;
-    color: #fff;
-    box-shadow: 0 2px 4px 0 rgba(70, 40, 9, 0.81);
-}
-.link-muted { color: #aaa; } .link-muted:hover { color: #8c5a0d; }
-
-.btn-outline-secondary {
-    font-size: 14px;
-    background: #dedede;
-    border: solid 1px #333;
-    color: #fcfdfd;
-}
-
 </style>
 
 {% block content %}
@@ -607,46 +34,64 @@ element.style {
                     </video>
 
                 <div class="col-12">
-                  <div class="card mb-2">
-                    <h5 class="card-header">{{ v.title }}</h5>
+                  <div style="background-color: #191C24; " class="card mb-2">
+                    <h5 class="card-header mb-2">{{ v.title }}</h5>
                     <div class="card-body">
                       <div class="row gy-3">
-                        <div class="row col-md-12">
+                        <div class="row col-12">
                             <div class="col-md-6">
-                                <span class="text-secondary fw-semibold">2313 views • {{ v.date_created.date }}</span>
+                                <span class="text-white fw-semibold">2313 views • {{ v.date_created.date }}</span>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-2 cen">
                                 {% if user.is_authenticated %}
                             <form action="{% url 'like_video' v.pk %}" method="post">
                                 {% csrf_token %}
-                                <button class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                    <i class="bx bx-heart me-2"></i>
+                                <button  style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                    <i class="fa fa-heart"></i>
                                 </button>
-                                <span class="align-middle text-right">{{ v.total_likes }} J'aime</span>
+                                <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
                             </form>
-                                {% else %}
-                                <form action="{% url 'login' %}" method="post">
+                            {% else %}
+                            <form action="{% url 'login' %}" method="post">
                                 {% csrf_token %}
-                                <button class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                    <i class="bx bx-heart me-2"></i>
+                                <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                    <i class="fa fa-heart"></i>
                                 </button>
-                                <span class="align-middle text-right">{{ v.total_likes }} J'aime</span>
+                                <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
                             </form>
                                 {% endif %}
 
+
                             </div>
                             <div class="col-md-2">
-                                <a href="#" style="color:#606060;" title="Share">
-                                    <i class="bx bx-share-alt me-2"></i>
-                                    <span class="align-middle">Partager</span>
-                                </a>
+                                <form>
+                                <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                    <i class="fa fa-share"></i>
+                                </button>
+                                <span class="align-middle text-white"> Partager</span>
+
+                            </form>
                             </div>
-                            <div class="col-md-2">
-                                <a href="#" style="color:#606060;" title="Share">
-                                <i class="bx bx-save me-2"></i>
-                                <span class="align-middle">Sauv</span>
-                                </a>
+                            <div class="col-md-2 nav-item dropdown">
+                                <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                    <i class="fa fa-ellipsis-h"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
+                                    <form>
+                                         {% csrf_token %}
+                                        <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                        </button>
+                                    </form>
+                                    <form action="{% url 'save_video' v.pk %}" method="post">
+                                        {% csrf_token %}
+                                        <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Enregistrer</span>
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
+
                         </div>
                       </div>
                         <div class="row col-md-12 col-sm-12 mt-4 ">
@@ -654,69 +99,53 @@ element.style {
                                 <img id="img" width="48" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
                             </div>
                             <div class="col-md-2 col-sm-6 pl-0">
-                                <p style="color:#303030;">
-                                    <b>Mockup World</b> <i class="fas fa-check"></i><br>
-                                    <span style="color:#606060">{{ v.total_abonnés }} abonnés</span>
+                                <p style="color:white;">
+                                    <b>{{ v.user.username }}</b> <i class="fas fa-check me-2"></i>
+                                    <span style="color:white">111 abonnés</span>
                                 </p>
                             </div>
                             <div class="col-md-3 col-sm-12 text-right">
+                                {% if all_chaine.id == v.user.id %}
                                 <form action="{% url 'abonni_video' v.pk %}" method="post">
                                     {% csrf_token %}
-                                    <button type="submit" name="chaine_id" value="{{ v.id }}" class="btn rounded-pill btn-outline-secondary">
-                                        <span style="color: black" class="tf-icons bx bx-bell"></span>
-                                        <span style="color: black">S'abonner</span>
+                                    <button disabled style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                        <i class="fa fa-bell"></i>
+                                        <span style="color: white">S'abonner</span>
                                     </button>
                                 </form>
+                                {% else %}
+                                <form action="{% url 'abonni_video' v.pk %}" method="post">
+                                    {% csrf_token %}
+                                    <button di style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                        <i class="fa fa-bell"></i>
+                                        <span style="color: white">S'abonner</span>
+                                    </button>
+                                </form>
+                                {% endif %}
                             </div>
                         </div>
-                            <div class="col-md-12">
-                                <p>Presenting the full video "KHAIRIYAT (BONUS TRACK)" from the Bollywood movie "CHHICHHORE". The film is directed by Nitesh Tiwari and produced by Sajid Nadiadwala under the banner of Nadiadwala Grandson Entertainment. The film stars Sushant Singh Rajput, Shraddha Kapoor, Varun Sharma, Prateik Babbar and follows the lives of seven friends from 1992 to present day.
+                            <div style="color: #b9b7b7">
+                                <p>{{ v.detail }}
                                     <span id="dots">...</span>
-                                    <span id="more">erisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta.</span>
+                                    <span id="more"></span>
                                 </p>
                             </div>
                         <button onclick="myFunction()" id="myBtn" class="btn">SHOW MORE</button>
 
-                          <!--<div class="row col-md-12">
-                              <div class="col-md-4 demo-inline-spacing">
-                                <button type="button" class="btn btn-sm btn-primary">
-                                  <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Primary
-                                </button>
-                                <button type="button" class="btn btn-sm btn-secondary">
-                                  <span class="tf-icons bx bx-bell"></span>&nbsp; Secondary
-                                </button>
-                              </div>
-                              <div class="col-md-4 demo-inline-spacing">
-                                <button type="button" class="btn rounded-pill btn-sm btn-primary">
-                                  <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Primary
-                                </button>
-                                <button type="button" class="btn rounded-pill btn-sm btn-secondary">
-                                  <span class="tf-icons bx bx-bell"></span>&nbsp; Secondary
-                                </button>
-                              </div>
-                              <div class="col-md-4 demo-inline-spacing">
-                                <button type="button" class="btn btn-xs btn-outline-secondary">
-                                  <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Partager
-                                </button>
-                                <button type="button" class="btn btn-xs btn-outline-secondary">
-                                  <span class="tf-icons bx bx-bell"></span>&nbsp; Signaler
-                                </button>
-                              </div>
-                          </div>-->
                       </div>
 
                     </div>
 
 					<!-- commentaires -->
-                    <section style="background-color: #f6dbc5;">
+                    <section>
                       <div class="my-2 ">
                         <div class="row d-flex justify-content-center">
                           <div class="col-md-12 col-lg-12">
-                            <div class="card text-dark">
+                            <div style="background-color: #191C24; " class="card text-dark">
 
                                   <div class="card-body p-4">
                                     <h4 class="mb-0">
-                                        <p style="color: black">{{ v.total_comments }} commentaires</p>
+                                        <p style="color: #b9b7b7">{{ v.total_comments }} commentaires</p>
                                     </h4>
                                   <form action="{% url 'commenter' v.id %}" method="post">
                                           {% csrf_token %}
@@ -730,42 +159,43 @@ element.style {
                                       </form>
                                       {% for c in comm %}
                                           {% if c.video.id == v.id %}
-                                    <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
+                                            <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
 
-                                    <div class="d-flex flex-start">
-                                      <img class="rounded-circle shadow-1-strong me-3"
-                                        src="{{ user.photo.url }}" alt="avatar" width="60"
-                                        height="60" />
-                                      <div>
-                                        <h6 class="fw-bold mb-1">{{ user.username }}</h6>
-                                        <div class="d-flex align-items-center mb-3">
-                                          <p class="mb-0">
-                                            {{ c.date_added }}
-                                            <!--<span class="badge bg-primary">Pending</span>-->
-                                          </p>
+                                            <div style="color: #b9b7b7" class="d-flex flex-start">
+                                              <img class="rounded-circle shadow-1-strong me-3"
+                                                src="{{ user.photo.url }}" alt="avatar" width="60"
+                                                height="60" />
+                                              <div>
+                                                <h6 class="fw-bold mb-1">{{ user.username }}</h6>
+                                                <div class="d-flex align-items-center mb-2">
+                                                  <p class="mb-0">
+                                                    {{ c.date_added }}
+                                                    <!--<span class="badge bg-primary">Pending</span>-->
+                                                  </p>
 
-                                           <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
-                                            <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
-                                        </div>
-                                        <p class="mb-3">
-                                          {{ c.contenue }}
-                                        </p>
-                                          <span id="repinput">
-                                              <div class="d-flex flex-start mb-4">
-                                              <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
-                                              <input  class="form-control" placeholder="Votre reponse .." >
-                                              <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
-                                          </div>
-                                          </span>
+                                                   <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
+                                                    <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
+                                                </div>
+                                                <p class="mb-3">
+                                                  {{ c.contenue }}
+                                                </p>
+                                                  <span id="repinput">
+                                                      <div class="d-flex flex-start mb-4">
+                                                      <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                                      <input  class="form-control" placeholder="Votre reponse .." >
+                                                      <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
+                                                  </div>
+                                                  </span>
 
-                                      </div>
-                                    </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                          <a href="#!" class="link-muted"><i class="bx bx-like ms-2"></i>232</a>
-                                          <a href="#!" class="link-muted"><i class="bx bx-dislike ms-2"></i>122</a>
-                                        </div>
+                                              </div>
+                                            </div>
+                                            <div class="d-flex align-items-center mb-3">
+                                                  <a href="#!" class="link-muted me-3"><i class="fa fa-heart me-1"></i>232</a>
+                                                  <a href="#!" class="link-muted"><i class="fa fa-heart-broken me-1"></i>23</a>
+                                                </div>
+                                              <hr style="color:#b9b7b7;">
                                           {% endif %}
-                                          {% endfor %}
+                                      {% endfor %}
                                   </div>
                                   <hr class="my-0" />
 

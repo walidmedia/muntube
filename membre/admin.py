@@ -38,3 +38,7 @@ admin.site.register(models.Subscriber, SubscriberAdmin)
 class SubscriptionAdmin(admin.ModelAdmin):
 	list_display=('user','plan','reg_date','price')
 admin.site.register(models.Subscription,SubscriptionAdmin)
+
+class SavedVideoAdmin(admin.ModelAdmin):
+	list_display=('video','user')
+admin.site.register(models.savedvideo,SavedVideoAdmin)

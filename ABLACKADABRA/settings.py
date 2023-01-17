@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'muntube',
@@ -92,15 +92,15 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
         'HOST': 'localhost',
         'PORT': '5433',
     }
-}"""
+}
 
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+}"""
 
 
 # Password validation
@@ -173,8 +173,8 @@ STRIPE_PUBLISHABLE_KEY='pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONm
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com' # ex: smtp.gmail.com
-EMAIL_PORT = 587  # or the server PORT if non standard
+EMAIL_PORT = 465  # or the server PORT if non standard
 EMAIL_HOST_USER = 'dilaw0895@gmail.com'  # a username, usually the e-mail address
 EMAIL_HOST_PASSWORD = 'bphsevpsmxepnsem'  # the smtp user password
-EMAIL_USE_TLS = True  # True if TLS should be enabled or False otherwise
-EMAIL_USE_SSL = False  # True if SSL should be enabled or False otherwise
+EMAIL_USE_TLS = False  # True if TLS should be enabled or False otherwise
+EMAIL_USE_SSL = True  # True if SSL should be enabled or False otherwise

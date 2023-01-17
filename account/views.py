@@ -10,7 +10,7 @@ def index(request):
     context = {
         'mes_videos': mes_videos,
     }
-    return render(request, 'index.html', context)
+    return render(request, 'home.html', context)
 
 def profile(request):
     context = {

@@ -1,0 +1,21 @@
+{% load static %}
+{% include 'base.html' %}
+
+
+
+            <!-- Sale & Revenue Start -->
+            <div class="pt-4 px-4">
+                <h3 class="mb-3">Vidéos J'aime</h3>
+                <div class="row g-4">
+                    {% for use in abonnement %}
+                            {{ use.user.username }}<br>
+                    {% endfor %}
+                 </div>
+            <hr style="color: #C39868">
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}

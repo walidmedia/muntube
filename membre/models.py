@@ -20,7 +20,7 @@ class Video(models.Model):
 	n_likes=models.ManyToManyField(User, related_name='likes', null=True, blank=True)
 	n_comments=models.ManyToManyField(User, related_name='comments', null=True, blank=True)
 	playlists=models.ForeignKey(User,on_delete=models.CASCADE,related_name='playlist', null=True, blank=True)
-	abonnements=models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
+	#abonnements=models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
 	link=models.TextField(null=True, blank=True)
 	documents=models.FileField(upload_to='filesvideo', null=True, blank=True)
 	date_created = models.DateTimeField(default=datetime.today)
@@ -34,8 +34,8 @@ class Video(models.Model):
 	def total_comments(self):
 		return self.n_comments.count()
 
-	def total_abonnés(self):
-		return self.abonnements.count()
+	"""def total_abonnés(self):
+		return self.abonnements.count()"""
 
 	def image_tag(self):
 		return mark_safe('<img src="%s" width="80" />' % (self.miniature.url))
@@ -49,6 +49,11 @@ class comment(models.Model):
 	def __str__(self):
 		return '%s - %s' % (self.video.title, self.name)
 
+class savedvideo(models.Model):
+	video = models.ForeignKey(Video,on_delete=models.CASCADE,null=True, blank=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+	def __str__(self):
+		return '%s - %s' % (self.video.title, self.user.username)
 
 
 # Gallery Images

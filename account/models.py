@@ -70,6 +70,18 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+#### User Abonnement
+class UserAbonn(models.Model):
+    chaine = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    abonnements = models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
+
+    def __str__(self):
+        if not self.chaine:
+            return "Anonymous"
+        return self.chaine.username
+
+    def total_abonnés(self):
+        return self.abonnements.count()
 
 #### This is user settings
 class UserSetting(models.Model):

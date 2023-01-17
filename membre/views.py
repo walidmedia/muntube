@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.db.models import Count
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template.loader import get_template
+from django.template.loader import get_template, render_to_string
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from ABLACKADABRA import settings
 from ABLACKADABRA.settings import AUTH_USER_MODEL
-from account.models import User
-from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment
+from account.models import User, UserAbonn
+from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment, savedvideo
 import stripe
 
 
@@ -104,8 +104,8 @@ def checkout_session(request,plan_id):
 	    }],
 	    mode='payment',
 
-	    success_url='http://web-production-f55f.up.railway.app/pay_success?session_id={CHECKOUT_SESSION_ID}',
-	    cancel_url='http://web-production-f55f.up.railway.app/pay_cancel',
+	    success_url='http://127.0.0.1:8000/pay_success?session_id={CHECKOUT_SESSION_ID}',
+	    cancel_url='http://127.0.0.1:8000/pay_cancel',
 	    client_reference_id=plan_id
 	)
 	return redirect(session.url, code=303)
@@ -123,14 +123,13 @@ def pay_success(request):
 		user=user,
 		price=plan.price
 	)
-	subject='Order Email'
-	html_content=get_template('membre/ordermail.html').render({'title':plan.title})
-	from_email='dilaw0895@gmail.com'
+	subject = 'ABLACHADABRA MunTube'
+	html_content = get_template('membre/ordermail.html').render({'title': plan.title})
+	from_email = 'dilaw0895@gmail.com'
 
 	msg = EmailMessage(subject, html_content, from_email, [request.user.email])
 	msg.content_subtype = "html"  # Main content is now text/html
 	msg.send()
-
 
 	return render(request, 'membre/success.html')
 
@@ -149,12 +148,6 @@ def video(request,id):
 	}
 	return render(request, 'video.html',context)
 
-def displaycomment(request):
-	comm = comment.objects.all()
-	context={
-		'comm' : comm,
-	}
-	return render(request, 'video.html',context)
 
 def commenter(request,id):
 	if request.method == "POST":
@@ -172,9 +165,44 @@ def like_video(request, pk):
 	return HttpResponseRedirect(reverse('video',args=[str(pk)]))
 
 def abonni_video(request, pk):
-	abonné = get_object_or_404(vdeo,id=request.POST.get('chaine_id'))
-	abonné.abonnements.add(request.user)
-	return HttpResponseRedirect(reverse('video',args=[str(pk)]))
+	all_chaine = UserAbonn.objects.get(id=request.POST.get('chaine_id'))
+	context = {
+		'all_chaine' : all_chaine,
+	}
+	chaine = UserAbonn.objects.create(id=request.POST.get('chaine_id'))
+	chaine.abonnements.add(request.user)
+	return render(request, 'video.html', context)
+	#return HttpResponseRedirect(reverse('video', args=[str(pk)]),context)
+
+
+def save_video(request, pk):
+	if request.method == "POST":
+		video = get_object_or_404(vdeo,id=request.POST.get('id_video'))
+		user = User.objects.get(id=request.user.id)
+		c = savedvideo(video=video, user=user)
+		c.save()
+		return HttpResponseRedirect(reverse('video',args=[str(pk)]))
+
+def vidéosjaime(request):
+	vidéosjaime = vdeo.objects.filter(n_likes=request.user)
+	context = {
+		'vidéosjaime':vidéosjaime,
+	}
+	return render(request, 'membre/vidéosjaime.html', context)
+
+def a_regarder(request):
+	videos = savedvideo.objects.filter(user = request.user)
+	context = {
+		'videos':videos,
+	}
+	return render(request, 'membre/a_regarder.html', context)
+
+def bibliothèque(request):
+	abonnement = vdeo.objects.filter(user = request.user)
+	context = {
+		'abonnement':abonnement,
+	}
+	return render(request, 'membre/bibliothèque.html', context)
 
 def monprofile(request, id):
 	profil = User.objects.all()

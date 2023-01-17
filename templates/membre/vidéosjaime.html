@@ -1,0 +1,49 @@
+{% load static %}
+{% include 'base.html' %}
+
+
+
+            <!-- Sale & Revenue Start -->
+            <div class="pt-4 px-4">
+                <h3 class="mb-3">Vidéos J'aime</h3>
+                <div class="row g-4">
+                    {% for v in vidéosjaime %}
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="rounded d-flex align-items-center justify-content-between h-100">
+                                <div style="background-color: #191C24; " class="card h-100">
+                                <a href="{% url 'video' v.id %}">
+                                    <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" controls >
+                                        <source src="{{ v.vid.url }}" type="video/mp4" />
+                                    </video>
+                                </a>
+                                <div class="row justify-content-between">
+                                        {% if v.miniature %}
+                                        <div class="col-2 mt-3">
+                                        {% if v.user.is_superuser %}
+                                            <img id="img" width="40" src="{{ v.user.photo }}" class="rounded-circle">
+                                            {% else %}
+                                            <img id="img" width="40" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                            {% endif %}
+                                        </div>
+                                        {% endif %}
+                                        <div class="col-10 mt-3">
+                                            <a href="{% url 'video' v.pk %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                            <p style="color:#606060;">
+                                                T-Series <i class="fas fa-check-circle"></i><br>
+                                                <small>2726842 vues  {{ v.date_created.date }}</small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                 </div>
+            <hr style="color: #C39868">
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+</body>
+
+{% include 'footer.html' %}

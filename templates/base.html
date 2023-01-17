@@ -1,398 +1,179 @@
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-    />
+    <meta charset="utf-8">
+    <title>MunTube</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% static 'images/ablackadabra.jpg' %}" />
+    <link href="img/favicon.ico" rel="icon">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
 
-    <!-- Icons. Uncomment required icon fonts -->
-    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css'%}" class="template-customizer-core-css" />
-    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
-    <link rel="stylesheet" href="{% static 'assets/css/demo.css'%}" />
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
 
-    <!-- Vendors CSS -->
-    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-    <link rel="stylesheet" href="{% static 'assets/vendor/libs/apex-charts/apex-charts.css' %}" />
-
-    <!-- Page CSS -->
-
-    <!-- Helpers -->
-    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
-
-    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    <script src="{% static 'assets/js/config.js' %}"></script>
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <style>
-.bg-menu-theme .menu-inner > .menu-item.active > .menu-link {
-    color: #f3efe5;
-    background-color: rgba(0, 0, 0, 0.25) !important;
+    :root {
+    --primary: #9c999a;
+    --secondary: #191C24;
+    --light: #6C7293;
+    --dark: #000000;
 }
-
-.app-brand .layout-menu-toggle {
-    background-color: #6e4f04;
-    border: 7px solid #f5f5f9;
-}
-.bg-menu-theme .menu-inner > .menu-item.active:before {
-    background: #6e4f04;
-}
-.bg-menu-theme .menu-link, .bg-menu-theme .menu-horizontal-prev, .bg-menu-theme .menu-horizontal-next {
-    color: #000000;
-}
-
-
-.bg-menu-theme {
-    background-color: #efe8e2 !important;
-    color: #3f2002;
-}
-.layout-navbar {
-    background-color: rgb(231, 220, 212) !important;
-}
-    .sidebarmuntube {
-/* fallback for old browsers */
-background: #533f03;
-
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to right, #DEA98A, #ba7900);
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #ba7900, #DEA98A);
-}
-
-    .navmuntube {
-/* fallback for old browsers */
-background: #533f03;
-
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to right, #ba7900, #DEA98A);
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #DEA98A, #ba7900)
-}
-.bg-navbar-theme {
-    color: #000000;
-}
-
-element.style {
-}
-.bx {
-    vertical-align: middle;
-    font-size: 1.15rem;
-    line-height: 1;
-}
-.bx-sm {
-    font-size: 1.55rem !important;
-}
-.bx {
-    font-family: "boxicons" !important;
-    font-weight: normal;
-    font-style: normal;
-    font-variant: normal;
-    line-height: 1;
-    text-rendering: auto;
-    display: inline-block;
-    text-transform: none;
-    speak: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-*, *::before, *::after {
-    box-sizing: border-box;
-}
-user agent stylesheet
-i {
-    font-style: italic;
-}
-.bg-navbar-theme .navbar-nav > .nav-link, .bg-navbar-theme .navbar-nav > .nav-item > .nav-link, .bg-navbar-theme .navbar-nav > .nav > .nav-item > .nav-link {
-    color: #000000;
-}
-.bodyy {
-/* fallback for old browsers */
-background: #533f03;
-
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to right, #ffffff, #ba7900);
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to right, #ba7900, #ffffff)
-}
-
 </style>
-<body class="bodyy">
 
-<div class="layout-wrapper layout-content-navbar">
-      <div class="layout-container">
-<!-- Menu -->
+    <div class="container-fluid position-relative d-flex p-0">
 
-        <aside id="layout-menu" class="sidebarmuntube layout-menu menu-vertical menu bg-menu-theme">
-          <div class="app-brand demo">
-            <a href="{% url 'index' %}" class="app-brand-link">
 
-              <span class="app-brand-text demo menu-text fw-bolder ms-2">
-                   <img width="180" src="{% static 'images/MunTube.png' %}">
-              </span>
-            </a>
 
-            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-              <i class="bx bx-chevron-left bx-sm align-middle"></i>
-            </a>
-          </div>
-
-          <div class="menu-inner-shadow"></div>
-
-          <ul class="menu-inner py-1">
-            <!-- Dashboard -->
-            <li class="menu-item active">
-              <a href="{% url 'index' %}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Analytics"><strong>Accueil</strong></div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-book"></i>
-                <div data-i18n="Analytics"><strong>Bibliothèque</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-history"></i>
-                <div data-i18n="Analytics"><strong>Historique</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-like"></i>
-                <div data-i18n="Analytics"><strong>Favoris</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-              <li>
-              <div class="dropdown-divider"></div>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-radio"></i>
-                <div data-i18n="Analytics"><strong>Chaîne</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-            <li>
-              <div class="dropdown-divider"></div>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-devices"></i>
-                <div data-i18n="Analytics"><strong>Paramètres</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-bell"></i>
-                <div data-i18n="Analytics"><strong>Notifications</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-help-circle"></i>
-                <div data-i18n="Analytics"><strong>Aide</strong></div>
-                  <span class="badge rounded-pill bg-label-info">bientôt</span>
-              </a>
-            </li>
-             <li>
-              <div class="dropdown-divider"></div>
-            </li>
-            <li class="menu-item">
-              <a href="#" class="menu-link">
-                <i class="menu-icon tf-icons bx bxs-traffic-cone"></i>
-                  <div data-i18n="Analytics"><strong>Termes et conditions</strong></div>
-              </a>
-            </li>
-
-          </ul>
-        </aside>
-        <!-- / Menu -->
-
-        <!-- Layout container -->
-        <div class="layout-page">
-          <!-- Navbar -->
-
-          <nav
-            class="navmuntube layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
-            id="layout-navbar"
-          >
-            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                <i class="bx bx-menu bx-sm"></i>
-              </a>
-            </div>
-
-            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-              <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                          style="background-color: #fcfbfb !important;"
-                    type="text"
-                    class="form-control border-0 shadow-none"
-                    placeholder="Rechercher..."
-                    aria-label="Rechercher..."
-                  />
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-secondary navbar-dark">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 style="color: #A77443"><i class="fa fa-user-edit me-2"></i>MunTube</h3>
+                </a>
+                <!--<div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="{% static 'img/user.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">Jhon Doe</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>-->
+                <div class="navbar-nav w-100">
+                    <a href="{% url 'index' %}" class="nav-item nav-link active"><i style="background-color: #A77443; color: #ffffff" class="fa fa-home me-2"></i><strong style="color: white">Accueil</strong></a>
+                    <a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #A77443; color: #ffffff"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>
+                    <a href="#" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
+                    <a href="{% url 'a_regarder' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-eye me-2"></i><strong style="color: white">A regarder</strong></a>
+                    <a href="{% url 'vidéosjaime' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-star me-2"></i><strong style="color: white">Vidéos "j'aime"</strong></a>
+                    <a><hr></a>
+                    <a href="#" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-photo-video me-2"></i><strong style="color: white">Chaîne</strong></a>
+                    <a href="{% url 'upload' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-video me-2"></i><strong style="color: white">Créer</strong></a>
+                    <a><hr></a>
+                    <a href="#" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
                 </div>
-              </div>
-              <!-- /Search -->
-            {% if request.user.is_authenticated %}
-              <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- Place this tag where you want the button to render. -->
+            </nav>
+        </div>
+        <!-- Sidebar End -->
 
-                <!-- User -->
-                <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                    <div class="avatar avatar-online">
-                      <img src="{% static 'images/claude.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
-                    </div>
-                  </a>
-                  <ul class="navmuntube dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <div class="d-flex">
-                          <div class="flex-shrink-0 me-3">
-                            <div class="avatar avatar-online">
-                              <img src="{% static 'images/claude.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
-                            </div>
-                          </div>
-                          <div class="flex-grow-1">
-                            <span class="fw-semibold d-block text-white">{{ user.username }}</span>
-                            <!--<small class="text-muted">pseudonyme</small>-->
-                          </div>
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
+                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                    <h2 class="text-primary mb-0"><i class="fa fa-"></i></h2>
+                </a>
+                <a href="#" class="sidebar-toggler flex-shrink-0 ms-2" style="color: #f8f8f8;
+                text-decoration: none;">
+                    <i class="fa fa-bars"></i>
+                </a>
+
+                <div class="navbar-nav align-items-center ms-auto">
+                    <!--<div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-envelope me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Message</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <div class="d-flex align-items-center">
+                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                                    <div class="ms-2">
+                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                </div>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">See all message</a>
                         </div>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'monprofile' user.id %}">
-                        <i class="bx bx-user me-2"></i>
-                        <span class="align-middle text-white">Mon Profile</span>
-                        <span class="badge rounded-pill bg-label-primary">Beta</span>
-                      </a>
-                    </li>
-                      <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                      <li>
-                      <a class="dropdown-item" href="{% url 'upload' %}">
-                        <i class="bx bx-video-plus me-2"></i>
-                        <span class="align-middle text-white">Créer une video</span>
-                        <span class="badge rounded-pill bg-label-primary">Beta</span>
-                      </a>
-                    </li>
-                      <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle text-white">Pramètres</span>
-                      </a>
-                    </li>
-                     <li>
-                      <a class="dropdown-item" href="{% url 'stockage' %}">
-                        <i class="bx bx-cog me-2"></i>
-                        <span class="align-middle text-white">Achter un stockage</span>
-                        <span class="badge rounded-pill bg-label-primary">Beta</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 bx bx-credit-card white me-2"></i>
-                          <span class="flex-grow-1 align-middle text-white">Paiement</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">1</span>
-                        </span>
-                      </a>
-                    </li>
-                    <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'logout_view' %}">
-                        <i class="bx bx-power-off me-2"></i>
-                        <span class="align-middle text-white">Log Out</span>
-                        <span class="badge rounded-pill bg-label-primary">Beta</span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!--/ User -->
-              </ul>
-            {% else %}
-                <ul class="navbar-nav flex-row align-items-center ms-auto">
-                <!-- Place this tag where you want the button to render. -->
-
-                <!-- User -->
-                <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                  <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                    <div class="avatar avatar-away">
-                      <img src="{% static 'images/profile1.jpg' %}" alt class="w-px-40 h-auto rounded-circle" />
+                    </div>-->
+                    <form class="navbar-nav">
+                        <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+                    </form>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link" data-bs-toggle="dropdown">
+                            <i style="background-color: #A77443;color: white" class="fa fa-bell me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Profil mis à jour
+</h6>
+                                <small>Il ya 15 minutes</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">nouvelle vidéo ajoutée</h6>
+                                <small>Il ya 15 minutes</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Mot de passe changé</h6>
+                                <small>Il ya 15 minutes</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item text-center">Voir toutes</a>
+                        </div>
                     </div>
-                  </a>
-                  <ul class="navmuntube dropdown-menu dropdown-menu-end">
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i style="color: white"  class="bx bx-cog me-2"></i>
-                        <span class="align-middle text-white">Parametres</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#">
-                        <i style="color: white"  class="bx bx-help-circle me-2"></i>
-                        <span class="align-middle text-white">Aide</span>
-                      </a>
-                    </li>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="{{ user.photo.url }}" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex"><strong>{{ user.username }}</strong></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                            <a href="{% url 'monprofile' user.id %}" class="dropdown-item">Mon Profile</a>
+                            <hr>
+                            <a href="{% url 'stockage' %}" class="dropdown-item">Acheter un stockage</a>
+                            <hr>
+                            <a href="{% url 'logout_view' %}" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
 
-                    <li>
-                      <div class="dropdown-divider"></div>
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="{% url 'login' %}">
-                        <i style="color: white" class="bx bx-log-in me-2"></i>
-                        <span class="align-middle text-white">Se connecter</span>
-                        <span class="badge rounded-pill bg-label-primary">Beta</span>
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <!--/ User -->
-              </ul>
-            {% endif %}
-            </div>
-          </nav>
+    {% block content %}
 
-          <!-- / Navbar -->
-
-{% block content %}
-{% endblock %}
-
-
-
+    {% endblock %}
