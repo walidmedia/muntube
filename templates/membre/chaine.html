@@ -11,7 +11,7 @@
                                 <table>
                                     <tr>
                                         <td rowspan="">
-                                            <img id="img" width="100" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
+                                            <img id="img" width="100" src="{{ user.photo.url }}" class="rounded-circle">
                                         </td>
 
                                     </tr>
@@ -28,7 +28,6 @@
                                 <div class="col-md-2 col-sm-6 pr-0 w-2 ">
                                 </div>
                                 <div class="col-md-4 col-sm-6 pl-0 mb-lg-5">
-
 
                                 </div>
                             </div>
@@ -75,10 +74,11 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                    <h6>Toutes mes vidéos</h6>
+                                     <a href="#newplaylist" class=" btn btn-warning mb-3">Nouvelle playlist</a>
                                     <div class="col-sm-12 col-md-12 col-xl-12">
                                     <div class="row g-4">
-                                    <h6>Toutes mes vidéos</h6>
-                                    {% for v in play_lists %}
+                                        {% for v in play_lists %}
                                         <div class="col-sm-6 col-xl-3">
                                             <div class="rounded d-flex align-items-center justify-content-between h-100">
                                                 <div style="background-color: #191C24; " class="card h-100">
@@ -86,7 +86,6 @@
                                                     <video width="180" height="100" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature_playlist.url }}" >
                                                         <source src="" type="video/mp4" />
                                                     </video>
-
                                                 </a>
                                                 <div class="row justify-content-between">
                                                         <div class="col-11 mt-3">
@@ -100,6 +99,31 @@
                                             </div>
                                         </div>
                                     {% endfor %}
+                                    <hr>
+                                    <div id="newplaylist" class="row h-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+                                                    <div class="col-md-6 text-center">
+                                                        <h6 class="mb-4">Créer une nouvelle PlayList</h6>
+                                                        <form action="{% url 'AddPlaylist' %}" method="post">
+                                                            {% csrf_token %}
+                                                            <input name="id" hidden value="{{ user.id }} ">
+                                                            <div class="form-floating mb-3">
+                                                                <input name="playlist" type="text" class="form-control" id="floatingInput"
+                                                                    placeholder="Nom de playlist">
+                                                                <label for="floatingInput">playlist</label>
+                                                            </div>
+                                                            <div class="mb-3">
+                                                                <label for="formFileSm" class="form-label">Miniature Playlist</label>
+                                                                <input name="miniature" class="form-control form-control-sm bg-dark" id="formFileSm" type="file">
+                                                            </div>
+                                                            <div class="form-floating">
+                                                            <textarea name="description" class="form-control mb-3" placeholder="Leave a comment here"
+                                                                id="floatingTextarea" style="height: 150px;"></textarea>
+                                                            <label for="floatingTextarea">Description</label>
+                                                        </div>
+                                                            <button type="submit"class="form-control btn btn-dark"><strong style="color: #72473b">Ajouter</strong></button>
+                                                        </form>
+                                                    </div>
+                                                </div>
                                     </div>
                                     </div>
                                 </div>
