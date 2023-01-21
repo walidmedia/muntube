@@ -9,7 +9,7 @@ class CommentAdmin(admin.ModelAdmin):
 admin.site.register(models.comment,CommentAdmin)
 
 class VideoAdmin(admin.ModelAdmin):
-	list_display=('user','title','detail','vid','miniature','playlists','total_likes','total_comments')
+	list_display=('user','title','detail','vid','miniature','play_lists','total_likes','total_comments')
 admin.site.register(models.Video,VideoAdmin)
 
 class GalleryVideoAdmin(admin.ModelAdmin):
@@ -42,3 +42,7 @@ admin.site.register(models.Subscription,SubscriptionAdmin)
 class SavedVideoAdmin(admin.ModelAdmin):
 	list_display=('video','user')
 admin.site.register(models.savedvideo,SavedVideoAdmin)
+
+class PlaylistsAdmin(admin.ModelAdmin):
+	list_display=('user_playlist','nom_playlist','miniature_playlist')
+admin.site.register(models.playlist,PlaylistsAdmin)

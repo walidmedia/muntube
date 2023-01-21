@@ -16,282 +16,350 @@
 </style>
 
 {% block content %}
-<div class="layout-overlay layout-menu-toggle"></div>
-<!--Container Main start-->
-
-  <!-- Content wrapper -->
-  <div class="content-wrapper">
-    <!-- Content -->
-
-	<!-- main content -->
-	<div class="container-fluid">
-		<div class="row pt-3">
-
-        {% for v in video %}
-			<div class="row col-12 video_box">
-                    <video width="100%" class="embed-responsive embed-responsive-16by9 col-md-12" controls="controls" >
-                        <source src="{{ v.vid.url }}" type="video/mp4" />
-                    </video>
-
-                <div class="col-12">
-                  <div style="background-color: #191C24; " class="card mb-2">
-                    <h5 class="card-header mb-2">{{ v.title }}</h5>
-                    <div class="card-body">
-                      <div class="row gy-3">
-                        <div class="row col-12">
-                            <div class="col-md-6">
-                                <span class="text-white fw-semibold">2313 views • {{ v.date_created.date }}</span>
-                            </div>
-                            <div class="col-md-2 cen">
-                                {% if user.is_authenticated %}
-                            <form action="{% url 'like_video' v.pk %}" method="post">
-                                {% csrf_token %}
-                                <button  style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                    <i class="fa fa-heart"></i>
-                                </button>
-                                <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
-                            </form>
-                            {% else %}
-                            <form action="{% url 'login' %}" method="post">
-                                {% csrf_token %}
-                                <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                    <i class="fa fa-heart"></i>
-                                </button>
-                                <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
-                            </form>
-                                {% endif %}
-
-
-                            </div>
-                            <div class="col-md-2">
-                                <form>
-                                <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                    <i class="fa fa-share"></i>
-                                </button>
-                                <span class="align-middle text-white"> Partager</span>
-
-                            </form>
-                            </div>
-                            <div class="col-md-2 nav-item dropdown">
-                                <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
-                                    <i class="fa fa-ellipsis-h"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
-                                    <form>
-                                         {% csrf_token %}
-                                        <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+   <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-md-12 col-xl-8">
+            {% for v in video %}
+                <div class="row col-12 video_box">
+                        <video width="100%" class=" embed-responsive embed-responsive-16by9 col-md-12" controls="controls" >
+                            <source src="{{ v.vid.url }}" type="video/mp4" />
+                        </video>
+                    <div class="col-sm-12 col-md-12 col-xl-12">
+                      <div style="background-color: #191C24; " class="card mb-2">
+                        <h5 class="card-header">{{ v.title }}</h5>
+                       <span class="container-fluid  text fw-semibold">2313 views • {{ v.date_created.date }}</span>
+                      <hr class="mt-2">
+                        <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="row g-3">
+                            <table class="mt-0">
+                                <tr>
+                                    <td>
+                                        {% if user.is_authenticated %}
+                                        <form action="{% url 'like_video' v.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <button  style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                                <i class="fa fa-heart"></i>
+                                            </button>
+                                            <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
+                                        </form>
+                                        {% else %}
+                                        <form action="{% url 'login' %}" method="post">
+                                            {% csrf_token %}
+                                            <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                                <i class="fa fa-heart"></i>
+                                            </button>
+                                            <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
+                                        </form>
+                                    {% endif %}
+                                    </td>
+                                    <td>
+                                        <form>
+                                        <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
+                                            <i class="fa fa-share"></i>
                                         </button>
+                                        <span class="align-middle text-white"> Partager</span>
                                     </form>
-                                    <form action="{% url 'save_video' v.pk %}" method="post">
-                                        {% csrf_token %}
-                                        <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Enregistrer</span>
-                                        </button>
-                                    </form>
+                                    </td>
+                                    <td>
+                                        <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                        <i class="fa fa-ellipsis-h"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
+                                        {% if user.is_authenticated %}
+                                        <form>
+                                             {% csrf_token %}
+                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                            </button>
+                                        </form>
+                                        <form action="{% url 'save_video' v.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">À regarder</span>
+                                            </button>
+                                        </form>
+                                        {% else %}
+                                            <form>
+                                             {% csrf_token %}
+                                                <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                    <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                                </button>
+                                            </form>
+                                            <form action="{% url 'login' %}" method="post">
+                                                {% csrf_token %}
+                                                <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                    <i class="fa fa-save me-3"></i><span class="align-middle text-black">Enregistrer</span>
+                                                </button>
+                                                </form>
+                                        {% endif %}
+                                    </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="container-fluid">
+                            <div class="row g-3">
+                                <table>
+                                    <tr>
+                                        <td rowspan="2">
+                                            <img id="img" width="48" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
+                                        </td>
+                                        <td>
+                                             <span style="color:white;">
+                                                <b>{{ v.user.username }}</b> <i class="fas fa-check-circle me-2"></i>
+                                             </span>
+                                        </td>
+                                        <td rowspan="2">
+                                            {% if user.is_authenticated %}
+                                                {% if all_chaine.id == v.user.id %}
+                                                    <form action="{% url 'abonni_video' v.pk %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button disabled style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                                            <i class="fa fa-bell"></i>
+                                                            <span style="color: white">S'abonner</span>
+                                                        </button>
+                                                    </form>
+                                                {% else %}
+                                                    <form action="{% url 'abonni_video' v.pk %}" method="post">
+                                                        {% csrf_token %}
+                                                        <button style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                                            <i class="fa fa-bell"></i>
+                                                            <span style="color: white">S'abonner</span>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                            {% else %}
+                                                <form action="{% url 'login' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                                        <i class="fa fa-bell"></i>
+                                                        <span style="color: white">S'abonner</span>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span style="color:white">111 abonnés</span>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="col-sm-4 col-md-4 col-xl-1">
                                 </div>
                             </div>
+                        </div>
 
+                        <div class="row g-4">
+                            <div class="col-sm-12 col-xl-4"></div>
+                            <div class="col-sm-12 col-xl-4">
+                                <div class=" rounded d-flex align-items-center justify-content-between p-0">
+                                    <table class="">
+                                        <thead class="mt-0">
+                                        <th colspan="4" class="text-center ml-0"><h3><strong class="text-success">SOUTENIR</strong></h3></th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td rowspan="2"><i class="fa fa-hands-helping me-4 fa-3x text-white"></i></td>
+                                            <td colspan="2">
+                                                <button onclick="plusClick()" style="background-color: #533f03" type="button" class="btn rounded btn-outline-warning me-2">
+                                                        <i class="fa fa-plus-circle"></i>
+                                                    </button>
+                                            </td>
+                                            <td rowspan="2">
+                                                <h1><i class="text-success me-2"><a id="clicks">10</a><span>€</span></i></h1>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <button onclick="moinsClick()" style="background-color: #533f03" type="submit" class="btn rounded btn-outline-warning">
+                                                    <i class="fa fa-minus-circle"></i>
+                                                </button>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <script>
+                                        var clicks = 10;
+
+                                        function plusClick() {
+                                          clicks += 5;
+                                          document.getElementById("clicks").innerHTML = clicks;
+                                        };
+                                        function moinsClick() {
+                                          clicks -= 5;
+                                          document.getElementById("clicks").innerHTML = clicks;
+                                        };
+                                    </script>
+                                    <div class="ms-3">
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-xl-4"></div>
+                         </div>
+                        <div style="color: #b9b7b7">
+                            <p>{{ v.detail }}
+                                <span id="dots">...</span>
+                                <span id="more"></span>
+                            </p>
+                        </div>
+                        <button onclick="myFunction()" id="myBtn" class="btn">MONTRE PLUS</button>
                         </div>
                       </div>
-                        <div class="row col-md-12 col-sm-12 mt-4 ">
-                            <div class="col-md-1 col-sm-6 pr-0 w-2 ">
-                                <img id="img" width="48" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
-                            </div>
-                            <div class="col-md-2 col-sm-6 pl-0">
-                                <p style="color:white;">
-                                    <b>{{ v.user.username }}</b> <i class="fas fa-check me-2"></i>
-                                    <span style="color:white">111 abonnés</span>
-                                </p>
-                            </div>
-                            <div class="col-md-3 col-sm-12 text-right">
-                                {% if all_chaine.id == v.user.id %}
-                                <form action="{% url 'abonni_video' v.pk %}" method="post">
-                                    {% csrf_token %}
-                                    <button disabled style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
-                                        <i class="fa fa-bell"></i>
-                                        <span style="color: white">S'abonner</span>
-                                    </button>
-                                </form>
-                                {% else %}
-                                <form action="{% url 'abonni_video' v.pk %}" method="post">
-                                    {% csrf_token %}
-                                    <button di style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
-                                        <i class="fa fa-bell"></i>
-                                        <span style="color: white">S'abonner</span>
-                                    </button>
-                                </form>
-                                {% endif %}
-                            </div>
-                        </div>
-                            <div style="color: #b9b7b7">
-                                <p>{{ v.detail }}
-                                    <span id="dots">...</span>
-                                    <span id="more"></span>
-                                </p>
-                            </div>
-                        <button onclick="myFunction()" id="myBtn" class="btn">SHOW MORE</button>
+                        <!-- commentaires -->
+                        <section>
+                          <div class="my-2 ">
+                            <div class="row d-flex justify-content-center">
+                              <div class="col-md-12 col-lg-12">
+                                <div style="background-color: #191C24; " class="card text-dark">
 
-                      </div>
-
-                    </div>
-
-					<!-- commentaires -->
-                    <section>
-                      <div class="my-2 ">
-                        <div class="row d-flex justify-content-center">
-                          <div class="col-md-12 col-lg-12">
-                            <div style="background-color: #191C24; " class="card text-dark">
-
-                                  <div class="card-body p-4">
-                                    <h4 class="mb-0">
-                                        <p style="color: #b9b7b7">{{ v.total_comments }} commentaires</p>
-                                    </h4>
-                                  <form action="{% url 'commenter' v.id %}" method="post">
-                                          {% csrf_token %}
-                                          <div class="d-flex flex-start mb-4">
-                                            <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
-                                            <input name="commentaire" type="text" class="form-control" placeholder="Enter your comment...">
-                                            <input name="video" type="hidden" value="{{ v.id }}">
-                                            <input name="sujet" type="hidden" value="{{ c.name }}">
-                                            <input type="submit" value="Commenter" class="btn rounded-pill btn-video">
-                                          </div>
-                                      </form>
-                                      {% for c in comm %}
-                                          {% if c.video.id == v.id %}
-                                            <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
-
-                                            <div style="color: #b9b7b7" class="d-flex flex-start">
-                                              <img class="rounded-circle shadow-1-strong me-3"
-                                                src="{{ user.photo.url }}" alt="avatar" width="60"
-                                                height="60" />
-                                              <div>
-                                                <h6 class="fw-bold mb-1">{{ user.username }}</h6>
-                                                <div class="d-flex align-items-center mb-2">
-                                                  <p class="mb-0">
-                                                    {{ c.date_added }}
-                                                    <!--<span class="badge bg-primary">Pending</span>-->
-                                                  </p>
-
-                                                   <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
-                                                    <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
-                                                </div>
-                                                <p class="mb-3">
-                                                  {{ c.contenue }}
-                                                </p>
-                                                  <span id="repinput">
-                                                      <div class="d-flex flex-start mb-4">
-                                                      <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
-                                                      <input  class="form-control" placeholder="Votre reponse .." >
-                                                      <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
-                                                  </div>
-                                                  </span>
-
+                                      <div class="card-body p-4">
+                                        <p class="mb-0">
+                                            <p style="color: #b9b7b7">{{ v.total_comments }} commentaires</p>
+                                        </p>
+                                      <form action="{% url 'commenter' v.id %}" method="post">
+                                              {% csrf_token %}
+                                              <div class="d-flex flex-start mb-4">
+                                                <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                                <input name="commentaire" type="text" class="form-control" placeholder="Entrez votre commentaire...">
+                                                <input name="video" type="hidden" value="{{ v.id }}">
+                                                <input name="sujet" type="hidden" value="{{ c.name }}">
+                                                <input style="background: #533f03; color: white" type="submit" value="Commenter" class="btn rounded-pill btn-outline-secondary">
                                               </div>
-                                            </div>
-                                            <div class="d-flex align-items-center mb-3">
-                                                  <a href="#!" class="link-muted me-3"><i class="fa fa-heart me-1"></i>232</a>
-                                                  <a href="#!" class="link-muted"><i class="fa fa-heart-broken me-1"></i>23</a>
-                                                </div>
-                                              <hr style="color:#b9b7b7;">
-                                          {% endif %}
-                                      {% endfor %}
-                                  </div>
-                                  <hr class="my-0" />
+                                          </form>
+                                          {% for c in comm %}
+                                              {% if c.video.id == v.id %}
+                                                <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
 
+                                                <div style="color: #b9b7b7" class="d-flex flex-start">
+                                                  <img class="rounded-circle shadow-1-strong me-3"
+                                                    src="{{ user.photo.url }}" alt="avatar" width="60"
+                                                    height="60" />
+                                                  <div>
+                                                    <h6 class="fw-bold mb-1">{{ user.username }}</h6>
+                                                    <div class="d-flex align-items-center mb-2">
+                                                      <p class="mb-0">
+                                                        {{ c.date_added }}
+                                                        <!--<span class="badge bg-primary">Pending</span>-->
+                                                      </p>
+
+                                                       <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
+                                                        <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
+                                                    </div>
+                                                    <p class="mb-3">
+                                                      {{ c.contenue }}
+                                                    </p>
+                                                      <span id="repinput">
+                                                          <div class="d-flex flex-start mb-4">
+                                                          <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
+                                                          <input  class="form-control" placeholder="Votre reponse .." >
+                                                          <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
+                                                      </div>
+                                                      </span>
+
+                                                  </div>
+                                                </div>
+                                                <div class="d-flex align-items-center mb-3">
+                                                      <a href="#!" class="link-muted me-3"><i class="fa fa-heart me-1"></i>232</a>
+                                                      <!--<a href="#!" class="link-muted"><i class="fa fa-like me-1"></i>23</a>-->
+                                                    </div>
+                                                  <hr style="color:#b9b7b7;">
+                                              {% endif %}
+                                          {% endfor %}
+                                      </div>
+                                      <hr class="my-0" />
+                                </div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
-                    </section>
+                        </section>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="col-sm-12 col-md-12 col-xl-4">
+                <div class="h-100 bg-secondary rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Recommandé</h6>
+                        <a href="{% url 'index' %}">Afficher tout</a>
+                    </div>
+                    <div>
+                        {% for v in recpmanded_video %}
+                            <div class=" col-sm-12 col-xl-12">
+                                <div class="rounded d-flex align-items-center justify-content-between h-100">
+                                    <div style="background-color: #191C24; " class="card h-100">
+                                    <a href="{% url 'video' v.id %}">
+                                        <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" controls >
+                                            <source src="{{ v.vid.url }}" type="video/mp4" />
+                                        </video>
+                                    </a>
+                                    <div class="row justify-content-between">
+                                            {% if v.miniature %}
+                                            <div class="col-2 mt-3 ml-1 ">
+                                            {% if v.user.is_superuser %}
+                                                <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
+                                                {% else %}
+                                                <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
+                                            <div class="col-10 mt-3">
+                                                <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                                <p style="color:#A77443;">
+                                                    {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
+                                                    <small>2742 vues  {{ v.date_created.date }}</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        function myFunction() {
+          var dots = document.getElementById("dots");
+          var moreText = document.getElementById("more");
+          var btnText = document.getElementById("myBtn");
 
-					<!-- <div class="row mt-4">
-						<div class="col-1">
-							<img id="img" width="48" src="images/icon/avatar.png" class="rounded-circle">
-						</div>
-						<div class="col-11">
-							<div><b>Vasudha Deshpande</b> 3 months ago</div>
-							<div>Mummy ke taane aur arijit ke gaane... Dil ko chhu jaate hain❤😘</div>
-						</div>
-					</div>
-					<div class="row mt-4">
-						<div class="col-1">
-							<img id="img" width="48" src="images/icon/avatar.png" class="rounded-circle">
-						</div>
-						<div class="col-11">
-							<div><b>Vasudha Deshpande</b> 3 months ago</div>
-							<div>Mummy ke taane aur arijit ke gaane... Dil ko chhu jaate hain❤😘</div>
-						</div>
-					</div>
-				</div>
-			</div>
-        {% endfor %}
+          if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "MONTRE PLUS";
+            moreText.style.display = "none";
+          } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "MONTRER MOINS";
+            moreText.style.display = "inline";
+          }
+        }
+        function myFunctionReply() {
+          var replyinput = document.getElementById("repinput");
+          var btnTextRep = document.getElementById("myBtnRep");
 
-			<!--<div class="col-md-4">
-				<div class="container-fluid video_list">
-					<a href="#">
-						<div class="card">
-							<div class="row p-0">
-								<div class="col-md-5">
-                                        <img class="video_list_responsive" src="https://i.ytimg.com/vi/hoNb6HuNmU0/hq720.jpg" alt="image" width="100%" height="94" />
-								</div>
-								<div class="col-md-7 p-0">
-										<p class="mb-1 title" title="Full Song: KHAIRIYAT (BONUS TRACK) | CHHICHHORE | Sushant, Shraddha | Pritam, Amitabh B|Arijit Singh">Full Song: KHAIRIYAT (BONUS TRACK) | CHHICHHORE | Sushant, Shraddha | Pritam, Amitabh B|Arijit Singh</p>
-											<p style="color:#000000;">
-												T-Series <i class="fas fa-check-circle"></i> <br>
-												70M views • 7 months ago
-											</p>
-								</div>
-							</div>
-						</div>
-						</a>
-				</div>
-			</div>-->
+          if (btnTextRep.innerHTML === "Repondre") {
+            replyinput.style.display = "inline";
+            btnTextRep.innerHTML = "Annuler";
 
-		</div>
-	</div>
+          } else {
+            replyinput.style.display = "none";
+            btnTextRep.innerHTML = "Repondre";
+          }
+        }
 
-		<!-- main content -->
-
-		<script src="js/jquery-3.5.1.min.js"></script>
-		<script src="js/popper.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-
-		<script>
-			$(document).ready(function(){
-				$('[data-toggle="tooltip"]').tooltip();
-			});
-
-function myFunction() {
-  var dots = document.getElementById("dots");
-  var moreText = document.getElementById("more");
-  var btnText = document.getElementById("myBtn");
-
-  if (dots.style.display === "none") {
-    dots.style.display = "inline";
-    btnText.innerHTML = "SHOW MORE";
-    moreText.style.display = "none";
-  } else {
-    dots.style.display = "none";
-    btnText.innerHTML = "SHOW LESS";
-    moreText.style.display = "inline";
-  }
-}
-function myFunctionReply() {
-  var replyinput = document.getElementById("repinput");
-  var btnTextRep = document.getElementById("myBtnRep");
-
-  if (btnTextRep.innerHTML === "Repondre") {
-    replyinput.style.display = "inline";
-    btnTextRep.innerHTML = "Annuler";
-
-  } else {
-    replyinput.style.display = "none";
-    btnTextRep.innerHTML = "Repondre";
-  }
-}
-
-</script>
+    </script>
 {% endblock %}
 
 {% include 'footer.html' %}

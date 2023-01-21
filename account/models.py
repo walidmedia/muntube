@@ -72,16 +72,24 @@ class User(AbstractUser):
 
 #### User Abonnement
 class UserAbonn(models.Model):
-    chaine = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    abonnements = models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
+    chaine = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    abonnements = models.ManyToManyField(User, related_name='abonnements', blank=True)
 
-    def __str__(self):
-        if not self.chaine:
-            return "Anonymous"
-        return self.chaine.username
+
+    """if not self.chaine:
+        return "Anonymous"
+    return self.chaine.username"""
 
     def total_abonnés(self):
         return self.abonnements.count()
+
+class playlist(models.Model):
+    user_playlist = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    nom_playlist = models.CharField(max_length=128,default=False)
+    miniature_playlist = models.ImageField(null=True,blank=True,upload_to='playlist_img')
+    desc_playlist = models.CharField(max_length=512,default=False, blank=True)
+    def __str__(self):
+        return '%s - %s' % (self.nom_playlist, self.user_playlist)
 
 #### This is user settings
 class UserSetting(models.Model):

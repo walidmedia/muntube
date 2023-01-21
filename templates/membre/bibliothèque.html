@@ -1,21 +1,51 @@
 {% load static %}
 {% include 'base.html' %}
 
+{% block content %}
 
-
-            <!-- Sale & Revenue Start -->
-            <div class="pt-4 px-4">
-                <h3 class="mb-3">Vidéos J'aime</h3>
-                <div class="row g-4">
-                    {% for use in abonnement %}
-                            {{ use.user.username }}<br>
-                    {% endfor %}
-                 </div>
-            <hr style="color: #C39868">
+        <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+    <div class="col-sm-12 col-xl-12">
+        <div class="bg-secondary rounded h-100 p-4">
+            <h5 class="mb-4">Mes abonnements</h5>
+            <div class="owl-carousel testimonial-carousel">
+                {% for chaine in chaines %}
+                <div class="testimonial-item text-center">
+                    <img class="img-fluid rounded-circle mx-auto mb-4" src="{{ chaine }}" style="width: 100px; height: 100px;">
+                    <h5 class="mb-1">{{ chaine.chaine }}</h5>
+                    <p>Profession</p>
+                    <p class="mb-0">{{ chaine.chaine.bio }}</p>
+                </div>
+                 {% endfor %}
             </div>
-            <!-- Sale & Revenue End -->
         </div>
     </div>
-</body>
 
+    <!-- Widget Start -->
+
+    <div class="col-sm-12 col-md-12 col-xl-12">
+                        <div class="h-100 bg-secondary rounded p-4">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h6 class="mb-0">Abonnements</h6>
+                                <a href="">Afficher tout</a>
+                            </div>
+                            {% for c in chaines %}
+                                <div class="d-flex align-items-center border-bottom py-3">
+                                <img class="rounded-circle flex-shrink-0" src="{{ chain.chaine.username }}" alt="" style="width: 40px; height: 40px;">
+                                <div class="w-100 ms-3">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-0">{{ c.chaine }}</h6>
+                                        <small>15 minutes ago</small>
+                                    </div>
+                                    <span>Short message goes here...</span>
+                                </div>
+                            </div>
+                                {% endfor %}
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+        {% endblock %}
 {% include 'footer.html' %}

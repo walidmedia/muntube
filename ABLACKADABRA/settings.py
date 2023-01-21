@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
 """DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'muntube',
+        'NAME': '0003',
         'USER': 'postgres',
         'PASSWORD': 'esst',
         'HOST': 'localhost',
@@ -154,7 +154,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL= '/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,"media/")
 
-
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/login/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

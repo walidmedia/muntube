@@ -4,7 +4,7 @@ from django.urls import path
 from ABLACKADABRA import settings
 from .views import checkout, upload, success_upload, addvideo, mesvideos, checkout_session, machaine, stockage, \
         pay_success, pay_cancel, video, commenter, like_video, abonni_video, monprofile, save_video, \
-        vidéosjaime, bibliothèque, a_regarder
+        vidéosjaime, bibliothèque, a_regarder, chaine, AddPlaylist, maintenance
 
 urlpatterns = [
         #path('pricing/', pricing, name='pricing'),
@@ -27,5 +27,8 @@ urlpatterns = [
         path('vidéosjaime/', vidéosjaime, name='vidéosjaime'),
         path('bibliothèque/', bibliothèque, name='bibliothèque'),
         path('a_regarder/', a_regarder, name='a_regarder'),
+        path('chaine/', chaine, name='chaine'),
+        path('AddPlaylist/', AddPlaylist, name='AddPlaylist'),
+        path('maintenance/', maintenance, name='maintenance'),
 
 ]

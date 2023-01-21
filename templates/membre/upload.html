@@ -1,60 +1,105 @@
 {% load static %}
+<style>
 
+</style>
 {% block content %}
     {% include 'base.html' %}
-  <div class="content-wrapper">
-    <!-- Content -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-xl-1"></div>
+        <div class="col-sm-12 col-xl-10">
+            <div class="bg-secondary rounded text-white h-100 p-4">
+                <h5 class="mb-4">Vos vidéos resteront privées jusqu'à leur publication</h5>
+                 <form action="{% url 'addvideo' %}" method="post"enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input name="id" type="hidden" class="custom-file-input" value="{{ user.id }}" id="inputGroupFile01">
+                    <div class="input-group mb-3">
+                    <input required
+                      name="video"
+                      type="file"
+                      class="form-control form-control-sm bg-dark"
+                      placeholder="Choisir une vidéo"
+                      id="defaultFormControlInput"
+                      aria-describedby="inputGroupFileAddon04"
+                      aria-label="Upload"
+                    />
+                       <small style="color: #9c999a">Déposez les fichiers vidéo que vous souhaitez mettre en ligne</small></label>
+                    </div>
+                    <div class="input-group mb-3">
+                    <input
+                            required
+                      name="image"
+                      type="file"
+                      class="form-control form-control-sm bg-dark "
+                      id="inputGroupFile04"
+                      aria-describedby="inputGroupFileAddon04"
+                      aria-label="Upload"
+                    />
+                        <small style="color: #9c999a">Sélectionnez ou importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs.</small>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text mb-3">Titre de la vidéo</span>
+                        <textarea required class="form-control mb-3" name="titre" aria-label="With textarea" placeholder="Titre"></textarea>
+                      </div>
+                     <div class="input-group">
+                        <span class="input-group-text mb-3">Description</span>
+                        <textarea required class="form-control mb-3" name="description" aria-label="With textarea" placeholder="Description"></textarea>
+                      </div>
+                     <div class="mb-3">
+                         <select required style="color: white" class="form-select" name="categorie" aria-label="Default select example">
+                            <option selected>Catégorie</option>
+                            <option value="Actualités et Politique">Actualités et Politique</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Associations et engagement">Associations et engagement</option>
+                            <option value="Auto/Moto">Auto/Moto</option>
+                            <option value="Education">Education</option>
+                            <option value="Films et animations">Films et animations</option>
+                            <option value="Humour">Humour</option>
+                            <option value="Jeux vidéos">Jeux vidéos</option>
+                            <option value="Musique">Musique</option>
+                            <option value="Science et technologie">Science et technologie</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Vie pratique et style">Vie pratique et style</option>
+                            <option value="Voyages et événnements">Voyages et événnements</option>
+                        </select>
+                         <small style="color: #9c999a">Ajoutez votre vidéo à une catégorie pour permettre aux spectateurs de la trouver plus facilement.</small>
+                     </div>
+                     <div class="mb-3">
+                         <select required style="color: white" class="form-select" name="play_list" aria-label="Default select example">
+                            <option>Playlists</option>
+                            {% for play in play_lists %}
+                                 <option value="{{ play.id }}">{{ play.nom_playlist }}</option>
+                             {% endfor %}
+                        </select>
+                     <small style="color: #9c999a">Ajoutez votre vidéo à une ou plusieurs playlists. Les playlists peuvent aider les spectateurs à trouver vos contenus plus rapidement. </small>
+                     </div>
+                     <div class="form-floating mb-3">
+                        <textarea required style="color: white" class="form-control" name="tags" placeholder=""
+                            id="floatingTextarea" style="height: 80px;">
+                        </textarea>
+                        <label for="floatingTextarea">Tags</label>
+                         <small style="color: #9c999a">Séparez chaque tag par une virgule</small>
+                    </div>
 
-    <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="mb-5"></div>
+                     <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" name="statut" value="0" type="checkbox" role="switch"
+                                    id="flexSwitchCheckChecked">
+                                <label style="color: #9c999a" class="form-check-label" for="flexSwitchCheckChecked">
+                                    Mettre la vidéo publique
+                                </label>
+                            </div>
+                    <button type="submit" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;
+    border-color: #ba7900;
+    background: rgba(70,40,9,0.81);">Ajouter</button>
+                </form>
 
-<!-- main content -->
-  <div class="row col-12 mb-lg-5">
-    <div class="container-fluid col-10">
-    <form action="{% url 'addvideo' %}" method="post"enctype="multipart/form-data">
-        {% csrf_token %}
-        <input name="id" type="hidden" class="custom-file-input" value="{{ user.id }}" id="inputGroupFile01">
-        <label for="defaultFormControlInput" class="form-label text-white">Choisir une vidéo</label>
-        <div class="input-group">
-        <input
-          name="video"
-          type="file"
-          class="form-control mb-3"
-          placeholder="Choisir une vidéo"
-          id="defaultFormControlInput"
-          aria-describedby="inputGroupFileAddon04"
-          aria-label="Upload"
-        />
+            </div>
         </div>
-        <label for="inputGroupFile04" class="form-label text-white">Choisir une miniature</label>
-        <div class="input-group">
-        <input
-          name="image"
-          type="file"
-          class="form-control mb-3"
-          id="inputGroupFile04"
-          aria-describedby="inputGroupFileAddon04"
-          aria-label="Upload"
-        />
-        </div>
-        <div class="input-group">
-            <span class="input-group-text mb-3">Titre de la vidéo</span>
-            <textarea class="form-control mb-3" name="titre" aria-label="With textarea" placeholder="Titre"></textarea>
-          </div>
-         <div class="input-group">
-            <span class="input-group-text mb-3">Description</span>
-            <textarea class="form-control mb-3" name="description" aria-label="With textarea" placeholder="Description"></textarea>
-          </div>
-            <button type="submit" class="btn rounded-pill btn-outline-secondary" style="color: #233446;
-    border-color: #d9dee3;
-    background: #fcfdfd;">Ajouter</button>
-    </form>
-
+        <div class="col-xl-1"></div>
+    </div>
 </div>
-    </div>
-    </div>
-  </div>
 
 
-{% include 'membre/footer.html' %}
+
 {% endblock %}
+{% include 'footer.html' %}

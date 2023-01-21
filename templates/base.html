@@ -47,7 +47,7 @@
         <!-- Sidebar Start -->
         <div class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
-                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                <a href="{% url 'index' %}" class="navbar-brand mx-4 mb-3">
                     <h3 style="color: #A77443"><i class="fa fa-user-edit me-2"></i>MunTube</h3>
                 </a>
                 <!--<div class="d-flex align-items-center ms-4 mb-4">
@@ -63,14 +63,24 @@
                 <div class="navbar-nav w-100">
                     <a href="{% url 'index' %}" class="nav-item nav-link active"><i style="background-color: #A77443; color: #ffffff" class="fa fa-home me-2"></i><strong style="color: white">Accueil</strong></a>
                     <a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #A77443; color: #ffffff"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>
-                    <a href="#" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
+                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
                     <a href="{% url 'a_regarder' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-eye me-2"></i><strong style="color: white">A regarder</strong></a>
                     <a href="{% url 'vidéosjaime' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-star me-2"></i><strong style="color: white">Vidéos "j'aime"</strong></a>
                     <a><hr></a>
-                    <a href="#" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-photo-video me-2"></i><strong style="color: white">Chaîne</strong></a>
+                    <a href="{% url 'chaine' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-photo-video me-2"></i><strong style="color: white">Chaîne</strong></a>
                     <a href="{% url 'upload' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-video me-2"></i><strong style="color: white">Créer</strong></a>
                     <a><hr></a>
-                    <a href="#" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
+                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
+                    <a><hr></a>
+                    <a href="#" class="nav-item nav-link"><strong style="color: white">Termes et conditions</strong></a>
+                    <a href="#" class="nav-item nav-link"><strong style="color: white">Politique de Confidentialité</strong></a>
+                    <a href="#" class="nav-item nav-link"><strong style="color: white">Mentions légales</strong></a>
+                    <a href="#" class="nav-item nav-link"><strong style="color: white">Politique de cookies</strong></a>
+                    <a><hr></a>
+                    <a style="padding-left: 10px"><i class="fa fa-copyright"></i><strong>
+                        2023 par STEAM BEAM<br>
+                        Tout droits réservés
+                    </strong></a>
                 </div>
             </nav>
         </div>
@@ -84,7 +94,7 @@
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-"></i></h2>
                 </a>
-                <a href="#" class="sidebar-toggler flex-shrink-0 ms-2" style="color: #f8f8f8;
+                <a href="#" class="sidebar-toggler flex-shrink-0" style="color: #f8f8f8;
                 text-decoration: none;">
                     <i class="fa fa-bars"></i>
                 </a>
@@ -139,8 +149,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profil mis à jour
-</h6>
+                                <h6 class="fw-normal mb-0">Profil mis à jour</h6>
                                 <small>Il ya 15 minutes</small>
                             </a>
                             <hr class="dropdown-divider">
@@ -191,6 +200,8 @@
                 </div>
             </nav>
             <!-- Navbar End -->
+
+        <a href="#" class="btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>
 
     {% block content %}
 

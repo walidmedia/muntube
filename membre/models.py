@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.db.models.fields import json
 from django.utils.html import mark_safe
-from account.models import User
+from account.models import User, playlist
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from asgiref.sync import async_to_sync
@@ -15,13 +15,16 @@ class Video(models.Model):
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 	title=models.CharField(max_length=150)
 	detail=models.TextField()
-	vid=models.FileField(null=True,blank=True,upload_to='videos')
+	vid=models.FileField(blank=True,upload_to='videos')
 	miniature=models.ImageField(null=True,blank=True,upload_to='imagevid')
-	n_likes=models.ManyToManyField(User, related_name='likes', null=True, blank=True)
-	n_comments=models.ManyToManyField(User, related_name='comments', null=True, blank=True)
-	playlists=models.ForeignKey(User,on_delete=models.CASCADE,related_name='playlist', null=True, blank=True)
+	n_likes=models.ManyToManyField(User, related_name='likes', blank=True)
+	n_comments=models.ManyToManyField(User, related_name='comments', blank=True)
+	play_lists = models.ForeignKey(playlist,on_delete=models.CASCADE,null=True, blank=True,default=False)
+	categorie = models.CharField(max_length=150, blank=True, default=False)
+	tags = models.CharField(max_length=150, blank=True,default=False)
+	status_video = models.IntegerField(null=True, blank=True, default=0)
 	#abonnements=models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
-	link=models.TextField(null=True, blank=True)
+	link=models.TextField(null=True,blank=True)
 	documents=models.FileField(upload_to='filesvideo', null=True, blank=True)
 	date_created = models.DateTimeField(default=datetime.today)
 
@@ -33,6 +36,9 @@ class Video(models.Model):
 
 	def total_comments(self):
 		return self.n_comments.count()
+
+	def total_playlists(self):
+		return self.play_lists.count()
 
 	"""def total_abonnés(self):
 		return self.abonnements.count()"""
@@ -49,11 +55,19 @@ class comment(models.Model):
 	def __str__(self):
 		return '%s - %s' % (self.video.title, self.name)
 
+
+
 class savedvideo(models.Model):
 	video = models.ForeignKey(Video,on_delete=models.CASCADE,null=True, blank=True)
 	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 	def __str__(self):
-		return '%s - %s' % (self.video.title, self.user.username)
+		return '%s - %s' % (self.video.title, self.user)
+
+"""class playlists(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+	nom_playlist = models.CharField(max_length=128)
+	def __str__(self):
+		return '%s - %s' % ( self.nom_playlist, self.user)"""
 
 
 # Gallery Images
