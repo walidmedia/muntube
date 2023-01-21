@@ -105,7 +105,7 @@
                                 <table>
                                     <tr>
                                         <td rowspan="2">
-                                            <img id="img" width="48" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwme89cM8YZvHcybGrZl_Obd9U9p5QabozJQ&usqp=CAU" class="rounded-circle">
+                                            <img id="img" width="48" src="{{ v.user.photo.url }}" class="rounded-circle">
                                         </td>
                                         <td>
                                              <span style="color:white;">
@@ -154,10 +154,12 @@
                         </div>
 
                         <div class="row g-4">
-                            <div class="col-sm-12 col-xl-4"></div>
-                            <div class="col-sm-12 col-xl-4">
+                            <div class="col-sm-4 col-xl-4"></div>
+                            <div class="col-sm-4 col-xl-4">
                                 <div class=" rounded d-flex align-items-center justify-content-between p-0">
-                                    <table class="">
+                                    <form action="" method="post">
+                                        {% csrf_token %}
+                                        <table>
                                         <thead class="mt-0">
                                         <th colspan="4" class="text-center ml-0"><h3><strong class="text-success">SOUTENIR</strong></h3></th>
                                         </thead>
@@ -170,19 +172,22 @@
                                                     </button>
                                             </td>
                                             <td rowspan="2">
-                                                <h1><i class="text-success me-2"><a id="clicks">10</a><span>€</span></i></h1>
+                                                <h1><SPAN class="text-success me-2"><a id="clicks">10</a><span>€</span></SPAN></h1>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                <button onclick="moinsClick()" style="background-color: #533f03" type="submit" class="btn rounded btn-outline-warning">
+                                                <button onclick="moinsClick()" style="background-color: #533f03" type="button" class="btn rounded btn-outline-warning">
                                                     <i class="fa fa-minus-circle"></i>
                                                 </button>
                                             </td>
                                             <td></td>
                                         </tr>
+
                                         </tbody>
                                     </table>
+                                     <button type="submit" class="col-12 btn btn-outline-warning text-center mt-2">Soutenir</button>
+                                    </form>
                                     <script>
                                         var clicks = 10;
 
@@ -201,7 +206,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-xl-4"></div>
+                            <div class="col-sm-4 col-xl-4"></div>
                          </div>
                         <div style="color: #b9b7b7">
                             <p>{{ v.detail }}

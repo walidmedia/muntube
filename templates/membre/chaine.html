@@ -13,12 +13,15 @@
                                         <td rowspan="">
                                             <img id="img" width="100" src="{{ user.photo.url }}" class="rounded-circle">
                                         </td>
+                                        <td rowspan="11">
+                                            <img id="img" width="100" src="{{ user.photo.url }}" class="rounded-circle">
+                                        </td>
 
                                     </tr>
                                     <tr>
                                         <td>
                                             <div style="color:white;">
-                                            <b>Muntube Compte</b> <i class="fas fa-check-circle me-2"></i></div>
+                                            <b>{{ user.username }}</b> <i class="fas fa-check-circle me-2"></i></div>
                                             <div>
                                                 <span style="color:white">111 abonnés</span>
                                             </div>
@@ -222,26 +225,26 @@
                                                                     <form>
                                                                          {% csrf_token %}
                                                                         <button class="dropdown-item" type="submit" value="" name="id_video">
-                                                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
                                                                         </button>
                                                                     </form>
                                                                     <form action="#" method="post">
                                                                         {% csrf_token %}
                                                                         <button class="dropdown-item" type="submit" value="" name="id_video">
-                                                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Enregistrer</span>
+                                                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
                                                                         </button>
                                                                     </form>
                                                                     {% else %}
                                                                         <form>
                                                                          {% csrf_token %}
                                                                             <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
                                                                             </button>
                                                                         </form>
                                                                         <form action="{% url 'login' %}" method="post">
                                                                             {% csrf_token %}
                                                                             <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">Enregistrer</span>
+                                                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
                                                                             </button>
                                                                             </form>
                                                                     {% endif %}
