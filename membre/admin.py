@@ -46,3 +46,7 @@ admin.site.register(models.savedvideo,SavedVideoAdmin)
 class PlaylistsAdmin(admin.ModelAdmin):
 	list_display=('user_playlist','nom_playlist','miniature_playlist')
 admin.site.register(models.playlist,PlaylistsAdmin)
+
+class DonAdmin(admin.ModelAdmin):
+	list_display=('user_don','video','cout_don','date_don')
+admin.site.register(models.Don,DonAdmin)

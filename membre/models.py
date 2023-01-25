@@ -19,7 +19,7 @@ class Video(models.Model):
 	miniature=models.ImageField(null=True,blank=True,upload_to='imagevid')
 	n_likes=models.ManyToManyField(User, related_name='likes', blank=True)
 	n_comments=models.ManyToManyField(User, related_name='comments', blank=True)
-	play_lists = models.ForeignKey(playlist,on_delete=models.CASCADE,null=True, blank=True,default=False)
+	play_lists = models.ForeignKey(playlist,on_delete=models.CASCADE,null=True, blank=True,default='NonClassifié')
 	categorie = models.CharField(max_length=150, blank=True, default=False)
 	tags = models.CharField(max_length=150, blank=True,default=False)
 	status_video = models.IntegerField(null=True, blank=True, default=0)
@@ -27,6 +27,11 @@ class Video(models.Model):
 	link=models.TextField(null=True,blank=True)
 	documents=models.FileField(upload_to='filesvideo', null=True, blank=True)
 	date_created = models.DateTimeField(default=datetime.today)
+	view_count = models.IntegerField(default=0)
+
+	"""def view_count_total(self):
+		self.view_count += 1
+		return self.view_count"""
 
 	def __str__(self):
 		return self.title
@@ -45,6 +50,16 @@ class Video(models.Model):
 
 	def image_tag(self):
 		return mark_safe('<img src="%s" width="80" />' % (self.miniature.url))
+
+
+class Don(models.Model):
+    user_don = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True)
+    cout_don = models.IntegerField(default=10)
+    date_don = models.DateTimeField(default=datetime.today)
+
+    def __str__(self):
+        return '%s - %s' % (self.user_don.username, self.cout_don)
 
 class comment(models.Model):
 	video = models.ForeignKey(Video,related_name='comments',on_delete=models.CASCADE,null=True, blank=True)

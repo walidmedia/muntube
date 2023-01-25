@@ -60,17 +60,17 @@
                         <span>Admin</span>
                     </div>
                 </div>-->
-                <div class="navbar-nav w-100">
-                    <a href="{% url 'index' %}" class="nav-item nav-link active"><i style="background-color: #A77443; color: #ffffff" class="fa fa-home me-2"></i><strong style="color: white">Accueil</strong></a>
-                    <a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #A77443; color: #ffffff"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>
-                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
-                    <a href="{% url 'a_regarder' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-eye me-2"></i><strong style="color: white">A regarder</strong></a>
-                    <a href="{% url 'vidéosjaime' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-star me-2"></i><strong style="color: white">Vidéos "j'aime"</strong></a>
+                <div  class="navbar-nav w-100">
+                    <a href="{% url 'index' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Accueil</strong></a>
+                    <a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>
+                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
+                    <a href="{% url 'a_regarder' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-eye me-2"></i><strong style="color: white">A regarder</strong></a>
+                    <a href="{% url 'vidéosjaime' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-star me-2"></i><strong style="color: white">Vidéos "j'aime"</strong></a>
                     <a><hr></a>
-                    <a href="{% url 'chaine' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-photo-video me-2"></i><strong style="color: white">Chaîne</strong></a>
-                    <a href="{% url 'upload' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-video me-2"></i><strong style="color: white">Créer</strong></a>
+                    <a href="{% url 'chaine' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-photo-video me-2"></i><strong style="color: white">Chaîne</strong></a>
+                    <a href="{% url 'upload' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-video me-2"></i><strong style="color: white">Créer</strong></a>
                     <a><hr></a>
-                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #A77443; color: #ffffff" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
+                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
                     <a><hr></a>
                     <a href="#" class="nav-item nav-link"><strong style="color: white">Termes et conditions</strong></a>
                     <a href="#" class="nav-item nav-link"><strong style="color: white">Politique de Confidentialité</strong></a>
@@ -177,9 +177,13 @@
                             <a href="{% url 'monprofile' user.pk %}" class="dropdown-item text-white">Mon Profile</a>
                             {% endif %}
                             <hr>
-                            <a href="{% url 'stockage' %}" class="dropdown-item text-white">Acheter un stockage</a>
+                            <a href="{% url 'chaine' %}" class="dropdown-item text-white">Ma chaîne</a>
+                            <a href="#commentaires" class="dropdown-item text-white">Commentaires</a>
+                            <a href="#stats" class="dropdown-item text-white">Statistiques</a>
+                            <a href="#don" class="dropdown-item text-white">Mes dons reçus </a>
+                            <a href="#mesfilleuls" class="dropdown-item text-white">Mes filleuls professionnels</a>
                             <hr>
-                            <a href="{% url 'logout_view' %}" class="dropdown-item text-white">Déconnecter</a>
+                            <a href="{% url 'logout_view' %}" class="dropdown-item text-white">Se déconnecter</a>
                         </div>
                     {% else %}
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -201,7 +205,7 @@
             </nav>
             <!-- Navbar End -->
 
-        <a href="#" class="btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>
+        <a id="ouverture" href="#" class="btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>
 
     {% block content %}
 

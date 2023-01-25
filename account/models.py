@@ -5,7 +5,6 @@ from django.contrib.auth.models import AbstractUser
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
-
 import datetime
 from datetime import timedelta
 from datetime import datetime as dt
@@ -82,6 +81,7 @@ class UserAbonn(models.Model):
 
     def total_abonnés(self):
         return self.abonnements.count()
+
 
 class playlist(models.Model):
     user_playlist = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)

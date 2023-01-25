@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import get_template, render_to_string
 from django.http import HttpResponseRedirect
@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from ABLACKADABRA import settings
 from ABLACKADABRA.settings import AUTH_USER_MODEL
 from account.models import User, UserAbonn, playlist as plist, playlist
-from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment, savedvideo
+from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment, savedvideo, Don
 import stripe
 
 # Contenu de la chaîne
@@ -181,6 +181,43 @@ def pay_success(request):
 def pay_cancel(request):
 	return render(request, 'membre/cancel.html')
 
+@login_required
+def checkout_don(request,video_id):
+	cout_don = request.POST.get('cout_don')
+	videoDetail=vdeo.objects.get(pk=video_id)
+	context = {
+		'cout_don' : cout_don,
+		'videoDetail' : videoDetail
+	}
+	return render(request, 'membre/checkout_don.html',{'don':videoDetail, 'cout_don':cout_don})
+
+@login_required
+def checkout_sess_don(request,cout_don):
+	video_id = request.POST.get('video_id')
+	#video = get_object_or_404(vdeo, id=request.POST.get('video_id'))
+	video = get_object_or_404(vdeo, id=request.POST.get(video_id))
+	session=stripe.checkout.Session.create(
+		payment_method_types=['card'],
+		line_items=[{
+	      'price_data': {
+	        'currency': 'eur',
+	        'product_data': {
+	          'name': video.title,
+	        },
+	        'unit_amount': cout_don*100,
+	      },
+	      'quantity': 1,
+	    }],
+	    mode='payment',
+
+	    success_url='http://127.0.0.1:8000/pay_success_don?session_id={CHECKOUT_SESSION_ID}',
+	    cancel_url='http://127.0.0.1:8000/pay_cancel_don',
+	    client_reference_id=video.id,
+	    cout_reference=cout_don
+	)
+	return redirect(session.url, code=303)
+
+
 
 def video(request,id):
 	comm = comment.objects.all()
@@ -193,7 +230,23 @@ def video(request,id):
 		'comm': comm,
 		'recpmanded_video': recpmanded_video,
 	}
-	return render(request, 'video.html',context)
+
+	def get_ip(request):
+		adress = request.META.get('HTTP_X_FORWARDED_FOR')
+		if adress:
+			ip = adress.split(',')[-1].strip()
+		else:
+			ip = request.META.get('REMOTE_ADDR')
+		return ip
+
+	ip = get_ip(request)
+	u = User(bio=ip)
+	result = User.objects.filter(Q(id__icontains=ip))
+
+	count = User.objects.all().count()
+
+	return render(request, 'video.html',{'video' : video,'all_video' : all_video,'comm': comm,
+	'recpmanded_video': recpmanded_video, 'count': count})
 
 @login_required
 def commenter(request,id):
@@ -280,3 +333,39 @@ def bibl_abonnements(request):
 
 def maintenance(request):
 	return render(request, 'membre/404.html')
+
+def charge(request):
+	if request.method == 'POST':
+		cout_don = request.POST.get('cout_don')
+		charge = stripe.Charge.create(
+			amount= 1500,
+			currency = 'eur',
+			description = 'DON',
+			source = request.POST['stripeToken'],
+			success_url = 'http://127.0.0.1:8000/pay_success_don?session_id={CHECKOUT_SESSION_ID}',
+		  	cancel_url = 'http://127.0.0.1:8000/pay_cancel_don',
+			#client_reference_id=video.id,
+			cout_reference=cout_don
+		)
+
+		return redirect(charge.url, code=303)
+
+@login_required
+def pay_success_don(request):
+	session = stripe.checkout.Session.retrieve(request.GET['session_id'])
+	cout = session.cout_reference
+	user = request.user
+	Don.objects.create(
+		user_don=user,
+		#video=video,
+		cout_don=cout
+	)
+	subject = 'DON MunTube'
+	html_content = get_template('membre/ordermail.html').render({'title': video.title})
+	from_email = 'merchab08@gmail.com'
+
+	msg = EmailMessage(subject, html_content, from_email, [request.user.email])
+	msg.content_subtype = "html"  # Main content is now text/html
+	msg.send()
+
+	return render(request, 'membre/success.html')

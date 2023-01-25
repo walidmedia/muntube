@@ -1,5 +1,7 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import LoginForm, SignUpForm
+from .models import User
 from django.contrib.auth import login as Login_process , logout, authenticate
 from django.contrib import messages
 from membre.models import Video
@@ -7,10 +9,21 @@ from membre.models import Video
 
 def index(request):
     mes_videos = Video.objects.all()
-    context = {
-        'mes_videos': mes_videos,
-    }
-    return render(request, 'home.html', context)
+
+    def get_ip(request):
+        adress = request.META.get('HTTP_X_FORWARDED_FOR')
+        if adress:
+            ip = adress.split(',')[-1].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+        return ip
+    ip = get_ip(request)
+    u = User(bio=ip)
+    result = User.objects.filter(Q(id__icontains=ip))
+
+    count = User.objects.all().count()
+    return render(request, 'home.html', {'mes_videos': mes_videos,'count': count})
+
 
 def profile(request):
     context = {

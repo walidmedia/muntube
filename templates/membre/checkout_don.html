@@ -1,0 +1,96 @@
+{% load static %}
+
+{% block content %}
+{% include 'base.html' %}
+
+
+<main>
+    <!-- Services -->
+    <section class="table-responsive container my-4">
+        <h1 class="text-center mb-4 section-heading border-bottom pb-2">Vérifier</h1>
+            <table class="table table-bordered">
+                <thead class="table-warning">
+                    <tr>
+                        <th>User</th>
+                        <th>video</th>
+                        <th>Don pour</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <table class="table-bordered table">
+                                <tr>
+                                    <th>Name</th>
+                                    <td>{{don.user.username}}</td>
+                                </tr>
+                                <tr>
+                                    <th>Price</th>
+                                    <td class="totalAmount">€{{cout_don}}</td>
+                                    <td><input hidden data-planprice="{{cout_don}}"  type="radio" id="validity{{cout_don}}" name="validity" class="select-validity" value="{{cout_don}}" /></td>
+                                </tr>
+                                <tr>
+                                    <th>User</th>
+                                    <td>
+                                        {{ don.user.username }}
+                                        <input type="hidden" name="video_id" value="{{ don.id }}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Already Registered</th>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <th>Balance Seats</th>
+                                    <td>15</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled">
+
+                            </ul>
+                        </td>
+                        <td>
+                            <table class="table table-bordered">
+
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot class="table-secondary">
+                    <tr>
+                        <td></td>
+                        <th>Total Amount</th>
+                        <td><b>€<span class="totalAmount">{{cout_don}}</span></b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
+                        <td>
+                            <form method="post" action="{% url 'checkout_sess_don' cout_don %}">
+                                {% csrf_token %}
+                                <input type="submit" value="Procéder au paiement" class="btn btn-success" />
+                            </form>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+    </section>
+    <!-- End -->
+</main>
+
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$(".select-validity").on('click',function(){
+			var _planPrice=$(this).attr('data-planprice');
+			var _planValid=$(this).val();
+			var _planDisc=$(this).attr('data-discount');
+			var _totalPrice=_planPrice*_planValid;
+			_calDisc=_planPrice;
+			$(".totalAmount").text(_calDisc);
+		});
+	});
+</script>
+
+{% endblock %}

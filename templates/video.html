@@ -1,4 +1,5 @@
 {% load static %}
+
 {% include 'base.html' %}
 <style>
     .comment-text {
@@ -21,13 +22,29 @@
             <div class="col-sm-12 col-md-12 col-xl-8">
             {% for v in video %}
                 <div class="row col-12 video_box">
-                        <video width="100%" class=" embed-responsive embed-responsive-16by9 col-md-12" controls="controls" >
+                        <video width="100%" class=" embed-responsive embed-responsive-16by9 col-md-12" poster="" controls="controls" >
                             <source src="{{ v.vid.url }}" type="video/mp4" />
+                                <track
+                            label="English"
+                            kind="subtitles"
+                            srclang="en"
+                            src="captions/vtt/sintel-en.vtt"
+                            default />
+                                <track
+                                label="Deutsch"
+                                kind="subtitles"
+                                srclang="de"
+                                src="captions/vtt/sintel-de.vtt" />
+                                <track
+                                label="Español"
+                                kind="subtitles"
+                                srclang="es"
+                                src="captions/vtt/sintel-es.vtt" />
                         </video>
                     <div class="col-sm-12 col-md-12 col-xl-12">
                       <div style="background-color: #191C24; " class="card mb-2">
-                        <h5 class="card-header">{{ v.title }}</h5>
-                       <span class="container-fluid  text fw-semibold">2313 views • {{ v.date_created.date }}</span>
+                        <h5 class="card-header" style="color: #fdecdd">{{ v.title }}</h5>
+                       <span class="container-fluid fw-semibold" style="color: #6e6a69">{{ count }} views • {{ v.date_created.date }}</span>
                       <hr class="mt-2">
                         <div class="card-body">
                         <div class="container-fluid">
@@ -41,24 +58,24 @@
                                             <button  style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
                                                 <i class="fa fa-heart"></i>
                                             </button>
-                                            <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
+                                            <span class="align-middle" style="color: #fdecdd"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
                                         </form>
                                         {% else %}
-                                        <form action="{% url 'login' %}" method="post">
-                                            {% csrf_token %}
+
                                             <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
                                                 <i class="fa fa-heart"></i>
                                             </button>
                                             <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
-                                        </form>
+
                                     {% endif %}
                                     </td>
                                     <td>
                                         <form>
+                                            {% load social_share %}
                                         <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                            <i class="fa fa-share"></i>
+                                            <i class="fa fa-share">{% post_to_facebook object_or_url "<p style='color: green;'>facebook</p>" %}</i>
                                         </button>
-                                        <span class="align-middle text-white"> Partager</span>
+                                        <span class="align-middle" style="color: #fdecdd"> Partager</span>
                                     </form>
                                     </td>
                                     <td>
@@ -157,7 +174,7 @@
                             <div class="col-sm-4 col-xl-4"></div>
                             <div class="col-sm-4 col-xl-4">
                                 <div class=" rounded d-flex align-items-center justify-content-between p-0">
-                                    <form action="" method="post">
+                                    <form action="{% url 'charge' %}" method="post">
                                         {% csrf_token %}
                                         <table>
                                         <thead class="mt-0">
@@ -167,30 +184,58 @@
                                         <tr>
                                             <td rowspan="2"><i class="fa fa-hands-helping me-4 fa-3x text-white"></i></td>
                                             <td colspan="2">
-                                                <button onclick="plusClick()" style="background-color: #533f03" type="button" class="btn rounded btn-outline-warning me-2">
+                                                <button onclick="plusClick()" style="background-color: #533f03" type="button" class="btn rounded-circle btn-outline-warning me-2">
                                                         <i class="fa fa-plus-circle"></i>
                                                     </button>
                                             </td>
                                             <td rowspan="2">
-                                                <h1><SPAN class="text-success me-2"><a id="clicks">10</a><span>€</span></SPAN></h1>
+                                                <h1><div data-value="clicks" type="number" class="text-success me-2" id="clicks">10<span>€</span></div></h1>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                <button onclick="moinsClick()" style="background-color: #533f03" type="button" class="btn rounded btn-outline-warning">
+                                                <button onclick="moinsClick()" style="background-color: #533f03" type="button" class="btn rounded-circle btn-outline-warning">
                                                     <i class="fa fa-minus-circle"></i>
                                                 </button>
                                             </td>
                                             <td></td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                            <script
+                                            src="https://checkout.stripe.com/checkout.js"
+                                            class="stripe-button"
+                                            data-key="pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV"
+                                            data-name="Gold Tier"
+                                            data-description="Monthly subscription with 30 days trial"
+                                            data-amount= "cout_don"
+                                            data-label="SOUTENIR">
+                                                const form = document.querySelector("form");
+                                                const cout_don = document.getElementById("clicks").textContent
+                                                const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
+                                                console.log(csrf);
+                                                form.addEventListener("submit", e =>{
+                                                    e.preventDefault();
+                                                    const newform = new FormData();
+                                                    newform.append("cout_don", cout_don.value);
+                                                    newform.append("csrfmiddlewaretoken", csrf);
+                                                    fetch("{% url 'charge' %}",{
+                                                      method: "post",
+                                                        body: newform,
+                                                    });
+                                                });
 
+                                          </script>
+                                        </td>
+                                        </tr>
                                         </tbody>
+
                                     </table>
-                                     <button type="submit" class="col-12 btn btn-outline-warning text-center mt-2">Soutenir</button>
                                     </form>
+
                                     <script>
                                         var clicks = 10;
-
+                                        document.getElementById("clicks").innerHTML = 10;
                                         function plusClick() {
                                           clicks += 5;
                                           document.getElementById("clicks").innerHTML = clicks;
@@ -199,16 +244,19 @@
                                           clicks -= 5;
                                           document.getElementById("clicks").innerHTML = clicks;
                                         };
+                                        function getAndSetText(){
+                                            var setText= document.getElementById('clicks').value;
+                                            document.getElementById('setText').value= setText;
+                                        }
                                     </script>
                                     <div class="ms-3">
-
-
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm-4 col-xl-4"></div>
                          </div>
-                        <div style="color: #b9b7b7">
+
+                                                <div style="color: #b9b7b7">
                             <p>{{ v.detail }}
                                 <span id="dots">...</span>
                                 <span id="more"></span>
@@ -217,6 +265,45 @@
                         <button onclick="myFunction()" id="myBtn" class="btn">MONTRE PLUS</button>
                         </div>
                       </div>
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="bg-secondary rounded h-100 p-4">
+                            <h6 class="mb-4">Liens utiles et Documents</h6>
+                            <nav>
+                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                    <button style="color: white" class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
+                                        aria-selected="true">Liens Utiles</button>
+                                    <button style="color: white" class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-profile" type="button" role="tab"
+                                        aria-controls="nav-profile" aria-selected="false">Documents</button>
+                                </div>
+                            </nav>
+                            <div class="tab-content pt-3" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="col-sm-12 col-xl-12">
+                                        <div class="bg-secondary rounded h-100">
+                                            {% if v.link %}
+                                            <div class="alert alert-primary" style="background-color: #533f03; color: white" role="alert">
+                                                <p>Ouvrir le lien <a href="{{ v.link }}">Link</a>.</p>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                     <div class="col-sm-12 col-xl-12">
+                                        <div class="bg-secondary rounded h-100">
+                                            {% if v.documents %}
+                                            <div class="alert alert-primary" style="background-color: #533f03; color: white" role="alert">
+                                                <p>Ouvrir le fichier PDF <a href="{{ v.documents.url }}">example</a>.</p>
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                         <!-- commentaires -->
                         <section>
                           <div class="my-2 ">
@@ -315,10 +402,10 @@
                                             </div>
                                             {% endif %}
                                             <div class="col-10 mt-3">
-                                                <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
-                                                <p style="color:#A77443;">
+                                                <a href="{% url 'video' v.id %}" class="mb-2 " style="overflow-wrap: break-word; color: #fdecdd" title="{{ v.title }}">{{ v.title }}</a>
+                                                <p style="color:#B88E6D;">
                                                     {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
-                                                    <small>2742 vues  {{ v.date_created.date }}</small>
+                                                    <small>{{ count }} vues  {{ v.date_created.date }}</small>
                                                 </p>
                                             </div>
                                         </div>
@@ -363,7 +450,10 @@
             btnTextRep.innerHTML = "Repondre";
           }
         }
+        function myDon() {
+            var don = document.getElementById("clicks");
 
+        }
     </script>
 {% endblock %}
 

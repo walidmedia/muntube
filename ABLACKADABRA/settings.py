@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'account',
     'membre',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -175,7 +176,7 @@ STRIPE_PUBLISHABLE_KEY='pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONm
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com' # ex: smtp.gmail.com
 EMAIL_PORT = 465  # or the server PORT if non standard
-EMAIL_HOST_USER = 'dilaw0895@gmail.com'  # a username, usually the e-mail address
-EMAIL_HOST_PASSWORD = 'bphsevpsmxepnsem'  # the smtp user password
+EMAIL_HOST_USER = 'merchab08@gmail.com'  # a username, usually the e-mail address
+EMAIL_HOST_PASSWORD = 'lkecwyedvpwhfmrk'  # the smtp user password
 EMAIL_USE_TLS = False  # True if TLS should be enabled or False otherwise
 EMAIL_USE_SSL = True  # True if SSL should be enabled or False otherwise
