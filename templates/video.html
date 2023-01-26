@@ -1,4 +1,5 @@
 {% load static %}
+{% load social_share %}
 
 {% include 'base.html' %}
 <style>
@@ -15,7 +16,7 @@
     margin-top: 12px
 }
 </style>
-
+<title>Muntube</title>
 {% block content %}
    <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
@@ -70,16 +71,33 @@
                                     {% endif %}
                                     </td>
                                     <td>
-                                        <form>
-                                            {% load social_share %}
-                                        <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                            <i class="fa fa-share">{% post_to_facebook object_or_url "<p style='color: green;'>facebook</p>" %}</i>
+                                         <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                            <i class="fa fa-share"></i>
                                         </button>
-                                        <span class="align-middle" style="color: #fdecdd"> Partager</span>
-                                    </form>
+                                         <span class="align-middle" style="color: #fdecdd"> Partager</span>
+                                        <div class="dropdown-menu dropdown-menu bg-black border-0 rounded-2 rounded-bottom m-0">
+                                            <form>
+                                             {% csrf_token %}
+                                            <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_facebook object_or_url "<span style='color: green;'><i class='fab fa-facebook fa-2x' style='color: #3b5998;'></i></span>" %}
+                                            </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_twitter v.title object_or_url "<span style='color: green;'><i class='fab fa-twitter fa-2x' style='color: #55acee;'></i></span>" %}</button>
+                                                </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% send_email v.title v.detail  object_or_url "<span style='color: green;'><i class='fab fa-google fa-2x' style='color: #dd4b39;'></i></span>" %}</button>
+                                                </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_whatsapp  object_or_url "<span style='color: green;'><i class='fab fa-whatsapp fa-2x' style='color: #25d366;'></i></span>" %}</button>
+                                                </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_telegram v.title object_or_url "<span style='color: green;'><i class='fab fa-telegram fa-2x' style='color: #095d9a;'></i></span>" %}</button>
+                                                </button>
+                                        </form>
+                                        </div>
                                     </td>
                                     <td>
-                                        <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                    <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
                                         <i class="fa fa-ellipsis-h"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
@@ -189,7 +207,8 @@
                                                     </button>
                                             </td>
                                             <td rowspan="2">
-                                                <h1><div data-value="clicks" type="number" class="text-success me-2" id="clicks">10<span>€</span></div></h1>
+                                                <h1><span class="text-success me-2"><a id="clicks">10</a><span>€</span></span></h1>
+                                                <input hidden id="clicks" value="10">
                                             </td>
                                         </tr>
                                         <tr>
@@ -211,7 +230,7 @@
                                             data-amount= "cout_don"
                                             data-label="SOUTENIR">
                                                 const form = document.querySelector("form");
-                                                const cout_don = document.getElementById("clicks").textContent
+                                                const cout_don = document.getElementById("clicks")
                                                 const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
                                                 console.log(csrf);
                                                 form.addEventListener("submit", e =>{
@@ -335,7 +354,7 @@
                                                     height="60" />
                                                   <div>
                                                     <h6 class="fw-bold mb-1">{{ user.username }}</h6>
-                                                    <div class="d-flex align-items-center mb-2">
+                                                    <div class="d-flex align-items-center mb-1">
                                                       <p class="mb-0">
                                                         {{ c.date_added }}
                                                         <!--<span class="badge bg-primary">Pending</span>-->
@@ -344,7 +363,7 @@
                                                        <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
                                                         <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
                                                     </div>
-                                                    <p class="mb-3">
+                                                    <p style="color: #fdecdd" class="mb-3">
                                                       {{ c.contenue }}
                                                     </p>
                                                       <span id="repinput">

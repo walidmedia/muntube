@@ -18,9 +18,16 @@
                                     <source src="{{ v.vid.url }}" type="video/mp4" />
                                 </video>
                             </a>
-                            <div class="row justify-content-between">
+                            <div class="row justify-content-between ">
+                                <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
+                                    <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                </div>
+                            </div>
+                            <p>
+                                <div style="margin-left: 0.1rem" class="row">
+                                <div class="col-2 mt-2">
                                     {% if v.miniature %}
-                                    <div class="col-2 mt-3 ml-1 ">
+                                    <div class="">
                                     {% if v.user.is_superuser %}
                                         <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
                                         {% else %}
@@ -28,14 +35,15 @@
                                         {% endif %}
                                     </div>
                                     {% endif %}
-                                    <div class="col-10 mt-3">
-                                        <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
-                                        <p style="color:#A77443;">
-                                            {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
-                                            <small>{{ count }} vues  {{ v.date_created.date }}</small>
-                                        </p>
-                                    </div>
                                 </div>
+                                <div class="col-10">
+                                    <span style="color:#A77443;">
+                                        {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
+                                        <small>2742 vues  {{ v.date_created.date }}</small>
+                                    </span>
+                                </div>
+                            </div>
+                            </p>
                             </div>
                         </div>
                     </div>

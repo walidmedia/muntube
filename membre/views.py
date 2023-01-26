@@ -265,6 +265,7 @@ def like_video(request, pk):
 	video.n_likes.add(request.user)
 	return HttpResponseRedirect(reverse('video',args=[str(pk)]))
 
+
 @login_required
 def abonni_video(request, pk):
 	chaine_chaine = get_object_or_404(UserAbonn,id=request.POST.get('chaine_id'))

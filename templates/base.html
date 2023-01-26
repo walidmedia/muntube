@@ -38,6 +38,30 @@
     --light: #6C7293;
     --dark: #000000;
 }
+
+    .mobile-nav {
+  background: #000;
+  position: fixed;
+  bottom: 0;
+  height: 65px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+        z-index:10;
+}
+    .bloc-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+    .bloc-icon img {
+  width: 30px;
+}
+    @media screen and (min-width: 600px) {
+  .mobile-nav {
+  display: none;
+  }
+}
 </style>
 
     <div class="container-fluid position-relative d-flex p-0">
@@ -72,12 +96,9 @@
                     <a><hr></a>
                     <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
                     <a><hr></a>
-                    <a href="#" class="nav-item nav-link"><strong style="color: white">Termes et conditions</strong></a>
-                    <a href="#" class="nav-item nav-link"><strong style="color: white">Politique de Confidentialité</strong></a>
-                    <a href="#" class="nav-item nav-link"><strong style="color: white">Mentions légales</strong></a>
-                    <a href="#" class="nav-item nav-link"><strong style="color: white">Politique de cookies</strong></a>
+                    <a href="" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-hands-helping me-2"></i><strong style="color: white">Nous Soutenir</strong></a>
                     <a><hr></a>
-                    <a style="padding-left: 10px"><i class="fa fa-copyright"></i><strong>
+                    <a style="padding-left: 10px; color: #B88E6D"><i class="fa fa-copyright"></i><strong>
                         2023 par STEAM BEAM<br>
                         Tout droits réservés
                     </strong></a>
@@ -94,7 +115,7 @@
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-"></i></h2>
                 </a>
-                <a href="#" class="sidebar-toggler flex-shrink-0" style="color: #f8f8f8;
+                <a href="#" class="sidebar-toggler flex-shrink-0" style="color: #B88E6D;
                 text-decoration: none;">
                     <i class="fa fa-bars"></i>
                 </a>
@@ -205,7 +226,27 @@
             </nav>
             <!-- Navbar End -->
 
-        <a id="ouverture" href="#" class="btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>
+        <!-- Nav Mobile -->
+
+        <div class="mobile-nav">
+            <a href="{% url 'index' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
+            </a>
+            <a href="{% url 'bibliothèque' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
+            </a>
+            <a href="{% url 'upload' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-plus"></i></button>            </a>
+            </a>
+            <a href="{% url 'chaine' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
+            </a>
+            <a href="{% url 'monprofile' user.pk %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
+            </a>
+        </div>
+
+        <!--<a style="background-color: #B88E6D" href="#" class="ouverture_sidebar btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>-->
 
     {% block content %}
 
