@@ -229,6 +229,7 @@
         <!-- Nav Mobile -->
 
         <div class="mobile-nav">
+            {% if user.is_authenticated %}
             <a href="{% url 'index' %}" class="bloc-icon">
                 <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
             </a>
@@ -244,6 +245,23 @@
             <a href="{% url 'monprofile' user.pk %}" class="bloc-icon">
                 <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
             </a>
+            {% else %}
+            <a href="{% url 'index' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
+            </a>
+            <a href="{% url 'login' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
+            </a>
+            <a href="{% url 'login' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-plus"></i></button>            </a>
+            </a>
+            <a href="{% url 'login' %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
+            </a>
+            <a href="{% url 'login' user.pk %}" class="bloc-icon">
+                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
+            </a>
+            {% endif %}
         </div>
 
         <!--<a style="background-color: #B88E6D" href="#" class="ouverture_sidebar btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>-->
