@@ -1,0 +1,45 @@
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+{% block content %}
+{% include 'base.html' %}
+
+ <!-- video_stats.html -->
+    <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <h5 style="color: #B88E6D;">Les statistique</h5>
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-secondary text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Les Vues</h6>
+                        <a style="color:#fff;" href=""></a>
+                    </div>
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                        <script>
+                            var ctx = document.getElementById('myChart').getContext('2d');
+                            var myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: {{ labels|safe }},
+                                    datasets: [{
+                                        label: 'Vues par vidéo',
+                                        data: {{ data|safe }},
+                                        backgroundColor: 'rgba(70,40,9,0.81)',
+                                        borderColor: 'rgb(140,90,13)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {}
+                            });
+                        </script>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+{% include 'footer.html' %}

@@ -6,7 +6,6 @@
     .comment-text {
     font-size: 13px
 }
-
 .wish {
     color: #35b69f
 }
@@ -15,14 +14,40 @@
     font-size: 14px;
     margin-top: 12px
 }
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #B88E6D;
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out;
+}
+:root {
+    --primary: #B88E6D;
+    --secondary: #191C24;
+    --light: #6C7293;
+    --dark: #000000;
+}
+.overlay {
+  position: fixed;
+  top: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #f1f1f1;
+  width: auto;
+  padding: 20px;
+}
+
 </style>
 <title>Muntube</title>
 {% block content %}
-   <div class="container-fluid pt-4 px-4">
-        <div class="row g-4">
+   <div class="justify-content-between">
+        <div class="row justify-content-between">
             <div class="col-sm-12 col-md-12 col-xl-8">
+            <div class=" bg-secondary rounded ">
             {% for v in video %}
-                <div class="row col-12 video_box">
+                <div class="row d-flex col-xl-12 video_box">
                         <video width="100%" class=" embed-responsive embed-responsive-16by9 col-md-12" poster="" controls="controls" >
                             <source src="{{ v.vid.url }}" type="video/mp4" />
                                 <track
@@ -42,39 +67,42 @@
                                 srclang="es"
                                 src="captions/vtt/sintel-es.vtt" />
                         </video>
+
                     <div class="col-sm-12 col-md-12 col-xl-12">
                       <div style="background-color: #191C24; " class="card mb-2">
                         <h5 class="card-header" style="color: #fdecdd">{{ v.title }}</h5>
-                       <span class="container-fluid fw-semibold" style="color: #6e6a69">{{ count }} views • {{ v.date_created.date }}</span>
+
+
+
+                       <span class="container-fluid fw-semibold" style="color: #6e6a69">{{ v.views }} views • {{ v.date_created.date |date:"d/m/Y" }}</span>
                       <hr class="mt-2">
                         <div class="card-body">
                         <div class="container-fluid">
-                            <div class="row g-3">
+                            <div class="row ">
                             <table class="mt-0">
                                 <tr>
                                     <td>
-                                        {% if user.is_authenticated %}
-                                        <form action="{% url 'like_video' v.pk %}" method="post">
-                                            {% csrf_token %}
-                                            <button  style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                                <i class="fa fa-heart"></i>
-                                            </button>
-                                            <span class="align-middle" style="color: #fdecdd"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
-                                        </form>
-                                        {% else %}
-
-                                            <button style="background-color: #533f03" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center" type="submit" name="video_id" value="{{ v.id }}" style="color:#606060;" title="I like this">
-                                                <i class="fa fa-heart"></i>
-                                            </button>
-                                            <span class="align-middle text-white"><span class="me-2">{{ v.total_likes }}</span> J'aime</span>
-
-                                    {% endif %}
+                                    <button id="like_button" style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+                                     <span id="likes" class="align-middle small" style="color: #fdecdd">{{ v.likes }} J'aimes</span>
+                                    <script>
+                                    const likeButton = document.querySelector('#like_button');
+                                    likeButton.addEventListener('click', function() {
+                                        fetch(`{% url 'like_video' v.id %}`)
+                                        .then(response => response.json())
+                                        .then(data => {
+                                            const likesElement = document.querySelector('#likes');
+                                            likesElement.innerHTML = `${data.likes} J'aimes`;
+                                        });
+                                    });
+                                    </script>
                                     </td>
                                     <td>
                                          <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
                                             <i class="fa fa-share"></i>
                                         </button>
-                                         <span class="align-middle" style="color: #fdecdd"> Partager</span>
+                                         <span class="align-middle small" style="color: #fdecdd"> Partager</span>
                                         <div class="dropdown-menu dropdown-menu bg-black border-0 rounded-2 rounded-bottom m-0">
                                             <form>
                                              {% csrf_token %}
@@ -98,9 +126,9 @@
                                     </td>
                                     <td>
                                     <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
-                                        <i class="fa fa-ellipsis-h"></i>
+                                        <i class="fa fa-ellipsis-v"></i>
                                     </button>
-                                    <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
+                                    <div class="dropdown-menu dropdown-menu-end bg-black border-0 rounded-0 rounded-bottom m-0">
                                         {% if user.is_authenticated %}
                                         <form>
                                              {% csrf_token %}
@@ -135,37 +163,59 @@
                             </div>
                         </div>
                         <hr>
-                        <div class="container-fluid">
-                            <div class="row g-3">
+                        <div class="">
+                            <div class="row">
                                 <table>
                                     <tr>
-                                        <td rowspan="2">
+
+                                        <td class="text-center" rowspan="2">
                                             <img id="img" width="48" src="{{ v.user.photo.url }}" class="rounded-circle">
                                         </td>
-                                        <td>
+                                        <td colspan="2">
                                              <span style="color:white;">
-                                                <b>{{ v.user.username }}</b> <i class="fas fa-check-circle me-2"></i>
+                                                <b>{{ v.user.first_name }}</b>
+
+                                                  {% if don_par_user.total_payments <= 10 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% elif don_par_user.total_payments <= 15 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% elif don_par_user.total_payments <= 20 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% elif don_par_user.total_payments > 20 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% endif %}
                                              </span>
                                         </td>
                                         <td rowspan="2">
                                             {% if user.is_authenticated %}
-                                                {% if all_chaine.id == v.user.id %}
-                                                    <form action="{% url 'abonni_video' v.pk %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button disabled style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
-                                                            <i class="fa fa-bell"></i>
-                                                            <span style="color: white">S'abonner</span>
+
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                        <button id="subscribe-button" style="background-color: #533f03;font-size: small" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                                            <span style="color: white"><i class="fa fa-bell me-1"></i>S'abonner</span>
                                                         </button>
-                                                    </form>
-                                                {% else %}
-                                                    <form action="{% url 'abonni_video' v.pk %}" method="post">
-                                                        {% csrf_token %}
-                                                        <button style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
-                                                            <i class="fa fa-bell"></i>
-                                                            <span style="color: white">S'abonner</span>
-                                                        </button>
-                                                    </form>
-                                                {% endif %}
+                                                    <script>
+                                                      $(document).ready(function() {
+                                                        $("#subscribe-button").click(function() {
+                                                          $.ajax({
+                                                            type: "POST",
+                                                            url: "{% url 'subscribe' v.id %}",
+                                                            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+                                                            success: function(response) {
+                                                              $("#subscribe-button").text("Subscribed");
+                                                            }
+                                                          });
+                                                        });
+                                                      });
+                                                    </script>
+                                                </form>
+
                                             {% else %}
                                                 <form action="{% url 'login' %}" method="post">
                                                     {% csrf_token %}
@@ -188,255 +238,413 @@
                             </div>
                         </div>
 
-                        <div class="row g-4">
-                            <div class="col-sm-4 col-xl-4"></div>
-                            <div class="col-sm-4 col-xl-4">
-                                <div class=" rounded d-flex align-items-center justify-content-between p-0">
-                                    <form action="{% url 'charge' %}" method="post">
-                                        {% csrf_token %}
-                                        <table>
-                                        <thead class="mt-0">
-                                        <th colspan="4" class="text-center ml-0"><h3><strong class="text-success">SOUTENIR</strong></h3></th>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td rowspan="2"><i class="fa fa-hands-helping me-4 fa-3x text-white"></i></td>
-                                            <td colspan="2">
-                                                <button onclick="plusClick()" style="background-color: #533f03" type="button" class="btn rounded-circle btn-outline-warning me-2">
-                                                        <i class="fa fa-plus-circle"></i>
-                                                    </button>
-                                            </td>
-                                            <td rowspan="2">
-                                                <h1><span class="text-success me-2"><a id="clicks">10</a><span>€</span></span></h1>
-                                                <input hidden id="clicks" value="10">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <button onclick="moinsClick()" style="background-color: #533f03" type="button" class="btn rounded-circle btn-outline-warning">
-                                                    <i class="fa fa-minus-circle"></i>
-                                                </button>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="5">
-                                            <script
-                                            src="https://checkout.stripe.com/checkout.js"
-                                            class="stripe-button"
-                                            data-key="pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV"
-                                            data-name="Gold Tier"
-                                            data-description="Monthly subscription with 30 days trial"
-                                            data-amount= "cout_don"
-                                            data-label="SOUTENIR">
-                                                const form = document.querySelector("form");
-                                                const cout_don = document.getElementById("clicks")
-                                                const csrf = document.getElementsByName("csrfmiddlewaretoken")[0].value;
-                                                console.log(csrf);
-                                                form.addEventListener("submit", e =>{
-                                                    e.preventDefault();
-                                                    const newform = new FormData();
-                                                    newform.append("cout_don", cout_don.value);
-                                                    newform.append("csrfmiddlewaretoken", csrf);
-                                                    fetch("{% url 'charge' %}",{
-                                                      method: "post",
-                                                        body: newform,
-                                                    });
-                                                });
+                        <div class="row">
 
-                                          </script>
-                                        </td>
-                                        </tr>
-                                        </tbody>
+                            <div class="text-center mb-4 mt-3">
+                                <script src="https://js.stripe.com/v3/"></script>
+                                    <form action="{% url 'proced_don' v.id %}" method="post">
+                                      {% csrf_token %}
+                                    <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
+                                    <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10">
+                                    <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
+                                    <p class="mb-3" style="position: absolute;right: 40px;">
+                                        <button id="stripe-button" type="submit" class="btn rounded-pill btn-outline-secondary" style="background-color: #B88E6D; color: white; font-size: small">
+                                            <strong>Suivant</strong>
+                                        </button>
+                                    </p>
 
-                                    </table>
                                     </form>
-
-                                    <script>
-                                        var clicks = 10;
-                                        document.getElementById("clicks").innerHTML = 10;
-                                        function plusClick() {
-                                          clicks += 5;
-                                          document.getElementById("clicks").innerHTML = clicks;
-                                        };
-                                        function moinsClick() {
-                                          clicks -= 5;
-                                          document.getElementById("clicks").innerHTML = clicks;
-                                        };
-                                        function getAndSetText(){
-                                            var setText= document.getElementById('clicks').value;
-                                            document.getElementById('setText').value= setText;
+                                <script type="text/javascript">
+                                    var counter = 10;
+                                    function increment(){
+                                        counter = counter+5;
+                                        document.getElementById('don').value = counter;
+                                    }
+                                    function decrement(){
+                                        counter = counter-5;
+                                        if(counter<5){
+                                            counter=5;
                                         }
-                                    </script>
-                                    <div class="ms-3">
-                                    </div>
-                                </div>
+                                        document.getElementById('don').value = counter;
+                                    }
+                                </script>
                             </div>
-                            <div class="col-sm-4 col-xl-4"></div>
+
                          </div>
 
-                                                <div style="color: #b9b7b7">
+                        <div class="mt-5" style="color: #b9b7b7">
                             <p>{{ v.detail }}
                                 <span id="dots">...</span>
                                 <span id="more"></span>
                             </p>
                         </div>
-                        <button onclick="myFunction()" id="myBtn" class="btn">MONTRE PLUS</button>
+                        <button onclick="myFunction()" id="myBtn" class="btn">PLUS</button>
                         </div>
                       </div>
                     <div class="col-sm-12 col-xl-12">
-                        <div class="bg-secondary rounded h-100 p-4">
-                            <h6 class="mb-4">Liens utiles et Documents</h6>
-                            <nav>
-                                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button style="color: white" class="nav-link active" id="nav-home-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                        aria-selected="true">Liens Utiles</button>
-                                    <button style="color: white" class="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
-                                        data-bs-target="#nav-profile" type="button" role="tab"
-                                        aria-controls="nav-profile" aria-selected="false">Documents</button>
-                                </div>
-                            </nav>
-                            <div class="tab-content pt-3" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    <div class="col-sm-12 col-xl-12">
-                                        <div class="bg-secondary rounded h-100">
+                        <div class="bg-secondary rounded h-100 mt-2">
+                        {% if v.link %}
+                            <ul class="nav nav-pills mb-3 pl-1" id="pills-tab" role="tablist">
+                                <li class="nav-item me-2" role="presentation">
+                                    <button class="nav-link rounded-pill active small" id="pills-home-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                        aria-selected="true"
+                                    >
+                                        <strong  style="font-size: 12px">Liens & documents</strong>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" >
+                                    <button class="nav-link rounded-pill small" id="pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile" type="button" role="tab"
+                                        aria-controls="pills-profile" aria-selected="false"
+                                     >
+                                        <strong class="me-1"><span style="font-size: 12px" class="me-1">{{ comments }}</span>Commentaires</strong>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" >
+                                    <div class="col-sm-12 col-xl-12 mt-3">
+                                        <div class="bg-secondary rounded h-100 p-4">
+                                        <h6 class="border-bottom" style="color: #6e6a69">Liens Utiles</h6>
                                             {% if v.link %}
-                                            <div class="alert alert-primary" style="background-color: #533f03; color: white" role="alert">
-                                                <p>Ouvrir le lien <a href="{{ v.link }}">Link</a>.</p>
-                                            </div>
+                                                <p style="color: #ffffff "><span><i class="fa fa-link me-3 text-white"></i></span>liens pour telecharger l'outils de tuto <a style="color: #B88E6D" href="{{ v.link }}">{{ v.link }}</a>.</p>
+                                                <hr>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-12">
+                                        <div class="bg-secondary rounded h-100 p-4">
+                                        <h6 class="border-bottom" style="color: #6e6a69">documents</h6>
+                                            {% if v.documents %}
+                                                <p style="color: white  "><i class="fa fa-file me-3"></i> Ouvrir le fichier PDF <a style="color:#B88E6D " href="{{ v.documents.url }}">cicilisation egypte</a>.</p>
                                             {% endif %}
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                     <div class="col-sm-12 col-xl-12">
-                                        <div class="bg-secondary rounded h-100">
-                                            {% if v.documents %}
-                                            <div class="alert alert-primary" style="background-color: #533f03; color: white" role="alert">
-                                                <p>Ouvrir le fichier PDF <a href="{{ v.documents.url }}">example</a>.</p>
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <section>
+                                      <div class="my-2 ">
+                                        <div class="row d-flex justify-content-center">
+                                          <div class="col-md-12 col-lg-12">
+                                            <div style="background-color: #191C24; font-size: small " class="card text-dark">
+
+                                                  <div class="card-body ">
+
+                                                  <form action="{% url 'commenter' v.id %}" method="post">
+                                                          {% csrf_token %}
+                                                          <div class="d-flex flex-start mb-3">
+                                                            <!--<img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">-->
+                                                            <input name="video" type="hidden" value="{{ v.id }}">
+                                                            <input name="user" type="hidden" value="{{ user.id}}">
+                                                            <input name="sujet" type="hidden" value="{{ c.name }}">
+                                                              <form>
+                                                                <input name="commentaire" type="text" class="form-control" placeholder="Entrez votre commentaire..."
+                                                                style="  width: 100%;padding: 10px;font-size: 16px;border: none;border-radius: 5px 0 0 5px;">
+                                                                  <button class="btn btn-outline-secondary" type="submit" style=" width: 10%;padding: 10px;background-color: #000000;color: #fff;border: none;border-radius: 0 5px 5px 0;cursor: pointer;transition: all 0.3s ease;">
+                                                                      <i class="fa fa-arrow-right"></i>
+                                                                  </button>
+                                                                </form>
+                                                              <!--<button class="btn btn-outline-secondary" style="background: #533f03; color: white"  type="submit"><i class="fa fa-arrow-right"></i></button>
+                                                            <input style="background: #533f03; color: white" type="submit" value="Commenter" class="btn rounded-pill btn-outline-secondary">-->
+                                                          </div>
+                                                      </form>
+                                                      {% for c in comm %}
+                                                          {% if c.video.id == v.id %}
+                                                            <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
+
+                                                            <div style="color: #b9b7b7" class="d-flex flex-start">
+                                                              <img class="rounded-circle shadow-1-strong me-3"
+                                                                src="{{ c.user.photo.url }}" alt="avatar" width="40"
+                                                                height="40" />
+                                                              <div>
+                                                                <span class="fw-bold mt-0">
+                                                                    <strong style="color:#fff;">{{ c.user.username }}</strong>
+                                                                    {% if don_par_user.total_payments <= 10 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% elif don_par_user.total_payments <= 15 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% elif don_par_user.total_payments <= 20 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% elif don_par_user.total_payments > 20 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% endif %}
+                                                                    {{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}
+                                                                    <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn btn-sm" style="">Repondre</button>
+                                                                </span>
+                                                                <div class="d-flex align-items-center mt-0 mb-0">
+                                                                    <span style="color: #fdecdd;font-size: 12px;" class="mb-2">
+                                                                  {{ c.contenue }}
+                                                                </span>
+                                                                   <!-- <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>-->
+                                                                </div>
+
+                                                                  <!--<span id="repinput">
+                                                                      <div class="d-flex flex-start mb-2">
+                                                                      <img src="{{ user.photo.url }}" width="30" height="30" class="mt-1 rounded-circle shadow-1-strong me-3">
+                                                                      <input  class="form-control"  placeholder="Votre reponse .." >
+                                                                      <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
+                                                                  </div>
+                                                                  </span>-->
+
+                                                              </div>
+                                                            </div>
+                                                              <div>
+                                                              <button id="like_button" style="background-color: #533f03"  data-comment-id="{{ c.pk }}" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                                                <!--<i class="fa fa-heart"></i>-->
+                                                            </button>
+
+                                                                <span id="likes-count-{{ c.id }}">{{ c.likes }}</span>
+
+                                                                <script>
+                                                                document.addEventListener("DOMContentLoaded", function() {
+                                                                    document.querySelectorAll(".like-button").forEach(function(button) {
+                                                                        button.addEventListener("click", function() {
+                                                                            var commentId = this.getAttribute("data-comment-id");
+                                                                            var xhr = new XMLHttpRequest();
+                                                                            xhr.open("POST", "/like_comment/" + commentId + "/");
+                                                                            xhr.setRequestHeader("Content-Type", "application/json");
+                                                                            xhr.setRequestHeader("X-CSRFToken", csrf_token);  // add CSRF token if using Django's built-in CSRF protection
+                                                                            xhr.onload = function() {
+                                                                                if (xhr.status === 200) {
+                                                                                    var response = JSON.parse(xhr.responseText);
+                                                                                    document.querySelector("#likes-count-" + commentId).innerHTML = response.likes;
+                                                                                }
+                                                                            };
+                                                                            xhr.send();
+                                                                        });
+                                                                    });
+                                                                });
+                                                                </script>
+                                                              </div>
+                                                              <hr style="color:#b9b7b7;" class="mb-3">
+                                                          {% endif %}
+                                                      {% endfor %}
+                                                  </div>
+                                                  <hr class="mt-0" />
                                             </div>
-                                            {% endif %}
+                                          </div>
                                         </div>
-                                    </div>
+                                      </div>
+                                    </section>
                                 </div>
                             </div>
+                        {% else %}
+                            <ul class="nav nav-pills mb-1 pl-1" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation" >
+                                    <button class="nav-link rounded-pill active small" id="pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile" type="button" role="tab"
+                                        aria-controls="pills-profile" aria-selected="false"
+                                     >
+                                        <strong class="me-1"><span style="font-size: 12px" class="me-1">{{ comments }}</span>Commentaires</strong>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <section>
+                                      <div class="my-2 ">
+                                        <div class="row d-flex justify-content-center">
+                                          <div class="col-md-12 col-lg-12">
+                                            <div style="background-color: #191C24; font-size: small " class="card text-dark">
+
+                                                  <div class="card-body p-4">
+
+                                                  <form action="{% url 'commenter' v.id %}" method="post">
+                                                          {% csrf_token %}
+                                                          <div class="d-flex flex-start mb-4">
+                                                            <!--<img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">-->
+                                                            <input name="video" type="hidden" value="{{ v.id }}">
+                                                            <input name="user" type="hidden" value="{{ user.id}}">
+                                                            <input name="sujet" type="hidden" value="{{ c.name }}">
+                                                              <form>
+                                                                <input name="commentaire" type="text" class="form-control" placeholder="Entrez votre commentaire..."
+                                                                style="  width: 100%;padding: 10px;font-size: 16px;border: none;border-radius: 5px 0 0 5px;">
+                                                                  <button class="btn btn-outline-secondary" type="submit" style=" width: 10%;padding: 10px;background-color: #000000;color: #fff;border: none;border-radius: 0 5px 5px 0;cursor: pointer;transition: all 0.3s ease;">
+                                                                      <i class="fa fa-arrow-right"></i>
+                                                                  </button>
+                                                                </form>
+                                                              <!--<button class="btn btn-outline-secondary" style="background: #533f03; color: white"  type="submit"><i class="fa fa-arrow-right"></i></button>
+                                                            <input style="background: #533f03; color: white" type="submit" value="Commenter" class="btn rounded-pill btn-outline-secondary">-->
+                                                          </div>
+                                                      </form>
+                                                      {% for c in comm %}
+                                                          {% if c.video.id == v.id %}
+                                                            <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
+
+                                                            <div style="color: #b9b7b7" class="d-flex flex-start">
+                                                              <img class="rounded-circle shadow-1-strong me-3"
+                                                                src="{{ c.user.photo.url }}" alt="avatar" width="40"
+                                                                height="40" />
+                                                              <div>
+                                                                <span class="fw-bold mt-0"><strong style="color:#fff;">
+                                                                    {{ c.user.username }}</strong>
+
+                                                                    {% if don_par_user.total_payments <= 10 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% elif don_par_user.total_payments <= 15 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% elif don_par_user.total_payments <= 20 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% elif don_par_user.total_payments > 20 %}
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                      {% endif %}
+                                                                 <span >{{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}</span>
+                                                                </span>
+                                                                <div class="d-flex align-items-center mt-0 mb-0">
+
+
+                                                                   <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn btn-sm" style="">Repondre</button>
+                                                                   <!-- <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>-->
+                                                                </div>
+                                                                <span style="color: #fdecdd;font-size: 14px;" class="mb-0">
+                                                                  {{ c.contenue }}
+                                                                </span>
+                                                                  <!--<span id="repinput">
+                                                                      <div class="d-flex flex-start mb-2">
+                                                                      <img src="{{ user.photo.url }}" width="30" height="30" class="mt-1 rounded-circle shadow-1-strong me-3">
+                                                                      <input  class="form-control"  placeholder="Votre reponse .." >
+                                                                      <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
+                                                                  </div>
+                                                                  </span>-->
+
+                                                              </div>
+                                                            </div>
+
+                                                            <button id="like-button" style="background-color: #533f03;background-color: transparent"  data-comment-id="{{ c.pk }}" class="like-button btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                                                <i class="fa fa-heart"></i>
+                                                            </button>
+                                                            <span id="likes-count-{{ c.id }}">{{ c.likes }}</span>
+
+                                                            <script>
+                                                            document.addEventListener("DOMContentLoaded", function() {
+                                                                document.querySelectorAll(".like-button").forEach(function(button) {
+                                                                    button.addEventListener("click", function() {
+                                                                        var commentId = this.getAttribute("data-comment-id");
+                                                                        var xhr = new XMLHttpRequest();
+                                                                        xhr.open("POST", "/like_comment/" + commentId + "/");
+                                                                        xhr.setRequestHeader("Content-Type", "application/json");
+                                                                        xhr.setRequestHeader("X-CSRFToken", csrf_token);  // add CSRF token if using Django's built-in CSRF protection
+                                                                        xhr.onload = function() {
+                                                                            if (xhr.status === 200) {
+                                                                                var response = JSON.parse(xhr.responseText);
+                                                                                document.querySelector("#likes-count-" + commentId).innerHTML = response.likes;
+                                                                            }
+                                                                        };
+                                                                        xhr.send();
+                                                                    });
+                                                                });
+                                                            });
+                                                            </script>
+                                                            <hr style="color:#b9b7b7;" class="mb-3">
+                                                          {% endif %}
+                                                      {% endfor %}
+                                                  </div>
+                                                  <hr class="my-0" />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </section>
+                                </div>
+                            </div>
+                        {% endif %}
                         </div>
                     </div>
                         <!-- commentaires -->
-                        <section>
-                          <div class="my-2 ">
-                            <div class="row d-flex justify-content-center">
-                              <div class="col-md-12 col-lg-12">
-                                <div style="background-color: #191C24; " class="card text-dark">
 
-                                      <div class="card-body p-4">
-                                        <p class="mb-0">
-                                            <p style="color: #b9b7b7">{{ v.total_comments }} commentaires</p>
-                                        </p>
-                                      <form action="{% url 'commenter' v.id %}" method="post">
-                                              {% csrf_token %}
-                                              <div class="d-flex flex-start mb-4">
-                                                <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
-                                                <input name="commentaire" type="text" class="form-control" placeholder="Entrez votre commentaire...">
-                                                <input name="video" type="hidden" value="{{ v.id }}">
-                                                <input name="sujet" type="hidden" value="{{ c.name }}">
-                                                <input style="background: #533f03; color: white" type="submit" value="Commenter" class="btn rounded-pill btn-outline-secondary">
-                                              </div>
-                                          </form>
-                                          {% for c in comm %}
-                                              {% if c.video.id == v.id %}
-                                                <!--<p class="fw-light mb-4 pb-2">Latest Comments section by users</p>-->
-
-                                                <div style="color: #b9b7b7" class="d-flex flex-start">
-                                                  <img class="rounded-circle shadow-1-strong me-3"
-                                                    src="{{ user.photo.url }}" alt="avatar" width="60"
-                                                    height="60" />
-                                                  <div>
-                                                    <h6 class="fw-bold mb-1">{{ user.username }}</h6>
-                                                    <div class="d-flex align-items-center mb-1">
-                                                      <p class="mb-0">
-                                                        {{ c.date_added }}
-                                                        <!--<span class="badge bg-primary">Pending</span>-->
-                                                      </p>
-
-                                                       <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn">Repondre</button>
-                                                        <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>
-                                                    </div>
-                                                    <p style="color: #fdecdd" class="mb-3">
-                                                      {{ c.contenue }}
-                                                    </p>
-                                                      <span id="repinput">
-                                                          <div class="d-flex flex-start mb-4">
-                                                          <img src="{{ user.photo.url }}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">
-                                                          <input  class="form-control" placeholder="Votre reponse .." >
-                                                          <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
-                                                      </div>
-                                                      </span>
-
-                                                  </div>
-                                                </div>
-                                                <div class="d-flex align-items-center mb-3">
-                                                      <a href="#!" class="link-muted me-3"><i class="fa fa-heart me-1"></i>232</a>
-                                                      <!--<a href="#!" class="link-muted"><i class="fa fa-like me-1"></i>23</a>-->
-                                                    </div>
-                                                  <hr style="color:#b9b7b7;">
-                                              {% endif %}
-                                          {% endfor %}
-                                      </div>
-                                      <hr class="my-0" />
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </section>
                     </div>
                 </div>
             {% endfor %}
+            </div>
             </div>
             <div class="col-sm-12 col-md-12 col-xl-4">
                 <div class="h-100 bg-secondary rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
                         <h6 class="mb-0">Recommandé</h6>
-                        <a href="{% url 'index' %}">Afficher tout</a>
+                        <a style="color: #B88E6D" href="{% url 'index' %}">Afficher tout</a>
                     </div>
                     <div>
-                        {% for v in recpmanded_video %}
-                            <div class=" col-sm-12 col-xl-12">
-                                <div class="rounded d-flex align-items-center justify-content-between h-100">
-                                    <div style="background-color: #191C24; " class="card h-100">
-                                    <a href="{% url 'video' v.id %}">
-                                        <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" controls >
-                                            <source src="{{ v.vid.url }}" type="video/mp4" />
-                                        </video>
-                                    </a>
-                                    <div class="row justify-content-between">
-                                            {% if v.miniature %}
-                                            <div class="col-2 mt-3 ml-1 ">
-                                            {% if v.user.is_superuser %}
-                                                <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
-                                                {% else %}
-                                                <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
-                                                {% endif %}
-                                            </div>
-                                            {% endif %}
-                                            <div class="col-10 mt-3">
-                                                <a href="{% url 'video' v.id %}" class="mb-2 " style="overflow-wrap: break-word; color: #fdecdd" title="{{ v.title }}">{{ v.title }}</a>
-                                                <p style="color:#B88E6D;">
-                                                    {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
-                                                    <small>{{ count }} vues  {{ v.date_created.date }}</small>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
+                    {% for v in recpmanded_video %}
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="rounded d-flex align-items-center justify-content-between h-100">
+                            <div style="background-color: #191C24; " class="card h-100">
+                            <a href="{% url 'video' v.id %}">
+                                <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
+                                    <source src="{{ v.vid.url }}#t={{ history.time_paused }}" type="video/mp4" />
+                                </video>
+
+                                <!--<form method="post">
+                                  {% csrf_token %}
+                                  <input type="submit" value="Pause">
+                                </form>-->
+
+                                <script>
+                                  var video = document.getElementById("video");
+                                  var form = document.querySelector("form");
+
+                                  form.addEventListener("submit", function(event) {
+                                    event.preventDefault();
+                                    var time_paused = video.currentTime;
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open("POST", ".");
+                                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                    xhr.send("time_paused=" + time_paused);
+                                  });
+                                </script>
+
+                            </a>
+                            <div class="row justify-content-between ">
+                                <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-1">
+                                    <a href="{% url 'video' v.id %}" class="text-white" style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
                                 </div>
                             </div>
-                        {% endfor %}
+                            <span>
+                                <div style="margin-left: 0.1rem" class="row">
+                                <div class="col-2 mt-2">
+                                    {% if v.miniature %}
+                                    <div class="">
+                                    {% if v.user.is_superuser %}
+                                        <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
+                                        {% else %}
+                                        <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-10">
+                                    <span style="color:#A77443;">
+                                        {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
+                                        <small>{{ v.views }} vues  {{ v.date_created.date|date:"d/m/Y" }}</small>
+                                    </span>
+                                </div>
+                            </div>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                        <hr>
+                    {% endfor %}
+
                     </div>
                 </div>
             </div>
         </div>
-   </div>
+
+
+
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
@@ -448,11 +656,11 @@
 
           if (dots.style.display === "none") {
             dots.style.display = "inline";
-            btnText.innerHTML = "MONTRE PLUS";
+            btnText.innerHTML = "PLUS";
             moreText.style.display = "none";
           } else {
             dots.style.display = "none";
-            btnText.innerHTML = "MONTRER MOINS";
+            btnText.innerHTML = "MOINS";
             moreText.style.display = "inline";
           }
         }
@@ -469,10 +677,7 @@
             btnTextRep.innerHTML = "Repondre";
           }
         }
-        function myDon() {
-            var don = document.getElementById("clicks");
 
-        }
     </script>
 {% endblock %}
 

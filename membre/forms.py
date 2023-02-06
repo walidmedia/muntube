@@ -1,4 +1,4 @@
-from .models import Video
+from .models import Video, Channel
 from django import forms
 
 """class Video_form(forms.ModelForm):
@@ -10,3 +10,8 @@ from django import forms
     class Meta:
         model=Video
         fields=("user","title","detail","vid","img")"""
+
+class ChannelForm(forms.ModelForm):
+    class Meta:
+        model = Channel
+        fields = ['name', 'description']

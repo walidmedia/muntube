@@ -1,32 +1,32 @@
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from .forms import LoginForm, SignUpForm
 from .models import User
 from django.contrib.auth import login as Login_process , logout, authenticate
 from django.contrib import messages
-from membre.models import Video
+from membre.models import Video, Notification, Channel
 
 
 def index(request):
-    mes_videos = Video.objects.all()
+    notifs = Notification.objects.filter(recipient_id=request.user.id)
 
-    def get_ip(request):
-        adress = request.META.get('HTTP_X_FORWARDED_FOR')
-        if adress:
-            ip = adress.split(',')[-1].strip()
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-    ip = get_ip(request)
-    u = User(bio=ip)
-    result = User.objects.filter(Q(id__icontains=ip))
+    trending_video = Video.objects.all()
 
-    count = User.objects.all().count()
-    return render(request, 'home.html', {'mes_videos': mes_videos,'count': count})
+    paginator = Paginator(trending_video, 2)
+
+    page = request.GET.get('page')
+
+    videos = paginator.get_page(page)
+
+    return render(request, 'home.html', {'videos': videos,'trending_video' : trending_video, 'notifs': notifs, })
 
 
 def profile(request):
+    notifs = Notification.objects.filter(recipient_id=request.user.id)
+
     context = {
+        'notifs': notifs,
     }
     return render(request, 'membre/profile.html', context)
 
@@ -35,7 +35,11 @@ def register(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
-            form.save()
+            user=form.save()
+            channel = Channel.objects.create(
+                name=user.username,
+                owner=user
+            )
             msg = 'user created'
             return redirect('login')
         else:

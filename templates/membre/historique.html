@@ -1,0 +1,57 @@
+{% load static %}
+{% include 'base.html' %}
+
+{% block content %}
+
+   <div class="container-fluid pt-4 px-4">
+        <div class="row g-4">
+            <div class="col-sm-12 col-md-12 col-xl-12">
+            <h6>Historique</h6>
+                <hr style="color:  #B88E6D" class="mt-0">
+                <div id="videos" class="row g-4">
+                    {% for v in history %}
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="rounded d-flex align-items-center justify-content-between h-100">
+                            <div style="background-color: #191C24; " class="card h-100">
+                            <a href="{% url 'video' v.video.id %}">
+                                <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.video.miniature.url }}" >
+                                    <source src="{{ v.vid.url }}" type="video/mp4" />
+                                </video>
+                            </a>
+                            <div class="row justify-content-between ">
+                                <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
+                                    <a href="{% url 'video' v.video.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.video.title }}">{{ v.video.title }}</a>
+                                </div>
+                            </div>
+                            <p>
+                                <div style="margin-left: 0.1rem" class="row">
+                                <div class="col-2 mt-2">
+                                    {% if v.video.miniature %}
+                                    <div class="">
+                                    {% if v.user.is_superuser %}
+                                        <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
+                                        {% else %}
+                                        <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-10">
+                                    <span style="color:#A77443;">
+                                        {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
+                                        <small>{{ v.video.views }} vues  {{ v.video.date_created.date|date:"d/m/Y" }}</small>
+                                    </span>
+                                </div>
+                            </div>
+                            </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                 </div>
+            </div>
+        </div>
+   </div>
+
+{% endblock %}
+{% include 'footer.html' %}

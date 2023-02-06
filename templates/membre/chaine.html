@@ -1,7 +1,20 @@
 {% load static %}
 {% include 'base.html' %}
+<style>
+    :root {
+    --primary: #B88E6D;
+    --secondary: #191C24;
+    --light: #6C7293;
+    --dark: #000000;
+}
+</style>
 {% block content %}
-<div class="container-fluid pt-4 px-4">
+    <div class="">
+                <div class="row bg-secondary rounded align-items-center mx-0" >
+                    <img src="{% static 'images/ablackadabra.svg' %}">
+                </div>
+            </div>
+<div class="container-fluid px-4">
     <div class="row g-4">
         <div class="col-12">
             <div class="bg-secondary rounded h-100 p-4">
@@ -13,9 +26,15 @@
                                         <td rowspan="">
                                             <img id="img" width="100" src="{{ user.photo.url }}" class="rounded-circle">
                                         </td>
-                                        <td rowspan="12">
+                                        <td colspan="4">
                                         </td>
+                                        <td colspan="2" style="position: absolute; right: 30px">
+                                            <a href="{% url 'channel_muntube' %}">
+                                                <button class="btn btn-sm rounded-pill m-2" style="background-color: #72473b; color: white">
+                                                Personnaliser</button>
+                                            </a>
 
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -29,34 +48,42 @@
                                 </table>
                                 <div class="col-md-2 col-sm-6 pr-0 w-2 ">
                                 </div>
-                                <div class="col-md-4 col-sm-6 pl-0 mb-lg-5">
+                                <div class="col-md-4 col-sm-6 pl-0 mb-lg-2">
 
                                 </div>
                             </div>
-                            <nav>
+                            <nav >
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <button style="color: #A77443" class="nav-link text-warning active" id="nav-home-tab" data-bs-toggle="tab"
+                                    <button class="nav-item nav-link btn-sm rounded-pill text-white" id="nav-home-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home"
-                                        aria-selected="true">ACCUEIL</button>
-                                    <button style="color: #A77443" class="nav-link text-warning" id="nav-profile-tab" data-bs-toggle="tab"
+                                        aria-selected="true" style="background-color: #A77443"><strong>ACCUEIL</strong></button>
+                                    <button style="color: #A77443" class="nav-link btn-sm rounded-pill text-white" id="nav-profile-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-profile" type="button" role="tab"
-                                        aria-controls="nav-profile" aria-selected="false">PLAYLIST</button>
-                                    <button style="color: #A77443" class="nav-link text-warning" id="nav-contact-tab" data-bs-toggle="tab"
+                                        aria-controls="nav-profile" aria-selected="false" style="background-color: #A77443"><strong>PLAYLIST</strong></button>
+                                    <button style="color: #A77443" class="nav-link btn-sm rounded-pill text-white" id="nav-contact-tab" data-bs-toggle="tab"
                                         data-bs-target="#nav-contact" type="button" role="tab"
-                                        aria-controls="nav-contact" aria-selected="false">CHAINES</button>
+                                        aria-controls="nav-contact" aria-selected="false" style="background-color: #A77443">
+                                        <strong>CHAINES</strong>
+                                    </button>
+                                    <button style="color: #A77443" class="nav-link btn-sm rounded-pill text-white" id="nav-youtube-tab" data-bs-toggle="tab"
+                                        data-bs-target="#nav-youtube" type="button" role="tab"
+                                        aria-controls="nav-contact" aria-selected="false" style="background-color: #A77443">
+                                        <strong>YOUTUBE</strong>
+                                    </button>
+
                                 </div>
                             </nav>
                             <div class="tab-content pt-3" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                     <div class="col-sm-12 col-md-12 col-xl-12">
                                     <div class="row g-4">
-                                    <h6>Toutes mes vidéos</h6>
+                                    <h6>Vidéos</h6>
                                     {% for v in mesvideos %}
                                         <div class="col-sm-6 col-xl-3">
                                             <div class="rounded d-flex align-items-center justify-content-between h-100">
                                                 <div style="background-color: #191C24; " class="card h-100">
                                                 <a href="">
-                                                    <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" controls >
+                                                    <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
                                                         <source src="{{ v.vid.url }}" type="video/mp4" />
                                                     </video>
                                                 </a>
@@ -64,7 +91,7 @@
                                                         <div class="col-10 mt-3">
                                                             <a href="" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
                                                             <p style="color:#A77443;">
-                                                                <small>2742 vues  {{ v.date_created.date }}</small>
+                                                                <small>{{ v.views }} vues . {{ v.date_created.date|date:"d/m/Y" }}</small>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -77,7 +104,7 @@
                                 </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                                     <h6>Toutes mes vidéos</h6>
-                                     <a href="#newplaylist" class=" btn btn-warning mb-3">Nouvelle playlist</a>
+                                    <a href="#newplaylist" class=" btn rounded-pill mb-3" style="background-color: #72473b"><span style="color:rgb(255,246,224);">Nouvelle playlist</span></a>
                                     <div class="col-sm-12 col-md-12 col-xl-12">
                                     <div class="row g-4">
                                         {% for v in play_lists %}
@@ -85,7 +112,7 @@
                                             <div class="rounded d-flex align-items-center justify-content-between h-100">
                                                 <div style="background-color: #191C24; " class="card h-100">
                                                 <a href="">
-                                                    <video width="180" height="100" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature_playlist.url }}" >
+                                                    <video width="180" height="100" class="card embed-responsive embed-responsive-16by9" poster="" >
                                                         <source src="" type="video/mp4" />
                                                     </video>
                                                 </a>
@@ -107,7 +134,7 @@
                                                         <h6 class="mb-4">Créer une nouvelle PlayList</h6>
                                                         <form action="{% url 'AddPlaylist' %}" method="post">
                                                             {% csrf_token %}
-                                                            <input name="id" hidden value="{{ user.id }} ">
+                                                            <input name="id_user" hidden value="{{ user.id }} ">
                                                             <div class="form-floating mb-3">
                                                                 <input name="playlist" type="text" class="form-control" id="floatingInput"
                                                                     placeholder="Nom de playlist">
@@ -122,7 +149,7 @@
                                                                 id="floatingTextarea" style="height: 150px;"></textarea>
                                                             <label for="floatingTextarea">Description</label>
                                                         </div>
-                                                            <button type="submit"class="form-control btn btn-dark"><strong style="color: #72473b">Ajouter</strong></button>
+                                                            <button type="submit"class="form-control btn btn-dark mb-lg-5" style="background-color: #72473b;"><strong style="color: #fff6e0">Ajouter</strong></button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -135,11 +162,12 @@
                                             <h5 class="mb-4">Contenu de la chaîne</h5>
                                             <div class="table-responsive mb-3">
                                                 <table class="table text-white">
-                                                    <thead class="text-warning">
+                                                    <thead class="text-white">
                                                         <tr>
                                                             <th scope="col">#</th>
                                                             <th scope="col">Video</th>
                                                             <th scope="col">detail</th>
+                                                            <th scope="col">Vues</th>
                                                             <th scope="col">j'aimes</th>
                                                             <th scope="col">Commentaires</th>
                                                             <th scope="col">Catégorie</th>
@@ -153,6 +181,7 @@
                                                             <th scope="row">{{ v.id }}</th>
                                                             <td>{{ v.title }}</td>
                                                             <td>{{ v.detail }}</td>
+                                                            <td>{{ v.views }}</td>
                                                             <td>{{ v.total_likes }}</td>
                                                             <td>{{ v.total_comments }}</td>
                                                             <td>{{ v.categorie }}</td>
@@ -199,7 +228,7 @@
                                             <h5>Playlists</h5>
                                             <div class="table-responsive mb-3">
                                                 <table class="table text-white">
-                                                    <thead class="text-warning">
+                                                    <thead class="text-white">
                                                         <tr>
                                                             <th scope="col">#</th>
                                                             <th scope="col">Playlist</th>
@@ -258,15 +287,33 @@
                                     </div>
 
                                 </div>
+                                <div class="tab-pane fade" id="nav-youtube" role="tabpanel" aria-labelledby="nav-youtube-tab">
+                                    <div class="container-fluid">
+                                    <div class="row ">
+                                        <div class="col-sm-12 col-md-12 col-xl-12">
+
+                                        <h5 style="color: #B88E6D">Ma chaine youtube</h5>
+                                        <hr style="color:  #B88E6D">
+                                            <div class="row">
+                                                {% for video in videos %}
+                                                <div class="col-sm-6 col-xl-3 mb-5">
+                                                    <div class="rounded d-flex align-items-center justify-content-between h-100">
+                                                        <div style="background-color: #191C24; " class="card h-100">
+                                                            <iframe src="https://www.youtube.com/embed/{{ video.id }}"  class="card embed-responsive embed-responsive-16by9" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                            <span style="color: #fdecdd">{{ video.snippet.title }}</span>
+                                                            <small style="color: #fdecdd">{{ video.statistics.viewCount }} vues | {{ video.statistics.likeCount }} <i class="fa fa-heart"></i></small>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Table End -->
 
 
 {% endblock %}
+<div style="margin-bottom: 100px"></div>
 {% include 'footer.html' %}

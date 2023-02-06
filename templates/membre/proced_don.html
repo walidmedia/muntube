@@ -1,0 +1,276 @@
+{% load static %}
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<style>
+    #invoice{
+padding: 30px;
+}
+.invoice {
+position: relative;
+background-color: #1c1c1c;
+min-height: 680px;
+padding: 15px
+}
+.invoice header {
+padding: 10px 0;
+margin-bottom: 20px;
+border-bottom: 1px solid #B88E6D
+}
+.invoice .company-details {
+text-align: right
+}
+.invoice .company-details .name {
+margin-top: 0;
+margin-bottom: 0
+}
+.invoice .contacts {
+margin-bottom: 20px
+}
+.invoice .invoice-to {
+text-align: left
+}
+.invoice .invoice-to .to {
+margin-top: 0;
+margin-bottom: 0
+}
+.invoice .invoice-details {
+text-align: right
+}
+.invoice .invoice-details .invoice-id {
+margin-top: 0;
+color: #B88E6D
+}
+.invoice main {
+padding-bottom: 50px
+}
+.invoice main .thanks {
+margin-top: -100px;
+font-size: 2em;
+margin-bottom: 50px
+}
+.invoice main .notices {
+padding-left: 6px;
+border-left: 6px solid #B88E6D
+}
+.invoice main .notices .notice {
+font-size: 1.2em
+}
+.invoice table {
+width: 100%;
+border-collapse: collapse;
+border-spacing: 0;
+margin-bottom: 20px
+}
+.invoice table td,.invoice table th {
+padding: 15px;
+background: #eee;
+border-bottom: 1px solid #fff
+}
+.invoice table th {
+white-space: nowrap;
+font-weight: 400;
+font-size: 16px
+}
+.invoice table td h3 {
+margin: 0;
+font-weight: 400;
+color: #B88E6D;
+font-size: 1.2em
+}
+.invoice table .qty,.invoice table .total,.invoice table .unit {
+text-align: right;
+font-size: 1.2em
+}
+.invoice table .no {
+color: #fff;
+font-size: 1.6em;
+background: #B88E6D
+}
+.invoice table .unit {
+background: #ddd
+}
+.invoice table .total {
+background: #B88E6D;
+color: #fff
+}
+.invoice table tbody tr:last-child td {
+border: none
+}
+.invoice table tfoot td {
+background: 0 0;
+border-bottom: none;
+white-space: nowrap;
+text-align: right;
+padding: 10px 20px;
+font-size: 1.2em;
+border-top: 1px solid #aaa
+}
+.invoice table tfoot tr:first-child td {
+border-top: none
+}
+.invoice table tfoot tr:last-child td {
+color: #B88E6D;
+font-size: 1.4em;
+border-top: 1px solid #B88E6D
+}
+.invoice table tfoot tr td:first-child {
+border: none
+}
+.invoice footer {
+width: 100%;
+text-align: center;
+color: #777;
+border-top: 1px solid #aaa;
+padding: 8px 0
+}
+@media print {
+.invoice {
+font-size: 11px!important;
+overflow: hidden!important
+}
+.invoice footer {
+position: absolute;
+bottom: 10px;
+page-break-after: always
+}
+.invoice>div:last-child {
+page-break-before: always
+}
+}
+</style>
+
+{% block content %}
+{% include 'base.html' %}
+
+<!------ Include the above in your HEAD tag ---------->
+<!--Author : @arboshiki-->
+<div id="invoice">
+    <!--<div class="toolbar hidden-print">
+        <div class="text-right">
+            <button id="printInvoice" class="btn btn-info"><i class="fa fa-print"></i> Print</button>
+            <button class="btn btn-info"><i class="fa fa-file-pdf-o"></i> Export as PDF</button>
+        </div>
+        <hr>
+    </div>-->
+    <div class="invoice overflow-auto">
+        <div style="min-width: 600px">
+            <header>
+            <div class="row">
+            <div class="col">
+            <a target="_blank" href="https://lobianijs.com">
+            <img class="mb-3" width="200" src="{% static 'images/logo-muntube-blanc.png' %}" data-holder-rendered="true" />
+            </a>
+            </div>
+            <div class="col company-details">
+            <h2 class="name">
+            <!--<a style="color:#fff;" target="_blank" href="http://muntube.com">
+            Muntube
+            </a>-->
+            </h2>
+            <!--<div>455 Foggy Heights, AZ 85004, US</div>
+            <div>(123) 456-789</div>-->
+            <div class="text-white">support@muntube.com</div>
+            </div>
+            </div>
+            </header>
+            <main class="text-white">
+                <div class="row contacts">
+                    <div class="col invoice-to">
+                    <div class="text-gray-light">Facture pour:</div>
+                    <h3 class="to">{{ user.first_name }} {{ user.last_name }}</h3>
+                    <div class="address">{{ user.username }}</div>
+                     <div class="email"><a class="text-white" href="mailto:{{ user.email }}">{{ user.email }}</a></div>
+                    </div>
+                    <div class="col invoice-details">
+                    <h1 class="invoice-id" style="color:#B88E6D;">Facture 3-2-1</h1>
+                    <div class="date">Date de facturation : : 01/10/2018</div>
+                    </div>
+                </div>
+                <table style="color: #72473b;font-size: 14px" border="0" cellspacing="0" cellpadding="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th class="text-left">Vidéo</th>
+                            <th class="text-left">Propriétaire</th>
+                            <th class="text-left">Titre</th>
+                            <th class="text-left">Description</th>
+                            <th class="text-left">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="no">{{ video.id }}</td>
+                            <td class="text-left"><img width="100" src="{{ video.miniature.url }}"></td>
+                            <td class="unit">{{ video.user.username }}</td>
+                            <td class="qty">{{ video.title }}</td>
+                            <td class="total">{{ video.detail }}</td>
+                            <td style="font-size: 20px;" class="total">{{ amount }}€</td>
+                        </tr>
+                    </tbody>
+                    <tfoot style="position: absolute; left: 10px; color: white">
+                        <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2">Don</td>
+                        <td>{{ amount }}€</td>
+                        </tr>
+                        <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2">TAX 00%</td>
+                        <td>€00</td>
+                        </tr>
+                        <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2">TOTAL</td>
+                        <td style="background-color: #72473b;color: white"><strong>{{ amount }}</strong>€</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <form action="{% url 'charge' video.id %}" method="post">
+                    {% csrf_token %}
+                    <input hidden name="amount" value="{{ amount }}">
+                    <input hidden name="email" value="{{ video.user.email }}">
+                    <!--<button id="stripe-button" type="submit" class="btn-lg rounded-pill btn-outline-secondary mt-2" style="background-color: #72473b; color: white; font-size: small">
+                        <strong style="font-size: 16px">Procéder au paiement</strong>
+                    </button>-->
+
+                    <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV"
+                        data-amount="{{ don_amount }}"
+                        data-name="Example Site"
+                        data-description="Example charge"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                        data-locale="auto"
+                        data-label="Soutenir"
+                        data-color="#000">
+
+                      </script>
+                </form>
+
+
+                <div class="notices">
+                <div></div>
+                <div class="notice"></div>
+                </div>
+            </main>
+            <!--<footer>
+                &copy;ABLACKADABRA- MunTube 2023
+            </footer>-->
+        </div>
+        <!--DO NOT DELETE THIS div. IT is responsible for showing footer always at the bottom-->
+        <div></div>
+    </div>
+</div>
+
+
+{% endblock %}
+{% include 'footer.html' %}

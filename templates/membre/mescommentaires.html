@@ -1,0 +1,55 @@
+{% load static %}
+
+{% block content %}
+{% include 'base.html' %}
+
+  <div class="content-wrapper text-white p-4">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="grid_title"><h2 style="color: #B88E6D">Commentaires</h2></div>
+    <hr>
+	<div class="row">
+        <div class="table-responsive">
+            <table class="table text-white">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Vidéo</th>
+                        <th scope="col">Titre vidéo</th>
+                        <th scope="col">Commentatuer</th>
+                        <th scope="col">Commentaire</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Heure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for comment in mesvideos %}
+                    {% for v in videos %}
+                        {% if comment.video.id == v.id %}
+                            <tr>
+                                <th scope="row">1</th>
+                                <th scope="row"><a href="{% url 'video' comment.video.id %}"><img width="80" src="{{ comment.video.miniature.url }}"></a></th>
+                                <td><a href="{% url 'video' comment.video.id %}"><span style="color:#fff;">{{ comment.video.title }}</span></a></td>
+                                <td><a href="#"><img width="30" class="rounded-circle me-2" src="{{ comment.user.photo.url }}"><span style="color:#ffffff;">{{ comment.user }}</span></a></td>
+                                <td>{{ comment.contenue }}</td>
+                                <td>{{ comment.date_added.date }}</td>
+                                <td>{{ comment.date_added.hour }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% for v in mesvideos %}
+
+        {% endfor %}
+	</div>
+</div>
+
+  </div>
+
+{% endblock %}
+{% include 'footer.html' %}

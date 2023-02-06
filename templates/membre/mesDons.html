@@ -1,0 +1,55 @@
+{% load static %}
+
+{% block content %}
+{% include 'base.html' %}
+
+  <div class="content-wrapper text-white p-4">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="grid_title"><h2 style="color: #B88E6D">Mes dons reçus</h2></div>
+    <hr>
+	<div class="row">
+        <div class="table-responsive">
+            <table class="table text-white">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Vidéo</th>
+                        <th scope="col">Titre vidéo</th>
+                        <th scope="col">Donneur</th>
+                        <th scope="col">Montant</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Heure</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for d in all_dons %}
+
+                        {% if d.to_user_don.id == user.id %}
+                            <tr>
+                                <th scope="row">{{ d.id }}</th>
+                                <th scope="row"><a href="{% url 'video' d.video.id %}"><img width="80" src="{{ d.video.miniature.url }}"></a></th>
+                                <td><a href="{% url 'video' d.video.id %}"><span style="color:#fff;">{{ d.video.title }}</span></a></td>
+                                <td><a href="#"><img width="30" class="rounded-circle me-2" src="{{ d.user_don.photo.url }}"><span style="color:#ffffff;">{{ d.user_don }}</span></a></td>
+                                <td style="background-color: #d39e00; color:#000;"><strong>{{ d.cout_don }}€</strong></td>
+                                <td>{{ d.date_don.date }}</td>
+                                <td>{{ d.date_don.time }}</td>
+                            </tr>
+                        {% endif %}
+
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% for v in mesvideos %}
+
+        {% endfor %}
+	</div>
+</div>
+
+  </div>
+
+{% endblock %}
+{% include 'footer.html' %}

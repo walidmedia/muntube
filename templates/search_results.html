@@ -1,0 +1,21 @@
+{% load static %}
+{% include 'base.html' %}
+<style>
+
+</style>
+{% block content %}
+
+  {% if results %}
+  <ul>
+    {% for result in results %}
+      <li>{{ result.title }} - {{ result.detail }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  No results found.
+{% endif %}
+
+{% endblock %}
+<div style="margin-bottom: 100px"></div>
+
+{% include 'footer.html' %}

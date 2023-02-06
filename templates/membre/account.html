@@ -6,15 +6,15 @@
   <div class="content-wrapper bg-dark">
     <!-- Content -->
 
-    <div class=" container-xxl flex-grow-1 container-p-y">
-        <div class="row">
+    <div class="bg-dark text-white container-xxl flex-grow-1 container-p-y">
+        <div class="row bg-dark">
             {% for info in profil %}
                 {% if info.id == user.id %}
-                <div class="col-md-12">
-                  <div class="card mb-4">
-                    <h5 class="card-header">Détails du profil</h5>
+                <div class="col-md-12 ">
+                  <div class="card bg-dark mb-4">
+                    <h5 class="card bg-dark">Détails du profil</h5>
                     <!-- Account -->
-                    <div class="card-body">
+                    <div class="card-body bg-dark">
                       <div class="d-flex align-items-start align-items-sm-center gap-4">
                         {% if v.user.is_superuser %}
                         <img
@@ -57,7 +57,7 @@
                       </div>
                     </div>
                     <hr class="my-0" />
-                    <div class="card-body">
+                    <div class="card bg-dark">
                       <form id="formAccountSettings" method="POST" onsubmit="return false">
                         <div class="row">
                           <div class="mb-3 col-md-6">
@@ -131,17 +131,17 @@
 
 
                         <div class="mt-2">
-                          <button type="submit" class="btn btn-success me-2">Save changes</button>
+                          <button type="submit" class="btn btn me-2" style="background-color: #533f03; color: white">Save changes</button>
                           <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                         </div>
                       </form>
                     </div>
                     <!-- /Account -->
                   </div>
-                  <div class="card">
+                  <!--<div class="card bg-dark">
                     <h5 class="card-header">Delete AccountSupprimer le compte
 </h5>
-                    <div class="card-body">
+                    <div class="card-body bg-dark">
                       <div class="mb-3 col-12 mb-0">
                         <div class="alert alert-warning">
                           <h6 class="alert-heading fw-bold mb-1">Êtes-vous sûr de vouloir supprimer votre compte ?</h6>
@@ -164,14 +164,14 @@
                         <button type="submit" class="btn btn-danger deactivate-account">Désactiver le compte</button>
                       </form>
                     </div>
-                  </div>
+                  </div>-->
                 </div>
                 {% endif %}
             {% endfor %}
               </div>
             </div>
   </div>
-
+<div class="mb-lg-5"></div>
 
 {% endblock %}
 {% include 'footer.html' %}

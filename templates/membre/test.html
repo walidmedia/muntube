@@ -1,0 +1,93 @@
+{% load static %}
+{% load social_share %}
+
+{% include 'base.html' %}
+<style>
+    .comment-text {
+    font-size: 13px
+}
+
+.wish {
+    color: #35b69f
+}
+
+.user-feed {
+    font-size: 14px;
+    margin-top: 12px
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #B88E6D;
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out;
+}
+:root {
+    --primary: #B88E6D;
+    --secondary: #191C24;
+    --light: #6C7293;
+    --dark: #000000;
+}
+
+</style>
+<title>Muntube</title>
+{% block content %}
+   <div class="p-1">
+        <div class="row g-4">
+            <div style="margin-left: 0" class="col-sm-12 col-md-12 col-xl-8">
+
+            </div>
+            <div class="col-sm-12 col-md-12 col-xl-4">
+                <div class="h-100 bg-secondary rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Recommandé</h6>
+                        <a href="#">Afficher tout</a>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+
+    <script>
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+        function myFunction() {
+          var dots = document.getElementById("dots");
+          var moreText = document.getElementById("more");
+          var btnText = document.getElementById("myBtn");
+
+          if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            btnText.innerHTML = "PLUS";
+            moreText.style.display = "none";
+          } else {
+            dots.style.display = "none";
+            btnText.innerHTML = "MOINS";
+            moreText.style.display = "inline";
+          }
+        }
+        function myFunctionReply() {
+          var replyinput = document.getElementById("repinput");
+          var btnTextRep = document.getElementById("myBtnRep");
+
+          if (btnTextRep.innerHTML === "Repondre") {
+            replyinput.style.display = "inline";
+            btnTextRep.innerHTML = "Annuler";
+
+          } else {
+            replyinput.style.display = "none";
+            btnTextRep.innerHTML = "Repondre";
+          }
+        }
+
+    </script>
+{% endblock %}
+
+{% include 'footer.html' %}

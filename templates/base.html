@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <title>MunTube</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
@@ -32,6 +32,7 @@
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 </head>
 <style>
+
     :root {
     --primary: #9c999a;
     --secondary: #191C24;
@@ -62,6 +63,16 @@
   display: none;
   }
 }
+    #bars {
+  display: block;
+}
+
+@media only screen and (max-width: 767px) {
+  #bars {
+    display: none;
+  }
+}
+
 </style>
 
     <div class="container-fluid position-relative d-flex p-0">
@@ -69,7 +80,7 @@
 
 
         <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
+        <div id="sidebar" class="sidebar pe-4 pb-3">
             <nav class="navbar bg-secondary navbar-dark">
                 <a href="{% url 'index' %}" class="navbar-brand mx-4 mb-3">
                     <img width="110%" height="" src="{% static 'images/logo-muntube-blanc.png' %}">
@@ -85,18 +96,18 @@
                     </div>
                 </div>-->
                 <div  class="navbar-nav w-100">
-                    <a href="{% url 'index' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Accueil</strong></a>
-                    <a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>
-                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
+                    <a href="{% url 'index' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-home me-2"></i><strong style="color: white">Accueil</strong></a>
+                    <!--<a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>-->
+                    <a href="{% url 'view_history' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
                     <a href="{% url 'a_regarder' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-eye me-2"></i><strong style="color: white">A regarder</strong></a>
                     <a href="{% url 'vidéosjaime' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-star me-2"></i><strong style="color: white">Vidéos "j'aime"</strong></a>
                     <a><hr></a>
                     <a href="{% url 'chaine' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-photo-video me-2"></i><strong style="color: white">Chaîne</strong></a>
                     <a href="{% url 'upload' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-video me-2"></i><strong style="color: white">Créer</strong></a>
                     <a><hr></a>
-                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
+                    <a href="{% url 'soutenir' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-hands-helping me-2"></i><strong style="color: white">Nous Soutenir</strong></a>
                     <a><hr></a>
-                    <a href="" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-hands-helping me-2"></i><strong style="color: white">Nous Soutenir</strong></a>
+                    <a href="{% url 'maintenance' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-chart-bar me-2"></i><strong style="color: white">Aide</strong></a>
                     <a><hr></a>
                     <a style="padding-left: 10px; color: #B88E6D"><i class="fa fa-copyright"></i><strong>
                         2023 par STEAM BEAM<br>
@@ -115,10 +126,13 @@
                 <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-"></i></h2>
                 </a>
+            <div id="bars">
                 <a href="#" class="sidebar-toggler flex-shrink-0" style="color: #B88E6D;
                 text-decoration: none;">
                     <i class="fa fa-bars"></i>
                 </a>
+            </div>
+
 
                 <div class="navbar-nav align-items-center ms-auto">
                     <!--<div class="nav-item dropdown">
@@ -160,31 +174,26 @@
                             <a href="#" class="dropdown-item text-center">See all message</a>
                         </div>
                     </div>-->
-                    <form class="navbar-nav">
-                        <input class="form-control bg-dark border-0" type="search" placeholder="Search">
+
+                    <form action="{% url 'search' %}" method="get" class="navbar-nav">
+                        <input class="form-control bg-dark border-0" type="text" placeholder="Rechercher">
                     </form>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                            <i style="background-color: #A77443;color: white" class="fa fa-bell me-lg-2"></i>
+                            <i style="background-color: #B88E6D;color: black" class="fa fa-bell"></i>
                             <span class="d-none d-lg-inline-flex"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Profil mis à jour</h6>
-                                <small>Il ya 15 minutes</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">nouvelle vidéo ajoutée</h6>
-                                <small>Il ya 15 minutes</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <h6 class="fw-normal mb-0">Mot de passe changé</h6>
-                                <small>Il ya 15 minutes</small>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">Voir toutes</a>
+                            {% for n in notifs %}
+                                {% if n.recipient.id == user.id %}
+                                <a href="#" class="dropdown-item">
+                                    <h6 class="fw-normal mb-0" style="color:#B88E6D;">{{ n.subject }}</h6>
+                                    <small style="color:#72473b;">Il ya {{ n.timestamp|timesince}}</small>
+                                </a>
+                                <hr class="dropdown-divider">
+                                {% endif %}
+                            {% endfor %}
+                            <a href="#" class="dropdown-item text-center" style="color: #B88E6D">Voir tout</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
@@ -193,18 +202,39 @@
                             <img class="rounded-circle me-lg-2" src="{{ user.photo.url }}" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex"><strong class="text-white">{{ user.username }}</strong></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 ">
                             {% if user.is_authenticated %}
-                            <a href="{% url 'monprofile' user.pk %}" class="dropdown-item text-white">Mon Profile</a>
+                            <a href="{% url 'monprofile' user.pk %}" class="dropdown-item text-white mb-2"><i style="color: #B88E6D;" class="fa fa-home me-3"></i>Mon Profile</a>
                             {% endif %}
-                            <hr>
-                            <a href="{% url 'chaine' %}" class="dropdown-item text-white">Ma chaîne</a>
-                            <a href="#commentaires" class="dropdown-item text-white">Commentaires</a>
-                            <a href="#stats" class="dropdown-item text-white">Statistiques</a>
-                            <a href="#don" class="dropdown-item text-white">Mes dons reçus </a>
-                            <a href="#mesfilleuls" class="dropdown-item text-white">Mes filleuls professionnels</a>
-                            <hr>
-                            <a href="{% url 'logout_view' %}" class="dropdown-item text-white">Se déconnecter</a>
+                            <hr class="mt-1 mb-1">
+                            <a href="{% url 'chaine' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-photo-video me-3"></i>Ma chaîne</a>
+                            <hr class="mt-1 mb-1">
+                            <a href="{% url 'mescommentaires' %}" class="dropdown-item text-white">
+                                <i style="color: #B88E6D;" class="fa fa-comment me-3"></i>
+                                <span class="me-3">Commentaires</span>
+                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
+                                    +99
+                                </span>
+                            </a>
+                        <hr class="mt-1 mb-1">
+                            <a href="{% url 'mesnotifications' %}" class="dropdown-item text-white">
+                                <i style="color: #B88E6D;" class="fa fa-bell me-3"></i>
+                                <span class="me-3">Notifications</span>
+                                {% if notifs.count > 0 %}
+                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
+                                    {{ notifs.count }}
+                                </span>
+                                {% endif %}
+                            </a>
+
+                            <hr class="mt-1 mb-1">
+                            <a href="{% url 'video_stats' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-star me-3"></i>Statistiques</a>
+                            <hr class="mt-1 mb-1">
+                            <a href="{% url 'mesdons' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mes dons reçus </a>
+                            <hr class="mt-1 mb-1">
+                            <a href="#mesfilleuls" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-fill me-3"></i>Mes filleuls professionnels</a>
+                            <hr class="mt-1">
+                            <a href="{% url 'logout_view' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-sign-out-alt me-3"></i>Se déconnecter</a>
                         </div>
                     {% else %}
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -216,8 +246,6 @@
                             <a href="{% url 'monprofile' user.pk %}" class="dropdown-item">Mon Profile</a>
                             {% endif %}
 
-                            <a href="{% url 'stockage' %}" class="dropdown-item text-white">Acheter un stockage</a>
-                            <hr>
                             <a href="{% url 'login' %}" class="dropdown-item text-white">Se connecter</a>
                         </div>
                     {% endif %}
@@ -231,41 +259,55 @@
         <div class="mobile-nav">
             {% if user.is_authenticated %}
             <a href="{% url 'index' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
+                <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
             </a>
             <a href="{% url 'bibliothèque' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
+                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
             </a>
             <a href="{% url 'upload' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-plus"></i></button>            </a>
+                <button style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2"><i class="fa fa-plus"></i></button>            </a>
             </a>
             <a href="{% url 'chaine' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
+                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
             </a>
             <a href="{% url 'monprofile' user.pk %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
+                <button style="background-color: #B88E6D; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2">
+                    <i class="fa fa-user"></i>
+                </button>
+
             </a>
+            </a>
+
             {% else %}
             <a href="{% url 'index' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
+                <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
             </a>
             <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
+                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
             </a>
             <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-plus"></i></button>            </a>
+                <button style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2"><i class="fa fa-plus"></i></button>            </a>
             </a>
             <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
+                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
             </a>
             <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
+                <button style="background-color: #B88E6D; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
             </a>
             {% endif %}
         </div>
+        <div class="sidebar-toggler" id="sidebarToggler">
+          <span class="icon-close" onclick="closeSidebar()"></span>
+        </div>
 
         <!--<a style="background-color: #B88E6D" href="#" class="ouverture_sidebar btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>-->
-
+<script>
+$(document).click(function(event) {
+    if (!$(event.target).closest("#sidebar").length) {
+        $("#sidebar").removeClass("show");
+    }
+});
+</script>
     {% block content %}
 
     {% endblock %}

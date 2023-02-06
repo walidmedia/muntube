@@ -1,0 +1,44 @@
+{% load static %}
+
+{% block content %}
+{% include 'base.html' %}
+
+  <div class="content-wrapper text-white p-4">
+    <!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="grid_title"><h2 style="color: #B88E6D">Notifications</h2></div>
+    <hr>
+	<div class="row">
+        <div class="table-responsive">
+            <table class="table text-white">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Sujet</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Temps</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for n in notifs %}
+                        <tr>
+                            <th scope="row">1</th>
+                            <th scope="row"><a style="color: white" href="#">{{ n.subject }}"</a></th>
+                            <td><a style="color: white" href="#"><span style="color:#fff;">{{ n.message }}</span></a></td>
+                            <td><a style="color: white" href="#"><span style="color:#ffffff;">{{ n.timestamp }}</span></a></td>
+                        </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+
+	</div>
+</div>
+
+  </div>
+
+{% endblock %}
+{% include 'footer.html' %}

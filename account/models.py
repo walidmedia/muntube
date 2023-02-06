@@ -86,7 +86,7 @@ class UserAbonn(models.Model):
 class playlist(models.Model):
     user_playlist = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     nom_playlist = models.CharField(max_length=128,default=False)
-    miniature_playlist = models.ImageField(null=True,blank=True,upload_to='playlist_img')
+    miniature_playlist = models.FileField(upload_to='playlist_img',null=True,blank=True)
     desc_playlist = models.CharField(max_length=512,default=False, blank=True)
     def __str__(self):
         return '%s - %s' % (self.nom_playlist, self.user_playlist)

@@ -1,0 +1,10 @@
+{% load static %}
+
+{% block content %}
+{% include 'base.html' %}
+    {% for video in videos %}
+        <h3>{{ video.snippet.title }}</h3>
+        <iframe width="400" height="200" src="https://www.youtube.com/embed/{{ video.id }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    {% endfor %}
+
+{% endblock %}

@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': '0003',
@@ -93,15 +93,15 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
         'HOST': 'localhost',
         'PORT': '5433',
     }
-}"""
+}
 
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
-}
+}"""
 
 
 # Password validation
@@ -180,3 +180,13 @@ EMAIL_HOST_USER = 'merchab08@gmail.com'  # a username, usually the e-mail addres
 EMAIL_HOST_PASSWORD = 'lkecwyedvpwhfmrk'  # the smtp user password
 EMAIL_USE_TLS = False  # True if TLS should be enabled or False otherwise
 EMAIL_USE_SSL = True  # True if SSL should be enabled or False otherwise
+
+
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
+DATE_FORMAT = 'd/m/Y'
+
+DATETIME_INPUT_FORMATS = ['%d/%m/%Y %H:%M:%S']
+DATETIME_FORMAT = 'd/m/Y H:i:s'
+
+#YOUTUBE_API_KEY = 'AIzaSyB7nilF_dFcouv4r7_551tkpK8ZQGVUGL4'
+YOUTUBE_API_KEY = 'AIzaSyAdhNVeVdZ-baLbzxk6BuDPcW_VDetSVzk'
