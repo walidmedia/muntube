@@ -1,4 +1,4 @@
-from .models import Video, Channel
+from .models import Video, Channel, comment
 from django import forms
 
 """class Video_form(forms.ModelForm):
@@ -15,3 +15,11 @@ class ChannelForm(forms.ModelForm):
     class Meta:
         model = Channel
         fields = ['name', 'description']
+
+class ReplyForm(forms.Form):
+    text = forms.CharField(widget=forms.Textarea)
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = comment
+        fields = '__all__'

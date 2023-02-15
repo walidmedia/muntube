@@ -5,7 +5,8 @@
 
             <!-- Sale & Revenue Start -->
             <div class="pt-4 px-4">
-                <h3 class="mb-3">Vidéos J'aime</h3>
+                <h5 style="color: #B88E6D" >Vidéos J'aime</h5>
+             <hr style="color:  #B88E6D" class="mt-0">
                 <div class="row g-4">
                     {% for v in vidéosjaime %}
                         <div class="col-sm-6 col-xl-3">
@@ -37,7 +38,7 @@
                                 <div class="col-10">
                                     <span style="color:#A77443;">
                                         {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
-                                        <small>2742 vues  {{ v.date_created.date }}</small>
+                                        <small>{{ v.views }} vues  {{ v.date_created.date }}</small>
                                     </span>
                                 </div>
                             </div>
@@ -47,7 +48,6 @@
                     </div>
                     {% endfor %}
                  </div>
-            <hr style="color: #C39868">
             </div>
             <!-- Sale & Revenue End -->
         </div>

@@ -3,11 +3,11 @@ from django.urls import path
 
 from ABLACKADABRA import settings
 from .views import checkout, upload, success_upload, addvideo, mesvideos, checkout_session, machaine, stockage, \
-        pay_success, pay_cancel, video, commenter, abonni_video, monprofile, save_video, \
+        pay_success, pay_cancel, video, commenter, subscribe, monprofile, save_video, \
         vidéosjaime, bibliothèque, a_regarder, chaine, AddPlaylist, maintenance, checkout_sess_don, checkout_don, \
-        charge, mescommentaires, like_comment, channel_videos, view_history, success, proced_don, payment, \
+        charge, mescommentaires, like_comment, view_history, success, proced_don, payment, \
         display_notification, mesnotifications, search, channel_muntube, chart_data, like_video, subscribe, mesdons, \
-        soutenir, soutien
+        soutenir, soutien, connect_stripe, get_stripe_account_id, get_stripe_access_token, newvideo, chaine_profile
 
 urlpatterns = [
         #path('pricing/', pricing, name='pricing'),
@@ -28,7 +28,7 @@ urlpatterns = [
         path('commenter/<int:id>', commenter, name='commenter'),
         path('video/<int:video_id>/like/', like_video, name='like_video'),
         path('like_comment/<int:comment_id>/', like_comment, name='like_comment'),
-        path('abonni_video/<int:pk>', abonni_video, name='abonni_video'),
+        path('subscribe/', subscribe, name='subscribe'),
         path('save_video/<int:pk>', save_video, name='save_video'),
         path('monprofile/<int:id>', monprofile, name='monprofile'),
         path('vidéosjaime/', vidéosjaime, name='vidéosjaime'),
@@ -39,7 +39,7 @@ urlpatterns = [
         path('maintenance/', maintenance, name='maintenance'),
         path('charge/<int:pk>', charge, name='charge'),
         path('mescomments/', mescommentaires, name='mescommentaires'),
-        path('channel_videos/', channel_videos, name='channel_videos'),
+        #path('channel_videos/', channel_videos, name='channel_videos'),
         #path('video/<int:id>', play_video, name='play_video'),
         path('historique/', view_history, name='view_history'),
         path('proced_don/<int:id>', proced_don, name='proced_don'),
@@ -53,6 +53,10 @@ urlpatterns = [
         path('mesdons/', mesdons, name='mesdons'),
         path('soutenir/', soutenir, name='soutenir'),
         path('soutien/', soutien, name='soutien'),
-
+        path('connect_stripe/', connect_stripe, name='connect_stripe'),
+        path('get_stripe_account_id/', get_stripe_account_id, name='get_stripe_account_id'),
+        path('get_stripe_access_token/', get_stripe_access_token, name='get_stripe_access_token'),
+        path('newvideo/', newvideo, name='newvideo'),
+        path('chaine/<int:chaine_id>/', chaine_profile, name='chaine_profile'),
 
 ]

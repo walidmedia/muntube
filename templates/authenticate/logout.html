@@ -2,15 +2,15 @@
     {% if msg %}
         {{ msg | safe }}
     {% else %}
-        Add your credentials
+        Ajoutez vos identifiants
     {% endif %}
 </span>
 {% if request.user.is_authenticated %}
 <form method="post">
     {% csrf_token %}
-    <p>Are you sure you want to logout?</p>
-    <button type="submit">Yes, LogOut</button>
+    <p>Êtes-vous sûr de vouloir vous déconnecter?</p>
+    <button type="submit">Oui, déconnexion</button>
 </form>
 {% else %}
-<p>You're not logged in, would you like to <a href="{% url 'login_view' %}">LogIn</a></p>
+<p>Vous n'êtes pas connecté, souhaitez-vous <a href="{% url 'login_view' %}">Se connecter</a></p>
 {% endif %}

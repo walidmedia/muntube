@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+    <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+        <h3 style="color:#fdf1ce;">Ma chaine</h3>
+        <div class="col-md-6 text-center">
+            <a href="{% url 'connect_stripe' %}">Connect with Stripe</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

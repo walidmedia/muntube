@@ -14,7 +14,12 @@
                   <div class="card bg-dark mb-4">
                     <h5 class="card bg-dark">Détails du profil</h5>
                     <!-- Account -->
-                    <div class="card-body bg-dark">
+
+                    <hr class="my-0" />
+                    <div class="card bg-dark">
+                      <form id="formAccountSettings" method="POST" action="{% url 'update_user' request.user.id %}">
+                      <input hidden name="id_user" value="{{ user.id }}">
+                        <div class="card-body bg-dark">
                       <div class="d-flex align-items-start align-items-sm-center gap-4">
                         {% if v.user.is_superuser %}
                         <img
@@ -26,7 +31,17 @@
                           id="uploadedAvatar"
                         />
                         {% else %}
+                            {% if info.photo %}
                             <img
+                          src="{{ info.photo }}"
+                          alt="user-avatar"
+                          class="d-block rounded"
+                          height="100"
+                          width="100"
+                          id="uploadedAvatar"
+                        />
+                                {% else %}
+                                <img
                           src="{{ info.photo.url }}"
                           alt="user-avatar"
                           class="d-block rounded"
@@ -34,12 +49,14 @@
                           width="100"
                           id="uploadedAvatar"
                         />
+                                {% endif %}
                         {% endif %}
                         <div class="button-wrapper">
                           <label for="upload" class="btn btn-secondary me-2 mb-4" tabindex="0">
                             <span class="d-none d-sm-block">Télécharger une nouvelle photo</span>
                             <i class="bx bx-upload d-block d-sm-none"></i>
                             <input
+                                    name="img"
                               type="file"
                               id="upload"
                               class="account-file-input"
@@ -56,13 +73,11 @@
                         </div>
                       </div>
                     </div>
-                    <hr class="my-0" />
-                    <div class="card bg-dark">
-                      <form id="formAccountSettings" method="POST" onsubmit="return false">
                         <div class="row">
                           <div class="mb-3 col-md-6">
                             <label for="firstName" class="form-label">Prénom</label>
                             <input
+                              style="border: 1px solid #7f5a07 !important;"
                               class="form-control"
                               type="text"
                               id="firstName"
@@ -73,7 +88,11 @@
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="lastName" class="form-label">Nom</label>
-                            <input class="form-control" type="text" name="lastName" id="lastName" value="{{ info.last_name }}" />
+                            <input style="border: 1px solid #7f5a07 !important;" class="form-control" type="text" name="lastName" id="lastName" value="{{ info.last_name }}" />
+                          </div>
+                          <div class="mb-3 col-md-6">
+                            <label for="Pseudonyme" class="form-label">Pseudonyme</label>
+                            <input style="border: 1px solid #7f5a07 !important;" class="form-control" type="text" name="Pseudonyme" id="Pseudonyme" value="{{ info.username }}" />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">E-mail</label>
@@ -84,20 +103,53 @@
                               name="email"
                               value="{{ info.email }}"
                               placeholder="john.doe@example.com"
+                              style="border: 1px solid #7f5a07 !important;"
                             />
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label for="organization" class="form-label">Organization</label>
+                          <label for="email" class="form-label">Pays</label>
+                          <select name="pays" aria-controls="pays" style="border: 1px solid #7f5a07 !important;" class="form-select mb-3" aria-label="Default select example" id="country-select">
+                              <option value="">Choisissez un pays</option>
+                            </select>
+                          </div>
+
+                            <script>
+                                fetch('https://restcountries.com/v3.1/all')
+  .then(response => response.json())
+  .then(countries => {
+    // Call a function to update the select element with the list of countries
+    updateCountrySelect(countries);
+  })
+  .catch(error => console.error(error));
+function updateCountrySelect(countries) {
+  const selectElement = document.getElementById('country-select');
+  countries.forEach(country => {
+    const optionElement = document.createElement('option');
+    optionElement.value = country.name.common;
+    optionElement.textContent = country.name.common;
+    selectElement.appendChild(optionElement);
+  });
+}
+document.getElementById('country-select').addEventListener('change', (event) => {
+  const selectedCountry = event.target.value;
+  // Call a function to display more information about the selected country
+  displayCountryInfo(selectedCountry);
+});
+
+                            </script>
+                          <div class="mb-3 col-md-6">
+                            <label for="organization" class="form-label">Bio</label>
                             <input
                               type="text"
                               class="form-control"
                               id="organization"
-                              name="organization"
+                              name="bio"
                               value=""
+                               style="border: 1px solid #7f5a07 !important;"
                             />
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                            <label class="form-label" for="phoneNumber">N° de téléphone</label>
                             <div class="input-group input-group-merge">
                               <span class="input-group-text">{{ info.country }}</span>
                               <input
@@ -106,65 +158,35 @@
                                 name="phoneNumber"
                                 class="form-control"
                                 placeholder="22 5505 0111"
+                                 style="border: 1px solid #7f5a07 !important;"
                               />
                             </div>
                           </div>
+
                           <div class="mb-3 col-md-6">
-                            <label for="address" class="form-label">Address</label>
-                            <input type="text" class="form-control" id="address" name="address" placeholder="Address" />
+                            <label for="state" class="form-label">Code Chaine YouTube</label>
+                            <input style="border: 1px solid #7f5a07 !important;" class="form-control" type="text" id="state" name="id_ytb" placeholder="UCKk4XQXSquh88TnnoQf6MVg" />
                           </div>
                           <div class="mb-3 col-md-6">
-                            <label for="state" class="form-label">State</label>
-                            <input class="form-control" type="text" id="state" name="state" placeholder="California" />
-                          </div>
-                          <div class="mb-3 col-md-6">
-                            <label for="zipCode" class="form-label">Zip Code</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="zipCode"
-                              name="zipCode"
-                              placeholder="231465"
-                              maxlength="6"
-                            />
+                            <label for="zipCode" class="form-label">Dons</label>
+                              <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked"checked>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked">Avec l'acceptation 15/85</label>
+                                </div>
                           </div>
 
 
                         <div class="mt-2">
-                          <button type="submit" class="btn btn me-2" style="background-color: #533f03; color: white">Save changes</button>
-                          <button type="reset" class="btn btn-outline-secondary">Cancel</button>
+                          <button type="submit" class="btn btn me-2" style="background-color: #533f03; color: white">Sauvegarder</button>
+                          <button type="reset" class="btn btn-outline-secondary" style="background-color: rgb(186,121,0);color: white">Annuler</button>
                         </div>
                       </form>
                     </div>
+
                     <!-- /Account -->
                   </div>
-                  <!--<div class="card bg-dark">
-                    <h5 class="card-header">Delete AccountSupprimer le compte
-</h5>
-                    <div class="card-body bg-dark">
-                      <div class="mb-3 col-12 mb-0">
-                        <div class="alert alert-warning">
-                          <h6 class="alert-heading fw-bold mb-1">Êtes-vous sûr de vouloir supprimer votre compte ?</h6>
-                          <p class="mb-0">Une fois que vous avez supprimé votre compte, il n'y a plus de retour en arrière. Soyez certain.
-</p>
-                        </div>
-                      </div>
-                      <form id="formAccountDeactivation" onsubmit="return false">
-                        <div class="form-check mb-3">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            name="accountActivation"
-                            id="accountActivation"
-                          />
-                          <label class="form-check-label" for="accountActivation"
-                            >Je confirme la désactivation de mon compte</label
-                          >
-                        </div>
-                        <button type="submit" class="btn btn-danger deactivate-account">Désactiver le compte</button>
-                      </form>
-                    </div>
-                  </div>-->
+
                 </div>
                 {% endif %}
             {% endfor %}

@@ -3,6 +3,33 @@
 
 {% include 'base.html' %}
 <style>
+
+#subscribe-btn {
+  background-color: blue;
+  color: white;
+}
+
+#subscribe-btn.subscribed {
+  background-color: green;
+}
+
+
+    .like-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.like-button .fa-heart {
+  color: red;
+  font-size: 20px;
+}
+
+.like-button .like-count {
+  font-size: 20px;
+  margin-left: 5px;
+}
+
     .comment-text {
     font-size: 13px
 }
@@ -169,11 +196,15 @@
                                     <tr>
 
                                         <td class="text-center" rowspan="2">
-                                            <img id="img" width="48" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                            <a href="{% url 'chaine_profile' v.user.id %}">
+                                                <img id="img" width="48" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                            </a>
                                         </td>
                                         <td colspan="2">
                                              <span style="color:white;">
-                                                <b>{{ v.user.first_name }}</b>
+                                                <a href="{% url 'chaine_profile' v.user.id %}" class="text-white">
+                                                    <b>{{ v.user.first_name }}</b>
+                                                </a>
 
                                                   {% if don_par_user.total_payments <= 10 %}
                                                   <i class="fas fa-gem" style="color: #d39e00"></i>
@@ -195,26 +226,20 @@
                                         <td rowspan="2">
                                             {% if user.is_authenticated %}
 
-                                                <form method="post">
-                                                    {% csrf_token %}
-                                                        <button id="subscribe-button" style="background-color: #533f03;font-size: small" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
-                                                            <span style="color: white"><i class="fa fa-bell me-1"></i>S'abonner</span>
-                                                        </button>
-                                                    <script>
-                                                      $(document).ready(function() {
-                                                        $("#subscribe-button").click(function() {
-                                                          $.ajax({
-                                                            type: "POST",
-                                                            url: "{% url 'subscribe' v.id %}",
-                                                            data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
-                                                            success: function(response) {
-                                                              $("#subscribe-button").text("Subscribed");
-                                                            }
-                                                          });
-                                                        });
-                                                      });
-                                                    </script>
-                                                </form>
+                                    <button id="subscribe-btn" onclick="subscribe()">Subscribe</button>
+
+                                    <script>
+                                    function subscribe() {
+                                      // Make an AJAX call to the Django view that handles subscriptions
+                                      $.post('/subscribe/', {channel_id: CHANNEL_ID}, function(response) {
+                                        // If the subscription was successful, change the button color and text
+                                        if (response.success) {
+                                          $('#subscribe-btn').addClass('subscribed').text('Subscribed');
+                                        }
+                                      });
+                                    }
+
+                                    </script>
 
                                             {% else %}
                                                 <form action="{% url 'login' %}" method="post">
@@ -274,11 +299,8 @@
 
                         <div class="mt-5" style="color: #b9b7b7">
                             <p>{{ v.detail }}
-                                <span id="dots">...</span>
-                                <span id="more"></span>
                             </p>
                         </div>
-                        <button onclick="myFunction()" id="myBtn" class="btn">PLUS</button>
                         </div>
                       </div>
                     <div class="col-sm-12 col-xl-12">
@@ -290,7 +312,7 @@
                                         data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
                                         aria-selected="true"
                                     >
-                                        <strong  style="font-size: 12px">Liens & documents</strong>
+                                        <strong  style="font-size: 14px">Liens & documents</strong>
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation" >
@@ -298,7 +320,7 @@
                                         data-bs-target="#pills-profile" type="button" role="tab"
                                         aria-controls="pills-profile" aria-selected="false"
                                      >
-                                        <strong class="me-1"><span style="font-size: 12px" class="me-1">{{ comments }}</span>Commentaires</strong>
+                                        <strong class="me-1"><span style="font-size: 14px" class="me-1">{{ comments }}</span>Commentaires</strong>
                                     </button>
                                 </li>
                             </ul>
@@ -357,9 +379,10 @@
                                                               <img class="rounded-circle shadow-1-strong me-3"
                                                                 src="{{ c.user.photo.url }}" alt="avatar" width="40"
                                                                 height="40" />
-                                                              <div>
-                                                                <span class="fw-bold mt-0">
-                                                                    <strong style="color:#fff;">{{ c.user.username }}</strong>
+                                                              <div class="comment">
+                                                                <span class="fw-bold mt-0"><strong style="color:#fff;">
+                                                                    {{ c.user.username }}</strong>
+
                                                                     {% if don_par_user.total_payments <= 10 %}
                                                                       <i class="fas fa-gem" style="color: #d39e00"></i>
                                                                       {% elif don_par_user.total_payments <= 15 %}
@@ -375,55 +398,96 @@
                                                                       <i class="fas fa-gem" style="color: #d39e00"></i>
                                                                       <i class="fas fa-gem" style="color: #d39e00"></i>
                                                                       {% endif %}
-                                                                    {{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}
-                                                                    <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn btn-sm" style="">Repondre</button>
+
+                                                                 <div class="mt-0" style="font-size: 10px">{{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}</div>
                                                                 </span>
                                                                 <div class="d-flex align-items-center mt-0 mb-0">
-                                                                    <span style="color: #fdecdd;font-size: 12px;" class="mb-2">
-                                                                  {{ c.contenue }}
-                                                                </span>
+
+
                                                                    <!-- <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>-->
                                                                 </div>
-
-                                                                  <!--<span id="repinput">
-                                                                      <div class="d-flex flex-start mb-2">
-                                                                      <img src="{{ user.photo.url }}" width="30" height="30" class="mt-1 rounded-circle shadow-1-strong me-3">
-                                                                      <input  class="form-control"  placeholder="Votre reponse .." >
-                                                                      <input class="btn rounded-pill btn-video" value="Repondre" type="submit">
-                                                                  </div>
-                                                                  </span>-->
+                                                                <span style="color: #fdecdd;font-size: 14px;" class="mb-0">
+                                                                  {{ c.contenue }}
+                                                                </span>
 
                                                               </div>
                                                             </div>
-                                                              <div>
-                                                              <button id="like_button" style="background-color: #533f03"  data-comment-id="{{ c.pk }}" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
-                                                                <!--<i class="fa fa-heart"></i>-->
+
+                                                            <!--<button id="like-button" style="background-color: #533f03;background-color: transparent"  data-comment-id="{{ c.pk }}" class="like-button btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                                                <i class="fa fa-heart"></i>
+                                                            </button>-->
+                                                          <div class="like-section">
+                                                            <button class="like-button" data-comment-id="{{ c.id }}">
+                                                              <i class="fa fa-heart"></i>
                                                             </button>
+                                                            <span class="like-count text-white">{{ c.likes }}</span>
+                                                          </div>
+                                                            <script>
+                                                           document.addEventListener('click', function(event) {
+  if (!event.target.classList.contains('like-button')) {
+    return;
+  }
 
-                                                                <span id="likes-count-{{ c.id }}">{{ c.likes }}</span>
+  const commentId = event.target.dataset.commentId;
+  const url = '/like_comment/' + commentId;
 
-                                                                <script>
-                                                                document.addEventListener("DOMContentLoaded", function() {
-                                                                    document.querySelectorAll(".like-button").forEach(function(button) {
-                                                                        button.addEventListener("click", function() {
-                                                                            var commentId = this.getAttribute("data-comment-id");
-                                                                            var xhr = new XMLHttpRequest();
-                                                                            xhr.open("POST", "/like_comment/" + commentId + "/");
-                                                                            xhr.setRequestHeader("Content-Type", "application/json");
-                                                                            xhr.setRequestHeader("X-CSRFToken", csrf_token);  // add CSRF token if using Django's built-in CSRF protection
-                                                                            xhr.onload = function() {
-                                                                                if (xhr.status === 200) {
-                                                                                    var response = JSON.parse(xhr.responseText);
-                                                                                    document.querySelector("#likes-count-" + commentId).innerHTML = response.likes;
-                                                                                }
-                                                                            };
-                                                                            xhr.send();
-                                                                        });
-                                                                    });
-                                                                });
-                                                                </script>
-                                                              </div>
-                                                              <hr style="color:#b9b7b7;" class="mb-3">
+  // Send an AJAX request to the server to update the like count
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Update the like count in the HTML
+    const commentElement = document.getElementById('comment-' + commentId);
+    const likeCountElement = commentElement.querySelector('.like-count');
+    likeCountElement.textContent = data.likes;
+  });
+});
+
+// Helper function to get the value of a cookie
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift();
+  }
+}
+document.addEventListener("click", function(event) {
+  if (event.target.classList.contains("like-button")) {
+    var commentId = event.target.dataset.commentId;
+
+    axios.post("/like_comment/", {
+      comment_id: commentId
+    })
+    .then(function(response) {
+      if (response.data.liked) {
+        event.target.innerHTML = "&#9829;";
+      } else {
+        event.target.innerHTML = "&#9825;";
+      }
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+  }
+});
+const replyButtons = document.querySelectorAll('.reply-button');
+replyButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    const replyForm = event.target.nextElementSibling;
+    replyForm.style.display = 'flex';
+  });
+});
+
+
+
+                                                            </script>
+                                                            <hr style="color:#b9b7b7;" class="mb-3">
                                                           {% endif %}
                                                       {% endfor %}
                                                   </div>
@@ -501,12 +565,11 @@
                                                                       <i class="fas fa-gem" style="color: #d39e00"></i>
                                                                       <i class="fas fa-gem" style="color: #d39e00"></i>
                                                                       {% endif %}
-                                                                 <span >{{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}</span>
+                                                                 <div class="mt-0" style="font-size: 10px">{{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}</div>
                                                                 </span>
                                                                 <div class="d-flex align-items-center mt-0 mb-0">
 
 
-                                                                   <button id="myBtnRep" onclick="myFunctionReply()" class="link-muted btn btn-sm" style="">Repondre</button>
                                                                    <!-- <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>-->
                                                                 </div>
                                                                 <span style="color: #fdecdd;font-size: 14px;" class="mb-0">
@@ -582,15 +645,10 @@
                         <div class="rounded d-flex align-items-center justify-content-between h-100">
                             <div style="background-color: #191C24; " class="card h-100">
                             <a href="{% url 'video' v.id %}">
-                                <video id="my-video" class="video-js vjs-big-play-centered" controls preload="auto" data-setup='{"advertising": {"client": "vast", "schedule": {"myAd": {"offset": "pre", "tag": "https://your-ad-tag-url.com"}}}}'>
-                                  <source src="{{ v.vid.url }}" type="video/mp4">
-                                </video>
 
-                                <script src="https://path-to-video.js/video.js"></script>
-                                <script src="https://path-to-video.js/videojs-contrib-ads.min.js"></script>
-                                <!--<video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
+                                <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
                                     <source src="{{ v.vid.url }}#t={{ history.time_paused }}" type="video/mp4" />
-                                </video>-->
+                                </video>
 
                                 <!--<form method="post">
                                   {% csrf_token %}
@@ -650,41 +708,6 @@
         </div>
 
 
-
-    <script>
-        $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-        });
-        function myFunction() {
-          var dots = document.getElementById("dots");
-          var moreText = document.getElementById("more");
-          var btnText = document.getElementById("myBtn");
-
-          if (dots.style.display === "none") {
-            dots.style.display = "inline";
-            btnText.innerHTML = "PLUS";
-            moreText.style.display = "none";
-          } else {
-            dots.style.display = "none";
-            btnText.innerHTML = "MOINS";
-            moreText.style.display = "inline";
-          }
-        }
-        function myFunctionReply() {
-          var replyinput = document.getElementById("repinput");
-          var btnTextRep = document.getElementById("myBtnRep");
-
-          if (btnTextRep.innerHTML === "Repondre") {
-            replyinput.style.display = "inline";
-            btnTextRep.innerHTML = "Annuler";
-
-          } else {
-            replyinput.style.display = "none";
-            btnTextRep.innerHTML = "Repondre";
-          }
-        }
-
-    </script>
 {% endblock %}
 
 {% include 'footer.html' %}

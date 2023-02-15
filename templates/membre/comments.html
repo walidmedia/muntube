@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+    <style>
+  .comment-section {
+    width: 80%;
+    margin: 20px auto;
+  }
+  .comment {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  .user-info {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+  }
+  .user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+  }
+  .username {
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+  .comment-text {
+    font-size: 14px;
+    margin: 0;
+    width: 100%;
+  }
+  .like-reply-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .like-button {
+    background-color: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 20px;
+  }
+  .like-button i {
+    margin-right: 5px;
+  }
+  .like-count {
+    font-size: 14px;
+    margin-right: 10px;
+  }
+  #reply-button {
+    background-color: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .reply-section {
+    margin-top: 20px;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  #submit-reply-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+</style>
+
+
+
+</head>
+<body>
+
+<div class="comment-section">
+  <div class="comment">
+    <div class="user-info">
+      <img src="user-avatar.png" alt="User Avatar">
+      <span class="username">Username</span>
+    </div>
+    <p class="comment-text">Comment text goes here</p>
+    <div class="like-reply-section">
+      <button class="like-button">
+        <i class="fa fa-thumbs-up"></i>
+        <span class="like-count">0</span>
+      </button>
+      <button id="reply-button">Reply</button>
+    </div>
+    <div class="reply-section" style="display: none;">
+      <input type="text" id="reply-input">
+      <button id="submit-reply-button" style="display: none;">Submit</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.getElementById("reply-button").addEventListener("click", function() {
+    document.querySelector(".reply-section").style.display = "block";
+  });
+
+  document.getElementById("reply-input").addEventListener("input", function() {
+    if (this.value) {
+      document.getElementById("submit-reply-button").style.display = "inline-block";
+    } else {
+      document.getElementById("submit-reply-button").style.display = "none";
+    }
+  });
+</script>
+
+
+</body>
+</html>

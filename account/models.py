@@ -60,6 +60,8 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='users', default="/static/images/profile1.jpg", null=True, blank=True)
     country = models.CharField(max_length=256, null=True)
     bio = models.TextField(default='', blank=True)
+    id_youtube_ch = models.CharField(max_length=24, null=True,unique=True)
+    Active_don = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'username']

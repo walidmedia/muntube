@@ -1,0 +1,463 @@
+{% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  :root {
+--primary: #B88E6D;
+--secondary: #191C24;
+--light: #6C7293;
+--dark: #000000;
+}
+.video-live {
+  width: 50%;
+  float: left;
+  height: 100%;
+}
+
+.live-info {
+  width: 50%;
+  float: right;
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cover-image {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+}
+
+.edit-profile-button {
+  position: absolute;
+  top: 80px;
+  right: 20px;
+  padding: 10px 10px;
+  background-color: #ba7900;
+  border: 1px solid rgba(70, 40, 9, 0.81);
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.profile {
+  margin-top: -75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 4px solid black;
+
+}
+
+.channel-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.bio {
+  font-size: 14px;
+  text-align: center;
+  width: 80%;
+}
+
+.nav-pills-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+
+.nav-pills {
+  display: flex;
+}
+
+.nav-pill {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: gray;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.nav-pill.active {
+  color: #B88E6D;
+}
+.result {
+    float: left;
+
+  }
+.nav-pills .nav-pill:hover {
+    color: #ba7900;
+}
+  </style>
+
+{% block content %}
+{% include 'base.html' %}
+<body>
+<div class="container">
+  <div class="cover-image">
+  {% if chaine %}
+    <img src="{{ chaine.cover_image.url }}" alt="Cover Image">
+  {% else %}
+      <img src="{% static 'images/ablackadabra.jpg' %}" alt="Cover Image">
+{% endif %}
+      {% if request.user == chaine.owner %}
+    <button class="edit-profile-button">Edit Profile</button>
+      {% endif %}
+  </div>
+  <div class="profile">
+      {% if chaine %}
+            <img src="{% static 'images/profile1.jpg' %}" alt="Profile Image">
+            <h1 class="channel-name" style="color: white">{{ chaine.owner }}</h1>
+            <p class="bio text-white">{{ chaine.description }}</p>
+      {% else %}
+            <img src="{{ chaine.image.url }}{% static 'images/profile1.jpg' %}" alt="Profile Image">
+            <h1 class="channel-name" style="color: white">{{ chaine.owner }}</h1>
+            <p class="bio text-white">{{ user.description }}</p>
+      {% endif %}
+  </div>
+  <div class="nav-pills-container">
+    <div class="nav-pills">
+      <a class="nav-pill" href="#home-results" onclick="showResult('home-results')">Home</a>
+      <a class="nav-pill" href="#video-results" onclick="showResult('video-results')">Videos</a>
+      <a class="nav-pill" href="#playlist-results" onclick="showResult('playlist-results')">Playlists</a>
+      <a class="nav-pill" href="#channel-results" onclick="showResult('channel-results')">Channels</a>
+    </div>
+      <hr>
+  </div>
+  <div class="result col-sm-12 col-md-12 col-xl-12" id="home-results">
+    <div class="">
+        <div class="row g-4">
+        <h6>Vidéos</h6>
+        {% for v in mesvideos %}
+            <div class="col-sm-6 col-xl-3">
+                <div class="rounded d-flex align-items-center justify-content-between h-100">
+                    <div style="background-color: #191C24; " class="card h-100">
+                    <a href="">
+                        <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
+                            <source src="{{ v.vid.url }}" type="video/mp4" />
+                        </video>
+                    </a>
+                    <div class="row justify-content-between">
+                            <div class="col-10 mt-3">
+                                <a href="" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                <p style="color:#A77443;">
+                                    <small>{{ v.views }} vues . {{ v.date_created.date|date:"d/m/Y" }}</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+  </div>
+  <div class="result col-sm-12 col-md-12 col-xl-12 p-1" id="video-results" style="display:none;">
+    <h6>Toutes mes vidéos</h6>
+    <a href="#newplaylist" class=" btn rounded-pill mb-3" style="background-color: #72473b"><span style="color:rgb(255,246,224);">Nouvelle playlist</span></a>
+    <div class="col-sm-12 col-md-12 col-xl-12">
+    <div class="row g-4">
+        {% for v in play_lists %}
+        <div class="col-sm-6 col-xl-3">
+            <div class="rounded d-flex align-items-center justify-content-between h-100">
+                <div style="background-color: #191C24; " class="card h-100">
+                <a href="">
+                    <video width="180" height="100" class="card embed-responsive embed-responsive-16by9" poster="" >
+                        <source src="" type="video/mp4" />
+                    </video>
+                </a>
+                <div class="row justify-content-between">
+                        <div class="col-11 mt-3">
+                            <a href="" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                            <p style="color:#A77443;">
+                                <h6>{{ v.nom_playlist }}</h6>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <hr>
+    <div id="newplaylist" class="row h-100 bg-secondary rounded align-items-center justify-content-center mx-0">
+                    <div class="col-md-6 text-center">
+                        <h6 class="mb-4 mt-4">Créer une nouvelle PlayList</h6>
+                        <form action="{% url 'AddPlaylist' %}" method="post">
+                            {% csrf_token %}
+                            <input name="id_user" hidden value="{{ user.id }} ">
+                            <div class="form-floating mb-3">
+                                <input name="playlist" type="text" class="form-control" id="floatingInput"
+                                    placeholder="Nom de playlist">
+                                <label for="floatingInput">playlist</label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFileSm" class="form-label">Miniature Playlist</label>
+                                <input name="miniature" class="form-control form-control-sm bg-dark" id="formFileSm" type="file">
+                            </div>
+                            <div class="form-floating">
+                            <textarea name="description" class="form-control mb-3" placeholder="Leave a comment here"
+                                id="floatingTextarea" style="height: 150px;"></textarea>
+                            <label for="floatingTextarea">Description</label>
+                        </div>
+                            <button type="submit"class="form-control btn btn-dark mb-lg-5" style="background-color: #72473b;"><strong style="color: #fff6e0">Ajouter</strong></button>
+                        </form>
+                    </div>
+                </div>
+    </div>
+    </div>
+  </div>
+  <div class="result col-sm-12 col-md-12 col-xl-12" id="playlist-results" style="display:none;">
+    <div class="col-12">
+                                        <div class="bg-secondary rounded h-100 p-4">
+                                            <h5 class="mb-4">Contenu de la chaîne</h5>
+                                            <div class="table-responsive mb-3">
+                                                <table class="table text-white">
+                                                    <thead class="text-white">
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Video</th>
+                                                            <th scope="col">detail</th>
+                                                            <th scope="col">Vues</th>
+                                                            <th scope="col">j'aimes</th>
+                                                            <th scope="col">Commentaires</th>
+                                                            <th scope="col">Catégorie</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for v in mesvideos %}
+                                                        <tr>
+                                                            <th scope="row">{{ v.id }}</th>
+                                                            <td>{{ v.title }}</td>
+                                                            <td>{{ v.detail }}</td>
+                                                            <td>{{ v.views }}</td>
+                                                            <td>{{ v.total_likes }}</td>
+                                                            <td>{{ v.total_comments }}</td>
+                                                            <td>{{ v.categorie }}</td>
+                                                            <td>{{ v.status_video }}</td>
+                                                            <td>
+                                                                <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                                                    <i class="fa fa-ellipsis-h"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
+                                                                    {% if user.is_authenticated %}
+                                                                    <form>
+                                                                         {% csrf_token %}
+                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
+                                                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
+                                                                        </button>
+                                                                    </form>
+                                                                    <form action="#" method="post">
+                                                                        {% csrf_token %}
+                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
+                                                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
+                                                                        </button>
+                                                                    </form>
+                                                                    {% else %}
+                                                                        <form>
+                                                                         {% csrf_token %}
+                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
+                                                                            </button>
+                                                                        </form>
+                                                                        <form action="{% url 'login' %}" method="post">
+                                                                            {% csrf_token %}
+                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
+                                                                            </button>
+                                                                            </form>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <h5>Playlists</h5>
+                                            <div class="table-responsive mb-3">
+                                                <table class="table text-white">
+                                                    <thead class="text-white">
+                                                        <tr>
+                                                            <th scope="col">#</th>
+                                                            <th scope="col">Playlist</th>
+                                                            <th scope="col">detail</th>
+                                                            <th scope="col">Vidéos</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for p in play_lists %}
+                                                        <tr>
+                                                            <th scope="row">{{ p.id }}</th>
+                                                            <td>{{ p.nom_playlist }}</td>
+                                                            <td>{{ p.desc_playlist }}</td>
+                                                            <td>10</td>
+                                                            <td>
+                                                                <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                                                    <i class="fa fa-ellipsis-h"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
+                                                                    {% if user.is_authenticated %}
+                                                                    <form>
+                                                                         {% csrf_token %}
+                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
+                                                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
+                                                                        </button>
+                                                                    </form>
+                                                                    <form action="#" method="post">
+                                                                        {% csrf_token %}
+                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
+                                                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
+                                                                        </button>
+                                                                    </form>
+                                                                    {% else %}
+                                                                        <form>
+                                                                         {% csrf_token %}
+                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
+                                                                            </button>
+                                                                        </form>
+                                                                        <form action="{% url 'login' %}" method="post">
+                                                                            {% csrf_token %}
+                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
+                                                                            </button>
+                                                                            </form>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+  </div>
+  <div class="result col-sm-12 col-md-12 col-xl-12" id="channel-results" style="display:none;">
+    <div class="container-fluid">
+                                    <div class="row ">
+                                        <div class="col-sm-12 col-md-12 col-xl-12">
+
+                                        <h5 style="color: #B88E6D">Ma chaine youtube</h5>
+
+                                            {% for video in live_videos %}
+                                        <div class="col-6">
+                                          <!-- Code pour afficher la vidéo en direct -->
+                                               <iframe src="https://www.youtube.com/embed/{{ video.id }}"></iframe>
+                                        <h6>Title: {{ video.snippet.title }}</h6>
+                                        <p class="text-white">Description: {{ video.snippet.description }}</p>
+                                        </div>
+
+                                        {% endfor %}
+
+                                            <hr style="color:  #B88E6D">
+                                            <div class="row">
+                                                {% for video in videos %}
+                                                <div class="col-sm-6 col-xl-3 mb-5">
+                                                    <div class="rounded d-flex align-items-center justify-content-between h-100">
+                                                        <div style="background-color: #191C24; " class="card h-100">
+                                                            <iframe src="https://www.youtube.com/embed/{{ video.id }}"  class="card embed-responsive embed-responsive-16by9" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                            <span style="color: #fdecdd">{{ video.snippet.title }}</span>
+                                                            <small style="color: #fdecdd">{{ video.statistics.viewCount }} vues | {{ video.statistics.likeCount }} <i class="fa fa-heart"></i></small>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  function showResult(resultId) {
+    var homeResult = document.getElementById("home-results");
+    var videoResult = document.getElementById("video-results");
+    var playlistResult = document.getElementById("playlist-results");
+    var channelResult = document.getElementById("channel-results");
+
+    homeResult.style.display = "none";
+    videoResult.style.display = "none";
+    playlistResult.style.display = "none";
+    channelResult.style.display = "none";
+
+    document.getElementById(resultId).style.display = "block";
+  }
+</script>
+    </body>
+<script>
+const navPills = document.querySelector('.nav-pills');
+const navPillsList = document.querySelector('.nav-pills-list');
+
+// Check if the screen width is less than a certain threshold
+if (window.innerWidth < 576) {
+  navPills.classList.add('scrollable');
+  navPillsList.classList.add('scrollable-list');
+}
+
+// Add event listeners to scroll the navigation pills left or right
+navPills.addEventListener('touchstart', startTouch);
+navPills.addEventListener('touchmove', moveTouch);
+
+let initialX = null;
+let currentX = null;
+
+function startTouch(event) {
+  initialX = event.touches[0].clientX;
+}
+
+function moveTouch(event) {
+  if (initialX === null) {
+    return;
+  }
+
+  currentX = event.touches[0].clientX;
+  let diffX = initialX - currentX;
+
+  if (diffX > 0) {
+    navPillsList.scrollLeft += diffX;
+  } else {
+    navPillsList.scrollLeft -= diffX;
+  }
+
+  initialX = null;
+}
+
+</script>
+
+{% include 'footer.html' %}
+{% endblock %}

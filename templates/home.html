@@ -1,119 +1,126 @@
-{% load static %}
-{% include 'base.html' %}
-<style>
+    {% load static %}
+    {% include 'base.html' %}
+    <style>
 
-</style>
-{% block content %}
+    </style>
+    {% block content %}
 
-   <div class="container-fluid pt-4 px-4">
-        <div class="row g-4">
-            <div class="col-sm-12 col-md-12 col-xl-12">
-            <h6 style="color: #B88E6D" class="mb-1">Trending</h6>
-            <hr style="color:  #B88E6D" class="mt-0">
-                <div id="videos" class="row g-4">
-                    {% for v in trending_video %}
-                    <div class="col-sm-6 col-xl-3">
-                        <div class="rounded d-flex align-items-center justify-content-between h-100">
-                            <div style="background-color: #191C24; " class="card h-100">
-                            <a href="{% url 'video' v.id %}">
-                                <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
-                                    <source src="{{ v.vid.url }}" type="video/mp4" />
-                                </video>
-                            </a>
-                            <div class="row justify-content-between ">
-                                <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
-                                    <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+       <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-12 col-md-12 col-xl-12">
+                <h5 style="color: #B88E6D" class="mb-1">Trending</h5>
+                <hr style="color:  #B88E6D" class="mt-0">
+                    <div id="videos" class="row g-4">
+                        {% for v in trending_video %}
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="rounded d-flex align-items-center justify-content-between h-100">
+                                <div style="background-color: #191C24; " class="card h-100">
+                                <a href="{% url 'video' v.id %}">
+                                    <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
+                                        <!--<source src="{{ v.vid.url }}" type="video/mp4" />-->
+                                    </video>
+                                    <div class="video-duration" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; bottom: 0; right: 0; padding: 0.1rem 0.5rem; color: white; font-size: 0.8rem;">{{ v.duration }}</div>
+
+                                </a>
+                                <div class="row justify-content-between ">
+                                    <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
+                                        <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <p>
-                                <div style="margin-left: 0.1rem" class="row">
-                                <div class="col-2 mt-2">
-                                    {% if v.miniature %}
-                                    <div class="">
-                                    {% if v.user.is_superuser %}
-                                        <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
-                                        {% else %}
-                                        <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                <p>
+                                    <div style="margin-left: 0.1rem" class="row">
+                                    <div class="col-2 mt-2">
+                                        {% if v.miniature %}
+                                        <div class="">
+                                        {% if v.user.is_superuser %}
+                                            <a href="{% url 'chaine_profile' v.user.id %}">
+                                                <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
+                                            </a>
+                                            {% else %}
+                                            <a href="{% url 'chaine_profile' v.user.id %}">
+                                                <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                            </a>
+                                        {% endif %}
+                                        </div>
                                         {% endif %}
                                     </div>
-                                    {% endif %}
+                                    <div class="col-10">
+                                        <span style="color:#A77443;">
+                                            <a style="color:#A77443;" href="{% url 'chaine_profile' v.user.id %}"><b>{{ v.user.username }}  </b></a> <i class="fas fa-check-circle"></i><br>
+                                            <small class="mt-0" style="font-size: 12px">{{ v.views }} vues Il y a {{ v.date_created.date|timesince }}</small>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="col-10">
-                                    <span style="color:#A77443;">
-                                        {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
-                                        <small>{{ v.views }} vues  {{ v.date_created.date|date:"d/m/Y" }}</small>
-                                    </span>
+                                </p>
                                 </div>
-                            </div>
-                            </p>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                 </div>
+                        {% endfor %}
 
-            <!-- example.html -->
+                     </div>
+
+                <!-- example.html -->
 
 
-            <div id="pagination" class="mt-lg-5">
-              <button id="prev">Prev</button>
-              <span id="currentPage">{{ videos.number }}</span> of <span id="totalPages">{{ videos.paginator.num_pages }}</span>
-              <button id="next">Next</button>
+                <div id="pagination" class="mt-lg-5">
+                  <button id="prev">Prev</button>
+                  <span id="currentPage">{{ videos.number }}</span> of <span id="totalPages">{{ videos.paginator.num_pages }}</span>
+                  <button id="next">Next</button>
+                </div>
+
+                <script>
+                  $(document).ready(function() {
+                    var currentPage = {{ videos.number }};
+                    var totalPages = {{ videos.paginator.num_pages }};
+
+                    $("#prev").click(function() {
+                      if (currentPage > 1) {
+                        currentPage--;
+                        updateView();
+                      }
+                    });
+
+                    $("#next").click(function() {
+                      if (currentPage < totalPages) {
+                        currentPage++;
+                        updateView();
+                      }
+                    });
+
+                    function updateView() {
+                      $("#currentPage").text(currentPage);
+
+                      $("#videos .video").hide();
+                      $("#videos .video").slice((currentPage - 1) * 2, currentPage * 2).show();
+                    }
+
+                    updateView();
+                  });
+                </script>
+
+                </div>
             </div>
+       </div>
 
-            <script>
-              $(document).ready(function() {
-                var currentPage = {{ videos.number }};
-                var totalPages = {{ videos.paginator.num_pages }};
 
-                $("#prev").click(function() {
-                  if (currentPage > 1) {
-                    currentPage--;
-                    updateView();
-                  }
-                });
-
-                $("#next").click(function() {
-                  if (currentPage < totalPages) {
-                    currentPage++;
-                    updateView();
-                  }
-                });
-
-                function updateView() {
-                  $("#currentPage").text(currentPage);
-
-                  $("#videos .video").hide();
-                  $("#videos .video").slice((currentPage - 1) * 2, currentPage * 2).show();
+    {% endblock %}
+    <div style="margin-bottom: 100px"></div>
+    <script>
+        $(document).ready(function() {
+        // Handle click events on pagination links
+        $('#pagination-container a').click(function(e) {
+            e.preventDefault();
+            var page = $(this).text();
+            // Use AJAX to get the data for the selected page
+            $.ajax({
+                url: '/get-data',
+                data: {'page': page},
+                success: function(data) {
+                    $('#data-container').html(data);
                 }
-
-                updateView();
-              });
-            </script>
-
-            </div>
-        </div>
-   </div>
-
-
-{% endblock %}
-<div style="margin-bottom: 100px"></div>
-<script>
-    $(document).ready(function() {
-    // Handle click events on pagination links
-    $('#pagination-container a').click(function(e) {
-        e.preventDefault();
-        var page = $(this).text();
-        // Use AJAX to get the data for the selected page
-        $.ajax({
-            url: '/get-data',
-            data: {'page': page},
-            success: function(data) {
-                $('#data-container').html(data);
-            }
+            });
         });
     });
-});
 
-</script>
-{% include 'footer.html' %}
+    </script>
+    {% include 'footer.html' %}

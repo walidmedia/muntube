@@ -72,6 +72,52 @@
     display: none;
   }
 }
+.search-container {
+  position: relative;
+  display: inline-block;
+}
+
+#search-input {
+  width: 0;
+  height: 0;
+  padding: 0;
+  opacity: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.search-icon {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.search-open #search-input {
+  width: 600px;
+  height: 40px;
+  padding: 10px;
+  opacity: 1;
+}
+@media only screen and (max-width: 767px) {
+  .search-open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #191C24;
+  }
+
+  .search-open #search-input {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    opacity: 1;
+    margin-top: 10px;
+  }
+}
 
 </style>
 
@@ -135,49 +181,52 @@
 
 
                 <div class="navbar-nav align-items-center ms-auto">
-                    <!--<div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="fa fa-envelope me-lg-2"></i>
-                            <span class="d-none d-lg-inline-flex">Message</span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item">
-                                <div class="d-flex align-items-center">
-                                    <img class="rounded-circle" src="img/user.jpg" alt="" style="width: 40px; height: 40px;">
-                                    <div class="ms-2">
-                                        <h6 class="fw-normal mb-0">Jhon send you a message</h6>
-                                        <small>15 minutes ago</small>
-                                    </div>
-                                </div>
-                            </a>
-                            <hr class="dropdown-divider">
-                            <a href="#" class="dropdown-item text-center">See all message</a>
-                        </div>
-                    </div>-->
 
-                    <form action="{% url 'search' %}" method="get" class="navbar-nav">
+                    <div class="search-container">
+                      <form action="{% url 'search' %}" method="get">
+                        <input type="text" name="q" id="search-input" placeholder="Rechercher">
+                      </form>
+                      <div class="search-icon" onclick="openSearch()">
+                        <i class="fa fa-search"></i>
+                      </div>
+                    </div>
+
+                    <script>
+                        function openSearch() {
+  let searchContainer = document.querySelector(".search-container");
+  let searchInput = document.getElementById("search-input");
+  searchContainer.classList.toggle("search-open");
+
+  if (searchInput.value) {
+    searchInput.form.submit();
+  }
+}
+
+function performSearch(event) {
+  if (event.type === "submit" || event.keyCode === 13) {
+    event.preventDefault();
+    let searchInput = document.getElementById("search-input").value;
+    console.log("Searching for: " + searchInput);
+
+    // Perform search and get result
+    let result = performSearch(searchInput);
+    console.log("Search result: " + result);
+  }
+}
+
+// Add the event listener to the form
+document.querySelector("form").addEventListener("submit", performSearch);
+
+// Add the event listener to the search input
+document.querySelector("#search-input").addEventListener("keyup", performSearch);
+
+// Add the event listener to the search icon
+document.querySelector(".search-icon").addEventListener("click", performSearch);
+
+                    </script>
+                    <!--<form action="{% url 'search' %}" method="get" class="navbar-nav">
                         <input class="form-control bg-dark border-0" type="text" placeholder="Rechercher">
-                    </form>
+                    </form>-->
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link" data-bs-toggle="dropdown">
                             <i style="background-color: #B88E6D;color: black" class="fa fa-bell"></i>
@@ -232,6 +281,9 @@
                             <hr class="mt-1 mb-1">
                             <a href="{% url 'mesdons' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mes dons reçus </a>
                             <hr class="mt-1 mb-1">
+                            <a href="{% url 'connect_stripe' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mon compte Stripe</a>
+                            <hr class="mt-1 mb-1">
+
                             <a href="#mesfilleuls" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-fill me-3"></i>Mes filleuls professionnels</a>
                             <hr class="mt-1">
                             <a href="{% url 'logout_view' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-sign-out-alt me-3"></i>Se déconnecter</a>
@@ -256,7 +308,7 @@
 
         <!-- Nav Mobile -->
 
-        <div class="mobile-nav">
+        <div class="mobile-nav footer">
             {% if user.is_authenticated %}
             <a href="{% url 'index' %}" class="bloc-icon">
                 <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>

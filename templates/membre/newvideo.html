@@ -1,0 +1,156 @@
+{% load static %}
+<style>
+  /* Style for the form container */
+  #upload-video-form {
+    width: 90%;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+  }
+
+  /* Style for the form steps */
+  .step {
+    display: none;
+  }
+
+  /* Style for the buttons */
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Style for the "Next" and "Previous" buttons */
+  .next-prev-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  /* Style for the "Create Playlist" button */
+  #create-playlist-button {
+    background-color: #f44336;
+    margin-top: 20px;
+  }
+</style>
+
+{% block content %}
+{% include 'base.html' %}
+    <form id="upload-video-form">
+  <!-- Step 1: Input video information -->
+  <div class="step">
+    <h2>Step 1: Input Video Information</h2>
+    <div>
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title">
+    </div>
+    <div>
+      <label for="description">Description:</label>
+      <textarea id="description" name="description"></textarea>
+    </div>
+    <div>
+      <label for="category">Category:</label>
+      <select id="category" name="category">
+        <option value="">Select a category</option>
+        <option value="entertainment">Entertainment</option>
+        <option value="education">Education</option>
+        <option value="news">News</option>
+      </select>
+    </div>
+    <div>
+      <label for="playlist">Playlist:</label>
+      <select id="playlist" name="playlist">
+        <option value="">Select a playlist</option>
+        <option value="favorites">Favorites</option>
+        <option value="watch-later">Watch Later</option>
+      </select>
+    </div>
+    <div>
+      <button id="create-playlist-button">Create New Playlist</button>
+    </div>
+    <div>
+      <label for="tags">Tags:</label>
+      <input type="text" id="tags" name="tags">
+    </div>
+    <div>
+      <button id="next-step-0">Next</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Upload video -->
+  <div class="step">
+    <h2>Step 2: Upload Video</h2>
+    <div>
+      <label for="video">Video:</label>
+      <input type="file" id="video" name="video">
+    </div>
+    <div>
+      <progress id="upload-progress" value="0" max="100"></progress>
+    </div>
+    <div>
+      <img id="video-thumbnail" src="#" alt="Video thumbnail">
+    </div>
+    <div>
+      <button id="prev-step-1">Previous</button>
+      <button id="next-step-1">Next</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Confirm and submit -->
+  <div class="step">
+    <h2>Step 3: Confirm and Submit</h2>
+    <div>
+      <input type="checkbox" id="agreement" name="agreement">
+      <label for="agreement">I agree to the terms and conditions</label>
+    </div>
+    <div>
+      <button id="prev-step-2">Previous</button>
+      <button type="submit">Submit</button>
+    </div>
+  </div>
+</form>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("upload-video-form");
+    const steps = form.querySelectorAll(".step");
+
+    // Helper function to show the specified step
+    const showStep = stepNumber => {
+      steps.forEach(step => {
+        step.style.display = "none";
+      });
+      steps[stepNumber].style.display = "block";
+    };
+
+    // Show the first step by default
+    showStep(0);
+
+    // Handle next button clicks
+    form.addEventListener("click", function(event) {
+      if (event.target.id.startsWith("next-step-")) {
+        const currentStep = parseInt(event.target.id.split("-")[2]);
+        showStep(currentStep + 1);
+      }
+
+      // Handle previous button clicks
+      if (event.target.id.startsWith("prev-step-")) {
+        const currentStep = parseInt(event.target.id.split("-")[2]);
+        showStep(currentStep - 1);
+      }
+
+      // Handle create playlist button clicks
+      if (event.target.id === "create-playlist-button") {
+        alert("Please create a new playlist.");
+      }
+    });
+  });
+
+
+</script>
+{% include 'footer.html' %}
+{% endblock %}
