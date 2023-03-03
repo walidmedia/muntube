@@ -1,8 +1,75 @@
     {% load static %}
     {% include 'base.html' %}
     <style>
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
 
+.page-item {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 0px 0px;
+    margin: 0 3px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: rgba(70, 40, 9, 0.81);
+    background-color: #ffffff;
+    border-color: #ffffff;
+}
+
+.page-link:hover {
+    background-color: #f5f5f5;
+    border-color: #aaa;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+}
+
+@media (max-width: 576px) {
+  .page-item {
+    padding: 4px 8px;
+    margin: 3px;
+  }
+}
+
+.page-link:hover {
+    background-color: #f5f5f5;
+    border-color: #aaa;
+    color: #533f03;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+}
+.v169 {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+}
+
+.v169 video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
     </style>
+
     {% block content %}
 
        <div class="container-fluid pt-4 px-4">
@@ -11,24 +78,28 @@
                 <h5 style="color: #B88E6D" class="mb-1">Trending</h5>
                 <hr style="color:  #B88E6D" class="mt-0">
                     <div id="videos" class="row g-4">
-                        {% for v in trending_video %}
+                        {% for v in videos %}
                         <div class="col-sm-6 col-xl-3">
                             <div class="rounded d-flex align-items-center justify-content-between h-100">
                                 <div style="background-color: #191C24; " class="card h-100">
-                                <a href="{% url 'video' v.id %}">
+                                <a class="v169" href="{% url 'video' v.id %}?video={{ v.vid.url }}">
+                                    {% if v.miniature %}
                                     <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
                                         <!--<source src="{{ v.vid.url }}" type="video/mp4" />-->
                                     </video>
-                                    <div class="video-duration" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; bottom: 0; right: 0; padding: 0.1rem 0.5rem; color: white; font-size: 0.8rem;">{{ v.duration }}</div>
-
+                                    {% else %}
+                                    <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{% static 'images/Playlist non classée.svg' %}" >
+                                        <!--<source src="{{ v.vid.url }}" type="video/mp4" />-->
+                                    </video>
+                                    {% endif %}
+                                    <!--<div class="video-duration" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; bottom: 0; right: 0; padding: 0.1rem 0.5rem; color: white; font-size: 0.8rem;">{{ v.duration }}</div>-->
                                 </a>
                                 <div class="row justify-content-between ">
                                     <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
-                                        <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                        <a href="{% url 'video' v.id %}?video={{ v.vid.url }}" class="text-white mb-2 " style="overflow-wrap: break-word;font-size: 13px" title="{{ v.title }}">{{ v.title|truncatechars:70 }}</a>
                                     </div>
                                 </div>
-                                <p>
-                                    <div style="margin-left: 0.1rem" class="row">
+                                    <div style="margin-left: 0.1rem" class="row mb-2">
                                     <div class="col-2 mt-2">
                                         {% if v.miniature %}
                                         <div class="">
@@ -38,7 +109,8 @@
                                             </a>
                                             {% else %}
                                             <a href="{% url 'chaine_profile' v.user.id %}">
-                                                <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                                <img id="img" width="35"
+                                                     src="{% if v.user.photo %}{{ v.user.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" class="rounded-circle">
                                             </a>
                                         {% endif %}
                                         </div>
@@ -46,12 +118,11 @@
                                     </div>
                                     <div class="col-10">
                                         <span style="color:#A77443;">
-                                            <a style="color:#A77443;" href="{% url 'chaine_profile' v.user.id %}"><b>{{ v.user.username }}  </b></a> <i class="fas fa-check-circle"></i><br>
+                                            <a style="color:#A77443;font-size: 14px" href="{% if v.user.id == request.user.id %} {% url 'chaine' %} {% else %} {% url 'chaine_profile' v.user.id %} {% endif %}"><b>{{ v.user.username }}  </b></a> <i class="fas fa-check-circle"></i><br>
                                             <small class="mt-0" style="font-size: 12px">{{ v.views }} vues Il y a {{ v.date_created.date|timesince }}</small>
                                         </span>
                                     </div>
                                 </div>
-                                </p>
                                 </div>
                             </div>
                         </div>
@@ -62,41 +133,32 @@
                 <!-- example.html -->
 
 
-                <div id="pagination" class="mt-lg-5">
-                  <button id="prev">Prev</button>
-                  <span id="currentPage">{{ videos.number }}</span> of <span id="totalPages">{{ videos.paginator.num_pages }}</span>
-                  <button id="next">Next</button>
-                </div>
 
-                <script>
-                  $(document).ready(function() {
-                    var currentPage = {{ videos.number }};
-                    var totalPages = {{ videos.paginator.num_pages }};
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center mt-3">
+    <li class="page-item {% if not videos.has_previous %}disabled{% endif %}">
+      <a class="page-link" href="{% if videos.has_previous %}?page={{ videos.previous_page_number }}{% endif %}" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    <li class="page-item active">
+      <span class="page-link">
+        Page {{ videos.number }} of {{ videos.paginator.num_pages }}
+      </span>
+    </li>
+    <li class="page-item {% if not videos.has_next %}disabled{% endif %}">
+      <a class="page-link" href="{% if videos.has_next %}?page={{ videos.next_page_number }}{% endif %}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav>
 
-                    $("#prev").click(function() {
-                      if (currentPage > 1) {
-                        currentPage--;
-                        updateView();
-                      }
-                    });
 
-                    $("#next").click(function() {
-                      if (currentPage < totalPages) {
-                        currentPage++;
-                        updateView();
-                      }
-                    });
 
-                    function updateView() {
-                      $("#currentPage").text(currentPage);
 
-                      $("#videos .video").hide();
-                      $("#videos .video").slice((currentPage - 1) * 2, currentPage * 2).show();
-                    }
-
-                    updateView();
-                  });
-                </script>
 
                 </div>
             </div>

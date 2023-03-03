@@ -2,18 +2,37 @@ from django.contrib import admin
 
 # Register your models here.
 from membre import models
-from membre.models import Channel, Like
+from membre.models import Channel, Like, revendication, Report_comment, Report_video, Category, VideoHistory
 
 
-class CommentAdmin(admin.ModelAdmin):
-	list_display = ('video','name','contenue','date_added')
-	list_filter =('video','name','contenue','date_added')
-	search_fields = ('video','name','contenue','date_added')
-admin.site.register(models.comment,CommentAdmin)
+class commentAdmin(admin.ModelAdmin):
+    list_display = ('video','name', 'contenue', 'date_added', 'parent')
+    list_filter = ('video','name', 'contenue', 'date_added', 'parent',)
+    search_fields = ('video','name', 'contenue', 'date_added', 'parent')
+    ordering = ('-date_added',)
 
-class VideoAdmin(admin.ModelAdmin):
-	list_display=('user','title','detail','vid','miniature','play_lists','total_likes','total_comments')
-admin.site.register(models.Video,VideoAdmin)
+admin.site.register(models.comment, commentAdmin)
+
+class AdminVideo(admin.ModelAdmin):
+    list_display = ('title', 'user', 'views', 'likes', 'category', 'play_lists', 'contenue_18')
+    search_fields = ('title', 'user__username', 'category__title', 'play_lists__nom_playlist')
+    list_filter = ('category', 'play_lists', 'contenue_18', 'date_created')
+
+admin.site.register(models.Video, AdminVideo)
+
+class VideoHistoryAdmin(admin.ModelAdmin):
+    list_display = ('user', 'video', 'viewed_at', 'time_paused')
+    list_filter = ('user', 'viewed_at')
+    search_fields = ('user__username', 'video__title')
+    date_hierarchy = 'viewed_at'
+
+admin.site.register(VideoHistory, VideoHistoryAdmin)
+
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+    search_fields = ('name',)
+admin.site.register(Category, CategoryAdmin)
+
 
 class GalleryVideoAdmin(admin.ModelAdmin):
 	list_display=('alt_text','vid')
@@ -56,9 +75,11 @@ class DonAdmin(admin.ModelAdmin):
 	search_fields = ('user_don', 'to_user_don','video','cout_don','date_don')
 admin.site.register(models.Don,DonAdmin)
 
-class VideoHistoryAdmin(admin.ModelAdmin):
-	list_display=('user','video','viewed_at')
-admin.site.register(models.VideoHistory,VideoHistoryAdmin)
+class Reclamations_DonAdmin(admin.ModelAdmin):
+	list_display=('user_don','to_user_don','video','cout_don','date_don')
+	list_filter = ('user_don', 'to_user_don','video','cout_don','date_don')
+	search_fields = ('user_don', 'to_user_don','video','cout_don','date_don')
+admin.site.register(models.Reclamations_Don,DonAdmin)
 
 class NotificationAdmin(admin.ModelAdmin):
 	list_display=('recipient','subject','message','read','timestamp')
@@ -89,3 +110,25 @@ class Like_commentAdmin(admin.ModelAdmin):
     list_filter = ('user', 'commentt', 'created_at')
     search_fields = ('user', 'commentt', 'created_at')
 admin.site.register(models.Like_comment, Like_commentAdmin)
+
+class RevendicationAdmin(admin.ModelAdmin):
+    list_display = ('pseudonyme', 'prenom', 'nom', 'email', 'date', 'pays', 'phone_number', 'message','date_created')
+    list_filter = ('date_created', 'pays')
+    search_fields = ('pseudonyme', 'email', 'phone_number', 'message')
+
+admin.site.register(revendication, RevendicationAdmin)
+
+class Report_commentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'commentt', 'user', 'date_reported')
+    list_filter = ('user',)
+    search_fields = ('comment__name', 'user__username')
+
+admin.site.register(Report_comment, Report_commentAdmin)
+
+class Report_videoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'video', 'reporter', 'reason', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('video__title', 'reporter__username')
+    ordering = ('-created_at',)
+
+admin.site.register(Report_video, Report_videoAdmin)

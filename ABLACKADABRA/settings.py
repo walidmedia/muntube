@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'account',
     'membre',
     'django_social_share',
+    'bootstrap_pagination',
+
 ]
 
 MIDDLEWARE = [
@@ -87,7 +89,7 @@ WSGI_APPLICATION = 'ABLACKADABRA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '0003',
+        'NAME': '0004',
         'USER': 'postgres',
         'PASSWORD': 'esst',
         'HOST': 'localhost',
@@ -166,9 +168,73 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'account.User'
 VERIFY_EXPIRE_DAYS = 3
 
-JAZZMIN_SETTINGS={
-    "site_title": "ABLACKADABRA Admin",
-    "site_header": "ABLACKDABRA Admin",
+JAZZMIN_SETTINGS = {
+    "custom_css": "admin/custom.css",
+    "site_title": "Muntube",
+    "site_header": "Muntube",
+    "site_brand": "Muntube",
+    "site_icon": "images/favicon.png",
+    "site_logo": "images/logo.png",
+    "welcome_sign": "Welcome to My Website",
+    "user_avatar": None,
+
+    # Links to put along the top menu
+    "topmenu_links": [
+
+        # Url that gets reversed (Permissions can be added)
+        {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+
+        # external url that opens in a new window (Permissions can be added)
+        {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
+
+        # model admin to link to (Permissions checked against model)
+        {"model": "auth.User"},
+
+        # App with dropdown menu to all its models pages (Permissions checked against models)
+        {"app": "books"},
+    ],
+"custom_links": {
+    "books": [{
+        # Any Name you like
+        "name": "Make Messages",
+
+        # url name e.g `admin:index`, relative urls e.g `/admin/index` or absolute urls e.g `https://domain.com/admin/index`
+        "url": "make_messages",
+
+        # any font-awesome icon, see list here https://fontawesome.com/icons?d=gallery&m=free&v=5.0.0,5.0.1,5.0.10,5.0.11,5.0.12,5.0.13,5.0.2,5.0.3,5.0.4,5.0.5,5.0.6,5.0.7,5.0.8,5.0.9,5.1.0,5.1.1,5.2.0,5.3.0,5.3.1,5.4.0,5.4.1,5.4.2,5.13.0,5.12.0,5.11.2,5.11.1,5.10.0,5.9.0,5.8.2,5.8.1,5.7.2,5.7.1,5.7.0,5.6.3,5.5.0,5.4.2 (optional)
+        "icon": "fas fa-comments",
+
+        # a list of permissions the user must have to see this link (optional)
+        "permissions": ["books.view_book"]
+    }]
+},
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-arrow-circle-right",
+
+    "related_modal_active": False,
+
+
+    "custom_css": None,
+    "custom_js": None,
+    "show_ui_builder": False,
+
+    "changeform_format": "horizontal_tabs",
+    "changeform_format_overrides": {
+        "auth.user": "collapsible",
+        "auth.group": "vertical_tabs",
+    },
+}
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    #"dark_mode_theme": "darkly",
+    #"theme": "darkly",
 }
 STRIPE_SECRET_KEY='sk_test_51M1tNCEz9Ud4aklFxKaVwVo0kCttkNebx9foe1Qxq1CoKhS9zTqaqtmpSdM1XiTIKyUJkXyQQN5MMPVQUfYZHhFO00U2oMN6jz'
 STRIPE_PUBLISHABLE_KEY='pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV'
@@ -177,7 +243,7 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com' # ex: smtp.gmail.com
 EMAIL_PORT = 465  # or the server PORT if non standard
 EMAIL_HOST_USER = 'merchab08@gmail.com'  # a username, usually the e-mail address
-EMAIL_HOST_PASSWORD = 'lkecwyedvpwhfmrk'  # the smtp user password
+EMAIL_HOST_PASSWORD = 'ayairufgirzmjxzy'  # the smtp user password
 EMAIL_USE_TLS = False  # True if TLS should be enabled or False otherwise
 EMAIL_USE_SSL = True  # True if SSL should be enabled or False otherwise
 
@@ -188,5 +254,5 @@ DATE_FORMAT = 'd/m/Y'
 DATETIME_INPUT_FORMATS = ['%d/%m/%Y %H:%M:%S']
 DATETIME_FORMAT = 'd/m/Y H:i:s'
 
-YOUTUBE_API_KEY = 'AIzaSyB7nilF_dFcouv4r7_551tkpK8ZQGVUGL4'
-#YOUTUBE_API_KEY = 'AIzaSyAdhNVeVdZ-baLbzxk6BuDPcW_VDetSVzk'
+#YOUTUBE_API_KEY = 'AIzaSyB7nilF_dFcouv4r7_551tkpK8ZQGVUGL4'
+YOUTUBE_API_KEY = 'AIzaSyAdhNVeVdZ-baLbzxk6BuDPcW_VDetSVzk'

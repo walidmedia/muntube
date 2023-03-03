@@ -4,48 +4,63 @@
 
 </style>
 {% block content %}
-<div class="container-fluid pt-4 px-4">
+<div class="container-fluid pt-1 px-1">
     <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
         <div class="col-md-6 text-center">
-            <div class="text-center mb-4 mt-3">
-                <script src="https://js.stripe.com/v3/"></script>
-                <h5 style="color: #B88E6D"><p>text text text text text text text text text text text text text text text text text </p></h5><br><br>
-                    <form action="{% url 'soutien' %}" method="post">
-                      {% csrf_token %}
-                    <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
-                    <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10">
-                    <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
-                    <script
-                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                        data-key="pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV"
-                        data-amount="10"
-                        data-name="Example Site"
-                        data-description="Example charge"
-                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
-                        data-locale="auto"
-                        data-label="Soutenir"
-                        data-color="#000"
-                       >
+            <div class="text-center mb-3">
+                                <a href="#">
+                                    <img id="img" width="30%" src="{% static 'images/logo user.jpg' %}" class="rounded-circle">
+                                </a>
+                            <h3 class="mt-2 text-muted">MunTube Platforme, Enjoy!</h3>
+                                <h5 class="text-muted"><span class="me-2">Nous Soutenir</span><i style="color: #533f03" class="fa fa-heart"></i></h5>
+                            <p class="text-muted"><strong>
+                                Pas de publicité<br>
+                                Pas de censure<br>
+                                Pas de revente des données
+                            </strong>
+                            </p>
+                            <button type="button" class="btn btn-warning rounded-pill me-1" style="color: #f8e9c2;
+                              background-color: #191C24; padding-left: 10px;padding-right: 10px;padding-bottom: 3px;padding-top: 3px;border: 2px solid #B88E6D !important;">
+                                <strong>Devenir Pionnier</strong>
+                            </button>
+                                <button type="button" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;
+                              background-color: #B88E6D;color: black; padding-left: 10px;padding-right: 10px;padding-bottom: 3px;padding-top: 3px;border: 1px solid #B88E6D !important;">
+                                <strong>Une fois par mois</strong>
+                            </button>
+                            </div>
+                            <div class="row">
+                                <div class="text-center mb-4 mt-3">
+                                    <script src="https://js.stripe.com/v3/"></script>
+                                        <form action="{% url 'proced_don' 1 %}" method="post">
+                                          {% csrf_token %}
+                                        <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
+                                        <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10">
+                                        <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
+                                        <p class="mb-3" style="position: absolute;right: 40px;">
+                                            <button  id="stripe-button" type="submit" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;
+                                              background-color: rgba(70,40,9,0.81); padding-left: 40px;padding-right: 40px;padding-bottom: 3px;padding-top: 3px;border: 1px solid rgba(70,40,9,0.81) !important;">
+                                                <strong>Suivant</strong>
+                                            </button>
+                                        </p>
 
-                      </script>
-                    </form>
-                <div class="mb-3 text-center" style="width: 130px; font-size: 50px; height: 130px;display: inline-block;text-align: center;">
-                    </div>
-                <script type="text/javascript">
-                    var counter = 10;
-                    function increment(){
-                        counter = counter+5;
-                        document.getElementById('don').value = counter;
-                    }
-                    function decrement(){
-                        counter = counter-5;
-                        if(counter<5){
-                            counter=5;
-                        }
-                        document.getElementById('don').value = counter;
-                    }
-                </script>
-            </div>
+                                        </form>
+                                    <script type="text/javascript">
+                                        var counter = 10;
+                                        function increment(){
+                                            counter = counter+5;
+                                            document.getElementById('don').value = counter;
+                                        }
+                                        function decrement(){
+                                            counter = counter-5;
+                                            if(counter<5){
+                                                counter=5;
+                                            }
+                                            document.getElementById('don').value = counter;
+                                        }
+                                    </script>
+                                </div>
+
+                             </div>
         </div>
     </div>
 </div>

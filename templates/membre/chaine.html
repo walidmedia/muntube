@@ -162,83 +162,245 @@
 .unsubscribe-button:hover {
   background-color: rgba(70, 40, 9, 0.81);
 }
-.playlist {
-  margin: 20px;
-}
-
-.playlist-header {
+.playlist-videos {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.playlist-header h2 {
-  font-size: 18px;
-  font-weight: 500;
-  color: #212121;
-}
-
-.playlist-info {
-  display: flex;
-  align-items: center;
-}
-
-.playlist-info span {
-  margin-right: 20px;
-  font-size: 14px;
-  color: #757575;
+  gap: 20px;
+  margin: 0 -10px;
 }
 
 .playlist-video {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+  position: relative;
+  width: calc(33.33% - 10px);
+  max-width: 300px;
 }
 
-.playlist-video img {
-  width: 150px;
-  height: 84px;
+.playlist-thumbnail {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: black;
+}
+
+.playlist-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.playlist-thumbnail:hover .playlist-info {
+  display: block;
+}
+
+.playlist-info {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 14px;
+  text-align: center;
+}
+
+.playlist-info h3 {
+  margin: 0;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.playlist-info p {
+  margin: 0;
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.playlist-info span {
+  display: block;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+@media screen and (min-width: 768px) {
+  .playlist-video {
+    width: calc(50% - 10px);
+    max-width: 350px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .playlist-video {
+    width: calc(33.33% - 10px);
+    max-width: 300px;
+  }
+}
+  @media screen and (max-width: 575px) {
+  .playlist-video {
+    width: 100%;
+    max-width: none;
+  }
+}
+  @media screen and (max-width: 767px) {
+  .playlist-video:hover .playlist-info {
+    display: block;
+  }
+}
+
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background-color: #191C24;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 32px;
+  cursor: pointer;
+}
+.video-thumbnail {
+  position: relative;
+  flex: 1 1 200px;
+  max-width: 200px;
   margin-right: 10px;
 }
 
-.playlist-video-info h3 {
-  margin: 0;
-  font-size: 16px;
+.video-thumbnail img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.video-thumbnail .video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1; /* Ensure that the video play button appears above the text */
+}
+
+.video-info {
+  padding: 10px;
+  flex: 1 1 calc(100% - 210px); /* Subtract the width of the video thumbnail plus margin from the total width of the container */
+  max-width: calc(100% - 210px); /* Subtract the width of the video thumbnail plus margin from the total width of the container */
+}
+.video-title {
+  margin: 0 0 5px;
+  font-size: 18px;
   font-weight: 500;
-  color: #212121;
+  line-height: 1.2;
+  color: #333;
 }
 
-.playlist-video-info p {
-  margin: 0;
+.video-author {
+  margin: 0 0 5px;
   font-size: 14px;
-  color: #757575;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #666;
 }
 
-.playlist-video-info span {
+.video-views {
+  margin: 0 0 5px;
   font-size: 14px;
-  color: #757575;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #666;
+}
+
+.video-menu {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.video-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.video-dropdown-btn {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.video-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.video-dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.video-dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.video-dropdown:hover .video-dropdown-content {
+  display: block;
+}
+.video-dropdown:hover .video-dropdown-content a {
+  color: #000;
+}
+@media only screen and (max-width: 768px) {
+  .video-thumbnail {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .video-info {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
 }
 
   </style>
 
 {% block content %}
 {% include 'base.html' %}
-<body>
+<body style="margin-bottom: 150px">
 <div class="container">
+{% if channel %}
   <div class="cover-image">
-    <img src="http://www.prodraw.net/fb_cover/images/fb_cover_65.jpg" alt="Cover Image">
-    <button class="edit-profile-button">Edit Profile</button>
+    <img src="{{ channel.cover_image.url }}" alt="Cover Image">
+    <button class="edit-profile-button btn btn-secondary" style="" onclick="location.href='{% url 'update_channel' %}'">Personaliser</button>
   </div>
   <div class="profile">
-      {% if user.photo %}
-    <img src="{{ user.photo.url }}" alt="Profile Image">
-      {% else %}
-      <img src="{% static 'images/profile1.jpg' %}" alt="Profile Image">
-      {% endif %}
+      <img  src="{% if channel.owner.photo %}{{ channel.owner.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="Profile Image">
   {% if user.first_name %}
-    <h1 class="channel-name">{{ user.first_name }}{{ user.last_name }}</h1>
-    <p class="bio text-white">{{ user.bio }}</p>
+    <h1 class="channel-name">{{ channel.name }}</h1>
+    <p class="bio text-white">{{ channel.description }}</p>
   {% else %}
   <h1 class="channel-name">@Muntube user</h1>
     <p class="bio text-white">Bio..</p>
@@ -248,6 +410,7 @@
       </button>
   {% endif %}
   </div>
+{% endif %}
   <div class="nav-pills-container">
     <div class="nav-pills">
       <a class="nav-pill" href="#home-results" onclick="showResult('home-results')">Accueil</a>
@@ -260,74 +423,173 @@
       <hr>
   </div>
   <div class="result col-sm-12 col-md-12 col-xl-12" id="home-results">
-    <div class="">
-        <div class="row g-4">
-        <h6>Vidéos</h6>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-sm-12 col-md-12 col-xl-12">
+        <h6 class="text-muted">Vidéos</h6>
         {% for v in mesvideos %}
-            <div class="col-sm-6 col-xl-3">
-                <div class="rounded d-flex align-items-center justify-content-between h-100">
-                    <div style="background-color: #191C24; " class="card h-100">
-                    <a href="">
-                        <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
-                            <source src="{{ v.vid.url }}" type="video/mp4" />
-                        </video>
-                    </a>
-                    <div class="row justify-content-between">
-                            <div class="col-10 mt-3">
-                                <a href="" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
-                                <p style="color:#A77443;">
-                                    <small>{{ v.views }} vues . {{ v.date_created.date|date:"d/m/Y" }}</small>
-                                </p>
-                            </div>
-                        </div>
+            <a href="{% url 'video' v.id %}">
+                <div class="video-container">
+                    {% if v.miniature %}
+              <div class="video-thumbnail">
+                <img src="{{ v.miniature.url }}" alt="Video thumbnail">
+                <!--<button class="video-play-btn"><i class="fa fa-play"></i></button>-->
+              </div>
+                        {% else %}
+                <div class="video-thumbnail">
+                <img src="{% static 'images/Playlist non classée.svg' %}" alt="Video thumbnail">
+                <!--<button class="video-play-btn"><i class="fa fa-play"></i></button>-->
+              </div>
+                    {% endif %}
+              <div class="video-info">
+                <h3 class="video-title text-white">{{ v.title }}</h3>
+                <p class="video-author">{{ v.detail }}</p>
+                <p class="video-views">{{ v.views }} views</p>
+                <div class="video-menu">
+                  <div class="video-dropdown">
+                    <button style="color: white" class="video-dropdown-btn"><i class="fa fa-ellipsis-v"></i></button>
+                    <div class="video-dropdown-content bg-dark">
+                      <a href="{% url 'updatevideo' v.id %}" class="align-middle text-white">Modifier</a>
+                      <a href="#" class="align-middle text-white">Ajouter au Playlist</a>
+                         <button style="background-color: transparent" id="delete-video" class="text-center text-white" data-video-id="{{ v.id }}">Supprimer</button>
+                        <script>
+  const deleteBtns = document.querySelectorAll('.delete-video');
+  deleteBtns.forEach(deleteBtn => {
+    const videoId = deleteBtn.dataset.videoId;
+    deleteBtn.addEventListener('click', () => {
+      const confirmDelete = confirm('Are you sure you want to delete this video?');
+
+      if (confirmDelete) {
+        fetch(`/delete/${videoId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+        })
+        .then(response => {
+          if (response.ok) {
+            window.location.href = '/'; // redirect to home page after successful deletion
+          } else {
+            throw new Error('Failed to delete video');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert(error.message);
+        });
+      }
+    });
+  });
+</script>
                     </div>
+                  </div>
                 </div>
+              </div>
             </div>
+            </a>
         {% endfor %}
         </div>
     </div>
-  </div>
-  <div class="result col-sm-12 col-md-12 col-xl-12 p-1" id="video-results" style="display:none;">
-    <div class="playlist">
-  <div class="playlist-header">
-    <h2>Playlist</h2>
-    <div class="playlist-info">
-      <span>100 videos</span>
-      <span>10 hours</span>
     </div>
   </div>
-  <div class="playlist-videos">
-      {% for p in play_lists %}
-    <div class="playlist-video">
-      <img src="{{ p.miniature_playlist.url }}" alt="Video thumbnail">
-      <div class="playlist-video-info">
-        <h3 class="text-white">{{ p.nom_playlist }}</h3>
-        <p>{{ p.desc_playlist }}</p>
-        <span>25 mins</span>
-      </div>
+  <script>
+      // Get all the video dropdown buttons
+var dropdownBtns = document.querySelectorAll(".video-dropdown-btn");
+
+// Loop through all the video dropdown buttons
+dropdownBtns.forEach(function(dropdownBtn) {
+  // Get the dropdown content for this button
+  var dropdownContent = dropdownBtn.nextElementSibling;
+
+  // Toggle the dropdown content when the button is clicked
+  dropdownBtn.addEventListener("click", function() {
+    dropdownContent.classList.toggle("show");
+  });
+
+  // Close the dropdown content when the user clicks outside of it
+  window.addEventListener("click", function(event) {
+    if (!event.target.matches(".video-dropdown-btn")) {
+      if (dropdownContent.classList.contains("show")) {
+        dropdownContent.classList.remove("show");
+      }
+    }
+  });
+});
+
+  </script>
+  </div>
+  <div class="result col-sm-12 col-md-12 col-xl-12 p-1" id="video-results" style="display:none;">
+    <div class="container-fluid">
+    <p>
+    <button type="button" class="btn btn-secondary mt-3" onclick="toggleForm()">Ajouter Playlist</button>
+    </p>
+
+<div id="playlist-form" style="display: none;">
+
+  <form class="card bg-secondary p-4" method="post" action="{% url 'AddPlaylist' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+      <h6 style="color: #b3b7bb" class="mt-3 mb-3">Nouvelle Playlist</h6>
+    <div class="form-group">
+      <input required type="text" class="form-control" style="background-color: #000000;border: 2px solid #7f5a07 !important;" placeholder="Nom Playlist" id="nom_playlist" name="nom_playlist">
     </div><br>
-    {% endfor %}
-  </div>
+    <div class="form-group">
+      <input required style="background-color: #000000;border: 2px solid #7f5a07 !important;" type="file" class="form-control" placeholder="Miniature Playlist" id="miniature_playlist" name="miniature_playlist">
+    </div><br>
+    <div class="form-group">
+      <textarea class="form-control" style="background-color: #000000;border: 2px solid #7f5a07 !important;" placeholder="Description" id="desc_playlist" name="desc_playlist"></textarea>
+    </div><br>
+    <button type="submit" class="btn btn-dark mt-3">Ajouter Playlist</button>
+  </form>
 </div>
-<h6 class="mt-3 mb-3">Nouvelle PlayListe</h6>
-<form method="post" action="{% url 'AddPlaylist' %}" enctype="multipart/form-data">
-  {% csrf_token %}
-  <div class="form-group">
-    <label for="nom_playlist" class="text-gray">Nom Playlist:</label>
-    <input type="text" class="form-control" style="border: 1px solid #7f5a07 !important;" id="nom_playlist" name="nom_playlist">
-  </div>
-  <div class="form-group">
-    <label for="miniature_playlist" class="text-gray">Miniature Playlist:</label>
-    <input type="file" class="form-control"id="miniature_playlist" name="miniature_playlist">
-  </div>
-  <div class="form-group">
-    <label for="desc_playlist" class="text-gray">Description Playlist:</label>
-    <textarea class="form-control" style="border: 1px solid #7f5a07 !important;"  id="desc_playlist" name="desc_playlist"></textarea>
-  </div>
-  <button type="submit" class="btn btn-secondary mt-3">Add Playlist</button>
-</form>
 
 <script>
+function toggleForm() {
+  var form = document.getElementById("playlist-form");
+  if (form.style.display === "none") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+}
+</script>
+
+      <div class="playlist">
+        <div class="playlist-header">
+        <p><h5 class="text-muted">Toutes les playlists</h5></p>
+  </div>
+<div class="playlist-videos p-2 mb-3">
+  {% for p in play_lists %}
+  <div class="playlist-video">
+  <a href="{% url 'get_playlist_videos' p.id %}">
+      {% if p.miniature_playlist %}
+    <div class="playlist-thumbnail">
+      <img src="{{ p.miniature_playlist.url }}" alt="Video thumbnail">
+      <div class="playlist-info">
+        <h3 class="text-white">{{ p.nom_playlist }}</h3>
+        <p>{{ p.desc_playlist }}</p>
+        <span>{{ p.videos.count }} videos</span>
+      </div>
+    </div>
+    {% else %}
+    <div class="playlist-thumbnail container-fluid">
+      <img src="{% static 'images/Playlist non classée.svg' %}" alt="Video thumbnail">
+      <div class="playlist-info">
+        <h3 class="text-white">{{ p.nom_playlist }}</h3>
+        <p>{{ p.desc_playlist }}</p>
+        <span>{{ p.videos.count }} videos</span>
+      </div>
+    </div>
+    {% endif %}
+  </a>
+  </div><br>
+  {% endfor %}
+</div>
+
+
+    </div>
+    </div>
+    <script>
     // Add click event listener to all playlist videos
 const playlistVideos = document.querySelectorAll('.playlist-video');
 playlistVideos.forEach(video => {
@@ -546,10 +808,6 @@ playlistVideos.forEach(video => {
         </div>
     </div>
   </div>
-</div>
-
-
-
 
 <script>
   function showResult(resultId) {

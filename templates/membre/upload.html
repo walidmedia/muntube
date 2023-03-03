@@ -1,5 +1,11 @@
 {% load static %}
 <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 <style>
 * {
   box-sizing: border-box;
@@ -11,10 +17,11 @@ body {
 
 #regForm {
   background-color: #191C24;
-  border: solid 1px #B88E6D;
-  margin: 100px auto;
+  border: solid 2px #000000;
+    border-radius: 20px;
+  margin: 50px auto;
   font-family: Raleway;
-  padding: 40px;
+  padding: 20px;
 
 }
 
@@ -27,7 +34,7 @@ input {
   width: 100%;
   font-size: 17px;
   font-family: Raleway;
-  border: 1px solid #aaaaaa;
+  border: 2px solid #aaaaaa;
 }
 
 /* Mark input boxes that gets an error on validation: */
@@ -79,26 +86,99 @@ button:hover {
   background-color: #B88E6D;
 }
 </style>
+
+{% block modal %}
+    <div class="modal fade" id="rules-modal" tabindex="-1" role="dialog" aria-labelledby="rules-modal-label" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="rules-modal-label">Please Accept the Rules and Conditions</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bonjour « {{ user.username }} »,
+Muntube est la première plateforme de vidéos entièrement dédiée à la Communauté
+Noire qui vous permet de rentabiliser vos créations :
+- Sans publicité
+- Sans censure
+- Sans revente des données des utilisateurs
+Nous vous invitons à soutenir régulièrement les Muntubers dont vous appréciez le
+travail car c’est par vos dons qu’ils peuvent continuer de vous apporter le meilleur
+d’eux-mêmes.
+Aussi, notre jeune plateforme a également besoin de votre soutien car bien des
+aventures nous attendent. A l’instar des Muntubers que nous affectionnons, nous
+n’avons aucune autre source de rémunération.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="background-color: black" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" style="background-color: #533f03" id="accept-rules">I Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        {% if first_upload %}
+            $(document).ready(function() {
+                if (!getCookie('accepted-rules')) {
+                    $('#rules-modal').modal('show');
+                }
+
+                $('#accept-rules').click(function() {
+                    setCookie('accepted-rules', 'true', 30);
+                    $('#rules-modal').modal('hide');
+                });
+            });
+
+            function setCookie(name, value, days) {
+                var expires = "";
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "") + expires + "; path=/";
+            }
+
+            function getCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+        {% endif %}
+    </script>
+{% endblock %}
+
+
 {% block content %}
     {% include 'base.html' %}
 <div class="container-fluid ">
     <div class="row">
         <div class="col-xl-1"></div>
         <div class="col-sm-12 col-xl-10">
-            <div class="bg-secondary rounded text-white">
+            <div class=" rounded text-white">
                 <form id="regForm" action="{% url 'addvideo' %}" method="post"enctype="multipart/form-data">
                 {% csrf_token %}
-                  <h3 class="mb-5">Mettre une vidéo en ligne </h3>
+                  <h5 class="mb-3 text-center">Mettre une vidéo en ligne </h5>
                   <!-- One "tab" for each step in the form: -->
-                  <div class="tab"><h5 class="mb-3">Détails </h5>
+                  <div class="tab"><h6 class="mb-3">Détails </h6>
+                      <hr>
                     <div class="input-group">
                     <textarea required class="form-control mb-3" name="titre" aria-label="With textarea" placeholder="Titre"></textarea>
                   </div>
                  <div class="input-group">
-                    <textarea required class="form-control mb-3" style="height: 180px" name="description" aria-label="With textarea" placeholder="Description"></textarea>
+                    <textarea class="form-control mb-3" style="height: 180px" name="description" aria-label="With textarea" placeholder="Description"></textarea>
                   </div>
                   </div>
                   <div class="tab"><h5 class="mb-3">Contenue</h5>
+                      <hr>
                     <input name="id" type="hidden" class="custom-file-input" value="{{ user.id }}" id="inputGroupFile01">
 
                       <div class="mb-3">
@@ -111,29 +191,31 @@ button:hover {
                             </div>
 
                   </div>
+                <div class="tab">
+                    <h5 class="mb-3">Liens et documents</h5>
+                    <hr>
+                    <div class="form-group">
+                        <label for="links">Ajouter des liens (facultatif)</label>
+                        <textarea class="form-control" id="links" name="links" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label for="formFileDoc" class="form-label">Télécharger des documents (facultatif)</label>
+                      <input name="documents" class="form-control bg-dark" type="file" id="formFileDoc" multiple>
+                    </div>
+
+                </div>
                   <div class="tab"><h5 class="mb-3">Visibilité</h5>
+                  <hr>
                     <div class="mb-3">
                          <select required style="color: white" class="form-select" name="categorie" aria-label="Default select example">
-                            <option selected>Catégorie</option>
-                            <option value="Actualités et Politique">Actualités et Politique</option>
-                            <option value="Animaux">Animaux</option>
-                            <option value="Associations et engagement">Associations et engagement</option>
-                            <option value="Auto/Moto">Auto/Moto</option>
-                            <option value="Education">Education</option>
-                            <option value="Films et animations">Films et animations</option>
-                            <option value="Humour">Humour</option>
-                            <option value="Jeux vidéos">Jeux vidéos</option>
-                            <option value="Musique">Musique</option>
-                            <option value="Science et technologie">Science et technologie</option>
-                            <option value="Sport">Sport</option>
-                            <option value="Vie pratique et style">Vie pratique et style</option>
-                            <option value="Voyages et événnements">Voyages et événnements</option>
+                            {% for catg in categorys %}
+                                 <option value="{{ catg.id }}">{{ catg.name }}</option>
+                             {% endfor %}
                         </select>
                          <small style="color: #9c999a">Ajoutez votre vidéo à une catégorie pour permettre aux spectateurs de la trouver plus facilement.</small>
                      </div>
                      <div class="mb-3">
                          <select required style="color: white" class="form-select" name="play_list" aria-label="Default select example">
-                            <option>Playlists</option>
                             {% for play in play_lists %}
                                  <option value="{{ play.id }}">{{ play.nom_playlist }}</option>
                              {% endfor %}
@@ -142,8 +224,7 @@ button:hover {
                      </div>
                      <div class="form-floating mb-3">
                         <textarea required style="color: white" class="form-control" name="tags" placeholder=""
-                            id="floatingTextarea" style="height: 80px;">
-                        </textarea>
+                            id="floatingTextarea" style="height: 80px;"></textarea>
                         <label for="floatingTextarea">Tags</label>
                          <small style="color: #9c999a">Séparez chaque tag par une virgule</small>
                     </div>
@@ -154,28 +235,41 @@ button:hover {
                             Mettre la vidéo publique
                         </label>
                     </div>
+                      <div class="form-check form-switch">
+                            <input style="background-color: #664d03;" name="contenue_18" class="form-check-input" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Contenue +18</label>
+                        </div>
                   </div>
+                <div class="tab">
+                  <h5 class="mb-3">Chargement de la vidéo</h5>
+                  <hr>
+                </div>
 
                   <div style="overflow:auto;">
                     <div style="float:right;">
                       <button type="button" id="prevBtn" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;
-                    border-color: #ba7900;
-                    background: rgba(70,40,9,0.81);" onclick="nextPrev(-1)">Previous</button>
-                      <button type="button" id="nextBtn" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;
-                    border-color: #ba7900;
-                    background: rgba(70,40,9,0.81);" onclick="nextPrev(1)">Next</button>
+                    border: solid 2px #ba7900;
+                    background: rgba(70,40,9,0.81);" onclick="nextPrev(-1)">Précédent</button>
+                      <button type="button" id="nextBtn" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;border: solid 2px #ba7900;background: rgba(70,40,9,0.81);" onclick="nextPrev(1)">Suivant</button>
+                      <button type="button" id="submitBtn" class="btn rounded-pill btn-outline-secondary" onclick="document.getElementById('regForm').submit()" style="color: #ffffff;border: solid 2px #ba7900;background: rgba(70,40,9,0.81);">Uploader</button>
                     </div>
                   </div>
-
                   <!-- Circles which indicates the steps of the form: -->
                   <div style="text-align:center;margin-top:40px;">
                     <span class="step"></span>
                     <span class="step"></span>
                     <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
                   </div>
+
                 </form>
             </div>
+        <!--<progress class="mt-3 center" id="progressBar" style="background-color: #533f03;" value="0" max="100"></progress>-->
+
         </div>
+
         <div class="col-xl-1"></div>
     </div>
 </div>
@@ -199,13 +293,16 @@ function showTab(n) {
     document.getElementById("prevBtn").style.display = "inline";
   }
   if (n == (x.length - 1)) {
-    document.getElementById("nextBtn").innerHTML = "Submit";
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("submitBtn").style.display = "inline"; // Show the submit button
   } else {
-    document.getElementById("nextBtn").innerHTML = "Next";
+    document.getElementById("nextBtn").style.display = "inline";
+    document.getElementById("submitBtn").style.display = "none"; // Hide the submit button
   }
   //... and run a function that will display the correct step indicator:
-  fixStepIndicator(n)
+  fixStepIndicator(n);
 }
+
 
 function nextPrev(n) {
   // This function will figure out which tab to display
@@ -218,8 +315,6 @@ function nextPrev(n) {
   currentTab = currentTab + n;
   // if you have reached the end of the form...
   if (currentTab >= x.length) {
-    // ... the form gets submitted:
-    document.getElementById("regForm").submit();
     return false;
   }
   // Otherwise, display the correct tab:
@@ -234,7 +329,7 @@ function validateForm() {
   // A loop that checks every input field in the current tab:
   for (i = 0; i < y.length; i++) {
     // If a field is empty...
-    if (y[i].value == "") {
+    if (y[i].value == "" && y[i].type != "file") {
       // add an "invalid" class to the field:
       y[i].className += " invalid";
       // and set the current valid status to false
@@ -248,14 +343,47 @@ function validateForm() {
   return valid; // return the valid status
 }
 
+
 function fixStepIndicator(n) {
-  // This function removes the "active" class of all steps...
   var i, x = document.getElementsByClassName("step");
   for (i = 0; i < x.length; i++) {
     x[i].className = x[i].className.replace(" active", "");
   }
-  //... and adds the "active" class on the current step:
   x[n].className += " active";
+
+  var progressBar = document.getElementById("progressBar");
+  progressBar.value = (n + 1) * (100 / x.length);
+
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").style.display = "none";
+    document.getElementById("prevBtn").style.display = "none";
+    document.getElementById("submitBtn").style.display = "inline"; // Show the submit button
+    document.getElementById("loading-video").style.display = "block";
+
+    // Check the progress of the file upload
+    setInterval(function() {
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var progress = xhr.responseText;
+          document.getElementById("progress").innerHTML = progress;
+        }
+      }
+      xhr.open("GET", "{% url 'progress_view' %}");
+      xhr.send();
+    }, 1000);
+  } else {
+    document.getElementById("nextBtn").style.display = "inline";
+    if (n == 0) {
+      document.getElementById("prevBtn").style.display = "none";
+    } else {
+      document.getElementById("prevBtn").style.display = "inline";
+    }
+    document.getElementById("submitBtn").style.display = "none"; // Hide the submit button
+    document.getElementById("loading-video").style.display = "none";
+  }
 }
 </script>
+
+
 {% include 'footer.html' %}

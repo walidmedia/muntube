@@ -1,31 +1,35 @@
 import json
 import time
+import uuid
 from functools import reduce
 from idlelib import history
 import plotly.express as px
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Count, Q, Sum
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import get_template, render_to_string
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, request
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, request, HttpResponseNotAllowed, \
+    HttpResponseForbidden
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+from django.utils.html import strip_tags
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.http import require_POST, require_http_methods
 from google.auth.transport import requests
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from unicodedata import decimal
 
 from ABLACKADABRA import settings
-from ABLACKADABRA.settings import AUTH_USER_MODEL
-from account.models import User, UserAbonn, playlist as plist, playlist
+from ABLACKADABRA.settings import AUTH_USER_MODEL, STRIPE_SECRET_KEY
+from account.models import User, UserAbonn, playlist as plist, playlist, AdsVideo
 from .forms import ChannelForm, CommentForm
 from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment as commentaire, \
     savedvideo, Don, \
-    VideoHistory, Notification, Channel, Like, Like_comment, soutien as Soutien, Channel
+    VideoHistory, Notification, Channel, Like, Like_comment, soutien as Soutien, Channel, revendication as revendq, \
+    Subscription_channel, Report_comment, Report_video, Category, Video, Reclamations_Don
 import stripe
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -46,6 +50,36 @@ def channel_muntube(request):
         form = ChannelForm()
     return render(request, 'membre/channel_muntube.html', {'form': form})
 
+def update_channel(request):
+    channel = Channel.objects.get(owner=request.user)
+
+    return render(request, 'membre/update_channel.html', {'channel': channel})
+
+@login_required
+def publier_info_gene(request):
+    channel = Channel.objects.get(owner=request.user)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        cover_image = request.FILES.get('cover')
+
+        # Update the channel instance with new information
+        channel.name = name
+        channel.description = description
+        if image:
+            channel.image = image
+        if cover_image:
+            channel.cover_image = cover_image
+        channel.save()
+
+        messages.success(request, 'Les informations de la chaine ont été mises à jour.')
+
+        return redirect('publier_info_gene')  # Replace 'nom_de_la_vue' with the name of the view to redirect after form submission
+
+    context = {'channel': channel}
+    return render(request, 'membre/update_channel.html', context)  # Replace 'nom_du_template.html' with the name of the HTML template to render the form
 
 def chart_data(request):
     videos = vdeo.objects.all()
@@ -124,14 +158,21 @@ def upload(request):
     playlists = vdeo.objects.filter(user_id=request.user.id)
     play_lists = plist.objects.filter(user_playlist_id=request.user.id)
     notifs = Notification.objects.filter(recipient_id=request.user.id)
+    categorys = Category.objects.all()
+
+    # Check if this is the user's first video upload
+    first_upload = Video.objects.filter(user=request.user).count() == 0
 
     context = {
         'play_lists': play_lists,
         'notifs': notifs,
+        'categorys': categorys,
+        'first_upload': first_upload
     }
     return render(request, 'membre/upload.html', context)
 
 
+@login_required
 @login_required
 def addvideo(request):
     if request.method == "POST":
@@ -140,17 +181,51 @@ def addvideo(request):
         image = request.FILES.get('image')
         titre = request.POST.get('titre')
         description = request.POST.get('description')
-        categorie = request.POST.get('categorie')
-        play_lists = get_object_or_404(playlist, id=request.POST.get('play_list'))
+        categorie_id = request.POST.get('categorie')
+        play_list_id = request.POST.get('play_list')
         tags = request.POST.get('tags')
-        status_video = request.POST.get('statut')
-        v = vdeo(user=User.objects.get(id=id),
-                 vid=video, miniature=image, detail=description, title=titre, categorie=categorie,
-                 play_lists=play_lists, tags=tags, status_video=status_video)
-        v.save()
-        # size = video.size
-        # return render(request, 'home.html')
+        contenue_18 = request.POST.get('contenue_18') == 'on'
+        status_video = request.POST.get('status_video')
+        links = request.POST.get('links')  # get list of links
+        documents = request.FILES.get('documents')  # get list of documents
+
+        # check if category and playlist are provided, otherwise create default ones
+        if categorie_id:
+            categorie = Category.objects.get(id=categorie_id)
+        else:
+            categorie, created = Category.objects.get_or_create(
+                name='Non Classés',
+            )
+
+        if play_list_id:
+            play_lists = playlist.objects.get(id=play_list_id)
+        else:
+            play_lists, created = playlist.objects.get_or_create(
+                nom_playlist='Non Classés',
+                user_playlist=request.user,
+            )
+
+        with transaction.atomic():
+            # create the Video object
+            v = Video.objects.create(
+                user=User.objects.get(id=id),
+                vid=video,
+                miniature=image,
+                detail=description,
+                title=titre,
+                category=categorie,
+                play_lists=play_lists,
+                tags=tags,
+                status_video=status_video,
+                contenue_18=contenue_18,
+                link=links,
+                documents=documents,
+            )
+
+
         return redirect('chaine')
+
+
         """if video.size > 1000:
             v = vdeo(user=User.objects.get(id=id),
                      vid = video,img = image,detail = description,title = titre)
@@ -167,6 +242,19 @@ def play_video(request, video_id):
     video = get_object_or_404(vdeo, pk=video_id)
     VideoHistory.objects.create(user=request.user, video=video)
     return render(request, 'video.html', {'video': video})"""
+
+def progress_view(request):
+    progress = 0
+    if request.is_ajax():
+        progress = int(request.GET.get('progress', 0))
+        if progress > 100:
+            progress = 100
+
+    data = {
+        'progress': progress
+    }
+
+    return JsonResponse(data)
 
 
 @login_required
@@ -223,8 +311,9 @@ def chaine(request):
     mesvideos = vdeo.objects.filter(user_id=request.user.id)
     notifs = Notification.objects.filter(recipient_id=request.user.id)
     play_lists = plist.objects.filter(user_playlist_id=request.user.id)
-    videos, live_videos = get_channel_videos('UCZ0fkEaTm106vBdvd4PK_sA')
+    videos, live_videos = get_channel_videos(request.user.id_youtube_ch)
     chaines = Channel.objects.filter(owner=request.user.id)
+    channel = Channel.objects.get(owner=request.user.id)
     context = {
         'mesvideos': mesvideos,
         'play_lists': play_lists,
@@ -232,6 +321,7 @@ def chaine(request):
         'live_videos': live_videos,
         'notifs': notifs,
         'chaines': chaines,
+        'channel': channel,
     }
     return render(request, 'membre/chaine.html', context)
 
@@ -287,7 +377,7 @@ def checkout_session(request, plan_id):
 
 
 # Success
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
 
 
 @login_required
@@ -356,66 +446,230 @@ def checkout_sess_don(request, cout_don):
     return redirect(session.url, code=303)
 
 
-@login_required
+def get_random_advertisement_video():
+    pass
+
+
+"""@login_required
 def video(request, id):
+    request.session['videos_watched_count'] = 0
     video = get_object_or_404(vdeo, pk=id)
     history_exists = VideoHistory.objects.filter(user=request.user, video=video).exists()
     if history_exists:
         pass
     else:
-        VideoHistory.objects.get_or_create(user=request.user, video=video)
-    """if history_exists:
-        try:
-            history, created = VideoHistory.objects.get_or_create(user=request.user, video=video)
-        except VideoHistory.DoesNotExist:
-            history, created = VideoHistory.objects.get_or_create(user=request.user, video=video)"""
+        VideoHistory.objects.create(user=request.user, video=video)
+        request.session['videos_watched_count'] = request.session.get('videos_watched_count', 0) + 1
 
-    """if request.method == 'POST':
-        time_paused = request.POST.get('time_paused', None)
-        if time_paused:
-            history.time_paused = float(time_paused)
-            history.save()"""
+    videos_watched_count = request.session.get('videos_watched_count', 0)
     notifs = Notification.objects.filter(recipient_id=request.user.id)
-
+    user = get_object_or_404(User, pk=video.user.id)
     don_par_user = Don.objects.filter(user_don=video.user).aggregate(total_payments=Sum('cout_don'))
-
+    user_video = video.user
+    chaine = Channel.objects.get(owner=user)
     comm = commentaire.objects.all()
     see_all_comm = commentaire.objects.all().order_by('-likes')
     video = vdeo.objects.filter(id=id)
     all_video = vdeo.objects.all()
+    total_abonnés = Subscription_channel.objects.filter(channel=chaine).count()
     comments = commentaire.objects.filter(video=id).count()
+    is_subscribed = False
+
+    try:
+        subscription = Subscription_channel.objects.get(
+            user_id=request.user.id,
+            channel_id=chaine.id,
+        )
+        is_subscribed = subscription.is_subscribed
+    except Subscription_channel.DoesNotExist:
+        # Subscription does not exist, set is_subscribed to False
+        is_subscribed = False
+    video_tag = vdeo.objects.get(pk=id)
+    tags = video_tag.tags.split(",") if video_tag.tags else []  # split tags by comma and create list
     recpmanded_video = vdeo.objects.all().order_by('-n_likes')[:10]
     vues = get_object_or_404(vdeo, pk=id)
     vues.views += 1
     vues.save()
-    context = {
-        'video': video,
-        'comments': comments,
-        'all_video': all_video,
-        'comm': see_all_comm,
-        'see_all_comm': see_all_comm,
-        'recpmanded_video': recpmanded_video,
-        'vues': vues,
-        'don_par_user': don_par_user,
-    }
 
-    return render(request, 'video.html', {'video': video, 'all_video': all_video, 'comm': see_all_comm,
-                                          'recpmanded_video': recpmanded_video, 'comments': comments, 'vues': vues,
-                                          'notifs': notifs,
-                                          'see_all_comm': see_all_comm, 'don_par_user': don_par_user, })
+    # Check if it's time to display the ad video
+    videos_watched_count = VideoHistory.objects.filter(user=request.user).count()
+    print(f"Videos watched count: {videos_watched_count}")  # Debugging line, remove later
+
+    if videos_watched_count % 2 == 0:
+        ads_video = AdsVideo.objects.get(id=1)
+        context = {
+            'video': video,
+            'comments': comments,
+            'all_video': all_video,
+            'comm': see_all_comm,
+            'see_all_comm': see_all_comm,
+            'recpmanded_video': recpmanded_video,
+            'vues': vues,
+            'don_par_user': don_par_user,
+            'chaine': chaine,
+            'is_subscribed': is_subscribed,
+            'total_abonnés': total_abonnés,
+            'tags': tags,
+            'ads_video': ads_video,
+        }
+        videos_watched_count += 1
+    else:
+        context = {
+            'video': video,
+            'comments': comments,
+            'all_video': all_video,
+            'comm': see_all_comm,
+            'see_all_comm': see_all_comm,
+            'recpmanded_video': recpmanded_video,
+            'vues': vues,
+            'don_par_user': don_par_user,
+            'chaine': chaine,
+            'is_subscribed': is_subscribed,
+            'total_abonnés': total_abonnés,
+            'tags': tags,
+        }
+        videos_watched_count += 1
+    request.session['videos_watched_count'] = videos_watched_count
+    return render(request, 'video.html', context)
+"""
+@login_required
+def video(request, id):
+    video = get_object_or_404(vdeo, pk=id)
+
+    history_exists = VideoHistory.objects.filter(user=request.user, video=video).exists()
+    if not history_exists:
+        VideoHistory.objects.create(user=request.user, video=video)
+
+    videos_watched_count = VideoHistory.objects.filter(user=request.user).count()
+    if videos_watched_count % 3 == 0:
+        bool_watch = True
+    else:
+        bool_watch = False
+    print(f"Videos watched count: {videos_watched_count}")  # Debugging line, remove later
+
+    # Determine which ad to display
+    ad_number = videos_watched_count % 3 + 1
+    if ad_number == 1:
+        ads_video = AdsVideo.objects.get(id=1)
+    elif ad_number == 2:
+        ads_video = AdsVideo.objects.get(id=2)
+    else:
+        ads_video = AdsVideo.objects.get(id=3)
+
+    vues = get_object_or_404(vdeo, pk=id)
+    vues.views += 1
+    vues.save()
+
+    user = get_object_or_404(User, pk=video.user.id)
+    don_par_user = Don.objects.filter(user_don=video.user).aggregate(total_payments=Sum('cout_don'))
+    user_video = video.user
+    chaine = Channel.objects.get(owner=user)
+    comm = commentaire.objects.all()
+    see_all_comm = commentaire.objects.all().order_by('-likes')
+    video = vdeo.objects.filter(id=id)
+    all_video = vdeo.objects.all()
+    total_abonnés = Subscription_channel.objects.filter(channel=chaine).count()
+    comments = commentaire.objects.filter(video=id).count()
+    is_subscribed = False
+
+    try:
+        subscription = Subscription_channel.objects.get(
+            user_id=request.user.id,
+            channel_id=chaine.id,
+        )
+        is_subscribed = subscription.is_subscribed
+    except Subscription_channel.DoesNotExist:
+        # Subscription does not exist, set is_subscribed to False
+        is_subscribed = False
+
+    video_tag = vdeo.objects.get(pk=id)
+    tags = video_tag.tags.split(",") if video_tag.tags else []  # split tags by comma and create list
+    recpmanded_video = vdeo.objects.all().order_by('-n_likes')[:10]
+
+    if videos_watched_count % 3 == 0:
+        context = {
+            'video': video,
+            'comments': comments,
+            'all_video': all_video,
+            'comm': see_all_comm,
+            'see_all_comm': see_all_comm,
+            'recpmanded_video': recpmanded_video,
+            'vues': vues,
+            'don_par_user': don_par_user,
+            'chaine': chaine,
+            'is_subscribed': is_subscribed,
+            'total_abonnés': total_abonnés,
+            'tags': tags,
+            'ads_video': ads_video,
+            'bool_watch': bool_watch,
+        }
+    else:
+        context = {
+            'video': video,
+            'comments': comments,
+            'all_video': all_video,
+            'comm': see_all_comm,
+            'see_all_comm': see_all_comm,
+            'recpmanded_video': recpmanded_video,
+            'vues': vues,
+            'don_par_user': don_par_user,
+            'chaine': chaine,
+            'is_subscribed': is_subscribed,
+            'total_abonnés': total_abonnés,
+            'tags': tags,
+            'bool_watch': bool_watch,
+        }
+        videos_watched_count += 1
+    request.session['videos_watched_count'] = videos_watched_count
+
+    return render(request, 'video.html', context)
+
+def increment_videos_watched_count(request):
+    if request.is_ajax() and request.method == 'POST':
+        videos_watched_count = request.session.get('videos_watched_count', 0)
+        request.session['videos_watched_count'] = videos_watched_count + 1
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
+def get_playlist_videos(request, playlist_id):
+    playlist = plist.objects.get(id=playlist_id)
+    videos = Video.objects.filter(play_lists=playlist)
+    first_video = videos.first()
+    rest_videos = videos.exclude(id=first_video.id)
+    user = get_object_or_404(User, pk=playlist.user_playlist.id)
+    chaine = Channel.objects.get(owner=user)
+
+    response = {
+        'playlist': playlist,
+        'chaine': chaine,
+        'first_video': first_video,
+        'videos': videos,
+        'rest_videos': rest_videos,
+        'rest_videos': rest_videos,
+    }
+    return render(request, 'membre/videos_playlist.html', response)
 
 
 @login_required
 def commenter(request, id):
     if request.method == "POST":
         video = request.POST.get('video')
-        user = request.user.id
+        user = request.user
         sujet = request.POST.get('sujet')
         coment = request.POST.get('commentaire')
-        c = commentaire(video=vdeo.objects.get(id=video), user=User.objects.get(id=user), name=sujet, contenue=coment)
+        c = commentaire(video=vdeo.objects.get(id=video), user=user, name=sujet, contenue=coment)
         c.save()
-        video = get_object_or_404(vdeo, id=request.POST.get('video'))
-        video.n_comments.add(request.user)
+        video_obj = get_object_or_404(vdeo, id=video)
+        video_obj.n_comments.add(user)
+
+        # Create notification for video owner
+        recipient = video_obj.user
+        subject = f"Nouveau commentaire sur votre vidéo"
+        message = f"{user.username} a commenté ta vidéo '{video_obj.title}': {coment}"
+        notification = Notification(recipient=recipient, subject=subject, message=message)
+        notification.save()
+
         return redirect('video', id)
 
 
@@ -438,14 +692,30 @@ def reply_comment(request, pk):
 def like_video(request, video_id):
     video = get_object_or_404(vdeo, id=video_id)
     user = request.user
+    is_liked = False
+
     try:
+        # Try to get an existing like object
         like = Like.objects.get(user=user, video=video)
+        like.delete()
     except Like.DoesNotExist:
+        # If the user has not liked the video yet, create a new like object
         like = Like.objects.create(user=user, video=video)
-        video.n_likes.add(request.user)
-        video.likes += 1
-        video.save()
-    return JsonResponse({'likes': video.likes})
+        is_liked = True
+        user = video.user
+        if user != request.user:
+            subject = f'{request.user.username} aime votre vidéo'
+            message = f'{request.user.username} à aimé votre vidéo "{video.title}".'
+            notification = Notification(recipient=user, subject=subject, message=message)
+            notification.save()
+
+    # Set the video's likes count to the number of likes on it
+    video.likes = Like.objects.filter(video=video).count()
+    video.save()
+
+    # Return the updated number of likes and the user's current like status
+    return JsonResponse({'likes': video.likes, 'is_liked': is_liked})
+
 
 
 """def like_video(request, pk):
@@ -482,23 +752,35 @@ def like_comment(request, pk):
 
 
 @csrf_exempt
+@login_required
 def like_comment(request, comment_id):
+    print(comment_id)
     if request.method == 'POST':
+        data = json.loads(request.body)
         comment = commentaire.objects.get(id=comment_id)
         user = request.user
-        if user.is_authenticated:
-            if user in comment.n_likes.all():
-                comment.n_likes.remove(user)
-                comment.likes -= 1
-                action = 'unlike'
-            else:
-                comment.n_likes.add(user)
+        liked = data.get('liked')
+
+        if isinstance(user, User):
+            like, created = Like_comment.objects.get_or_create(user=user, commentt=comment)
+
+            if liked:
                 comment.likes += 1
+                comment.n_likes.add(user)
                 action = 'like'
+            else:
+                comment.likes -= 1
+                comment.n_likes.remove(user)
+                action = 'unlike'
+                like.delete()
+
             comment.save()
             return JsonResponse({'likes': comment.likes, 'action': action})
         else:
-            return redirect('login')
+            return JsonResponse({'error': 'User is not authenticated.'}, status=401)
+    else:
+        return HttpResponseNotAllowed(['POST'])
+
 
 
 """@csrf_exempt
@@ -584,8 +866,8 @@ def bibliothèque(request):
 
 
 @login_required
-def monprofile(request, id):
-    profil = User.objects.all()
+def monprofile(request, user_id):
+    profil = User.objects.get(pk=user_id)
     # video=Video.objects.all().order_by('-id')
     notifs = Notification.objects.filter(recipient_id=request.user.id)
 
@@ -614,7 +896,7 @@ def maintenance(request):
 def proced_don(request, id):
     video = get_object_or_404(vdeo, pk=id)
     notifs = Notification.objects.filter(recipient_id=request.user.id)
-    amount = int(request.POST.get('don'))
+    amount = int(request.POST.get('don').split('€')[0])
     don_amount = amount * 100
     return render(request, 'membre/proced_don.html',
                   {'video': video, 'amount': amount, 'don_amount': don_amount, 'notifs': notifs, })
@@ -627,6 +909,93 @@ def payment(request):
 
 @login_required()
 def charge(request, pk):
+    if request.method == 'POST':
+        # Get the amount from the form
+        amount = int(request.POST.get('amount'))
+        token = request.POST.get('stripeToken')
+        video = get_object_or_404(Video, pk=pk)
+        to_user = video.user
+        # Set your secret key: remember to change this to your live secret key in production
+        # See your keys here: https://dashboard.stripe.com/account/apikeys
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        account = stripe.Account.retrieve(to_user.stripe_account_id)
+
+        # Check if to_user or stripe_account_id is None
+        if not to_user or not to_user.stripe_account_id:
+            charge = stripe.Charge.create(
+                amount=amount * 100,  # amount in cents, again
+                currency="eur",
+                source="tok_visa",  # obtained with Stripe.js
+                description="Example charge"
+            )
+            Reclamations_Don.objects.create(
+                user_don=request.user,
+                to_user_don=to_user,
+                video=video,
+                cout_don=amount
+            )
+            Notification.objects.create(
+                recipient=to_user,
+                subject='Vous avez un don mais non completé',
+                message='',
+            )
+            subject = 'DON MunTube'
+            html_content = get_template('membre/ordermail.html').render({'title': video.title})
+            from_email = 'merchab08@gmail.com'
+
+            msg = EmailMessage(subject, html_content, from_email,
+                               [request.user.email, 'ablackadabra.com@gmail.com'])
+            msg.content_subtype = "html"  # Main content is now text/html
+            msg.send()
+            return redirect('success')
+
+        else:
+            # Retrieve the account details using stripe_account_id
+            account = stripe.Account.retrieve(to_user.stripe_account_id)
+            if not account.charges_enabled or not account.payouts_enabled:
+                # Redirect to another page if the account is not active
+                return redirect('inactive_account')
+
+            # Create a transfer to send the payment to the account
+            transfer = stripe.Transfer.create(
+                amount=amount * 100,
+                currency="eur",
+                destination=to_user.stripe_account_id,
+                description="Video payment"
+            )
+
+            # Create Don and Notification objects
+            Don.objects.create(
+                user_don=request.user,
+                to_user_don=to_user,
+                video=video,
+                cout_don=amount
+            )
+            Notification.objects.create(
+                recipient=to_user,
+                subject='Vous avez reçu un don',
+                message='',
+            )
+
+            # Send email to customer with order details
+            subject = 'DON MunTube'
+            html_content = get_template('membre/ordermail.html').render({'title': video.title})
+            from_email = 'merchab08@gmail.com'
+
+            msg = EmailMessage(subject, html_content, from_email, [request.user.email, 'ablackadabra.com@gmail.com'])
+            msg.content_subtype = "html"  # Main content is now text/html
+            msg.send()
+
+            #return HttpResponseRedirect(reverse('video', args=[str(pk)]))
+            return redirect('success')
+
+    return render(request, 'home.html')
+
+
+
+
+
+"""def charge(request, pk):
     if request.method == 'POST':
         # Get the amount from the form
         amount = int(request.POST.get('amount'))
@@ -671,7 +1040,7 @@ def charge(request, pk):
         # ...
 
         return HttpResponseRedirect(reverse('video', args=[str(pk)]))
-    return render(request, 'home.html')
+    return render(request, 'home.html')"""
 
 
 def success(request):
@@ -733,14 +1102,16 @@ def search(request):
     query = request.GET.get('q')
     if query:
         words = query.split()
-        results = vdeo.objects.filter(reduce(lambda x, y: x & y, [Q(title__icontains=word) for word in words]))
+        results = vdeo.objects.filter(
+            reduce(lambda x, y: x & y, [Q(title__icontains=word) | Q(tags__icontains=word) for word in words])
+        )
         if not results:
             message = "Aucun résultat trouvé pour la requête: '{}'".format(query)
         else:
             message = "Résultats trouvés pour la requête: '{}'".format(query)
     else:
         message = "Aucune requête fournie"
-    return render(request, 'search_results.html', {'message': message, 'results': results})
+    return render(request, 'search_results.html', {'message': message, 'results': results, 'query': query})
 
 
 def mesdons(request):
@@ -797,43 +1168,6 @@ def soutien(request):
     return render(request, 'home.html')
 
 
-def connect_stripe(request):
-    # Redirect the customer to the Stripe authorization page
-    return redirect(stripe.OAuth.authorize_url(
-        client_id='pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV',
-        scope='read_write'
-    ))
-
-
-# acct_1M1tNCEz9Ud4aklF
-def get_stripe_access_token(authorization_code):
-    url = "https://connect.stripe.com/oauth/token"
-
-    payload = {
-        "client_id": 'pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV',
-        "client_secret": "sk_test_51M1tNCEz9Ud4aklFxKaVwVo0kCttkNebx9foe1Qxq1CoKhS9zTqaqtmpSdM1XiTIKyUJkXyQQN5MMPVQUfYZHhFO00U2oMN6jz",
-        "code": authorization_code,
-        "grant_type": "authorization_code"
-    }
-
-    response = requests.post(url, data=payload)
-
-    if response.status_code == 200:
-        return response.json()["access_token"]
-    else:
-        raise Exception("Could not obtain access token from authorization code")
-
-
-def get_stripe_account_id(request):
-    # Get the access token from the previous step
-    access_token = 'your_saved_access_token'
-
-    # Use the access token to retrieve information about the customer's Stripe account
-    stripe_account = stripe.Account.retrieve(access_token)
-
-    # Save the customer's Stripe account ID for later use
-    stripe_account_id = stripe_account['id']
-
 
 def newvideo(request):
     return render(request, 'membre/newvideo.html')
@@ -847,5 +1181,430 @@ def mes_muntubes(request):
 def chaine_profile(request, chaine_id):
     user = get_object_or_404(User, id=chaine_id)
     chaine = Channel.objects.filter(owner=user).first()
-    context = {'chaine': chaine}
+    all_chaine = Channel.objects.filter(owner=user)
+    videos = vdeo.objects.filter(user=user)
+    play_lists = plist.objects.filter(user_playlist_id=user.id)
+    total_abonnés = Subscription_channel.objects.filter(channel=chaine).count()
+    is_subscribed = False
+
+    try:
+        subscription = Subscription_channel.objects.get(
+            user_id=request.user.id,
+            channel_id=chaine.id,
+        )
+        is_subscribed = subscription.is_subscribed
+    except Subscription_channel.DoesNotExist:
+        # Subscription does not exist, set is_subscribed to False
+        is_subscribed = False
+    context = {
+        'chaine': chaine,
+        'videos': videos,
+        'play_lists': play_lists,
+        'all_chaine': all_chaine,
+        'total_abonnés': total_abonnés,
+        'is_subscribed': is_subscribed,
+               }
     return render(request, 'machaine.html', context)
+
+
+@login_required
+def update_user(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+
+    if request.method == 'POST':
+        user.first_name = request.POST.get('firstName')
+        user.last_name = request.POST.get('lastName')
+        user.username = request.POST.get('Pseudonyme')
+        user.email = request.POST.get('email')
+        user.country = request.POST.get('pays')
+        user.bio = request.POST.get('bio')
+        #user.phoneNumber = request.POST.get('phoneNumber')
+        user.id_youtube_ch = request.POST.get('id_ytb')
+        user.Active_don = request.POST.get('Active_don') == 'on'
+
+        if 'img' in request.FILES:
+            user.photo = request.FILES['img']
+
+        user.save()
+
+        messages.success(request, 'User profile updated successfully.')
+        return redirect('monprofile', user_id=user.id)
+    else:
+        return render(request, 'membre/home.html', {'user': user})
+
+@login_required
+def updatevideo(request, video_id):
+    video = get_object_or_404(vdeo, pk=video_id)
+    video_url = video.vid.url
+    miniature_url = video.miniature.url
+    play_lists = plist.objects.filter(user_playlist_id=request.user.id)
+    #video = vdeo.objects.filter(id=video_id)
+
+    return render(request, 'membre/update_video.html', {'video':video,'video_url':video_url,
+                                                        'miniature_url':miniature_url,'play_lists':play_lists})
+
+
+@login_required
+def confirmupdatevideo(request, video_id):
+    video = get_object_or_404(vdeo, pk=video_id)
+
+    if request.method == 'POST':
+        video.title = request.POST.get('titre')
+        video.detail = request.POST.get('description')
+        video.categorie = request.POST.get('categorie')
+        video.play_lists = get_object_or_404(playlist, id=request.POST.get('play_list'))
+        video.tags = request.POST.get('tags')
+        video.contenue_18 = request.POST.get('contenue_18') == 'on'
+        video.status_video = request.POST.get('statut')
+
+        # handle video upload
+        if request.FILES.get('video'):
+            video.vid.delete()  # remove old file if exists
+            video.vid = request.FILES['video']
+
+        # handle image upload
+        if request.FILES.get('image'):
+            video.miniature.delete()  # remove old file if exists
+            video.miniature = request.FILES['image']
+
+        video.save()
+
+        messages.success(request, 'Video updated successfully.')
+        return redirect('chaine')
+        #return redirect('chaine', video_id=video.id)
+    else:
+        return render(request, 'home.html')
+
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def delete_video(request, video_id):
+    video = get_object_or_404(vdeo, pk=video_id)
+    video.delete()
+    return HttpResponse(status=204)
+
+
+def revendiquer(request):
+    if request.method == 'POST':
+        pseudonyme = request.POST['pseudonyme']
+        prenom = request.POST['prénom']
+        nom = request.POST['nom']
+        email = request.POST['email']
+        date = request.POST['date']
+        pays = request.POST['pays']
+        phone_number = request.POST['phoneNumber']
+        message = request.POST['message']
+
+        # Create a new UserProfile object and save it to the database
+        revendication = revendq(
+            pseudonyme=pseudonyme,
+            prenom=prenom,
+            nom=nom,
+            email=email,
+            date=date,
+            pays=pays,
+            phone_number=phone_number,
+            message=message
+        )
+        revendication.save()
+
+        subject = 'Revendication chaine'
+        html_content = get_template('membre/ordermail.html').render({
+            'title': 'Revendication chaine',
+            'email': email
+            })
+        from_email = email
+
+        msg = EmailMessage(subject, html_content, from_email, ['ablackadabra.com@gmail.com'])
+        msg.content_subtype = "html"  # Main content is now text/html
+        msg.send()
+
+        # return a JSON response to display a success alert using JavaScript
+        return JsonResponse({'success': True})
+
+
+    return render(request, 'machaine.html')
+
+"""@login_required
+def subscribe(request):
+    user_id = request.POST['user_id']
+    channel_id = request.POST['channel_id']
+    subscription, created = Subscription_channel.objects.get_or_create(
+        user_id=user_id,
+        channel_id=channel_id,
+    )
+    if created:
+        status = 'subscribed'
+    else:
+        subscription.delete()
+        status = 'unsubscribed'
+    return JsonResponse({'status': status})
+
+@login_required
+def unsubscribe(request):
+    user_id = request.POST['user_id']
+    channel_id = request.POST['channel_id']
+    Subscription_channel.objects.filter(
+        user_id=user_id,
+        channel_id=channel_id,
+    ).delete()
+    return JsonResponse({'status': 'unsubscribed'})"""
+
+
+def subscription_status(request, channel_id):
+    user_id = request.user.id
+    subscription = Subscription_channel.objects.filter(user_id=user_id, channel_id=channel_id).first()
+    is_subscribed = subscription.is_subscribed if subscription else False
+    return JsonResponse({'is_subscribed': is_subscribed})
+
+@login_required
+def subscribe(request):
+    user_id = request.POST['user_id']
+    channel_id = request.POST['channel_id']
+    subscription, created = Subscription_channel.objects.get_or_create(
+        user_id=user_id,
+        channel_id=channel_id,
+    )
+    if created:
+        subscription.is_subscribed = True
+        subscription.save()
+        status = 'subscribed'
+    else:
+        subscription.is_subscribed = False
+        subscription.save()
+        status = 'unsubscribed'
+
+    # Create a notification for the channel owner if a new subscription is made
+    """if created:
+        channel = subscription.channel.owner
+        if channel.owner != request.user:
+            subject = f'{request.user.username} subscribed to your channel'
+            message = f'{request.user.username} has subscribed to your channel "{channel.title}".'
+            notification = Notification(recipient=channel, subject=subject, message=message)
+            notification.save()
+"""
+    return JsonResponse({'status': status})
+
+
+
+def unsubscribe(request):
+    user_id = request.POST['user_id']
+    channel_id = request.POST['channel_id']
+    subscription = Subscription_channel.objects.filter(
+        user_id=user_id,
+        channel_id=channel_id,
+    ).first()
+    if subscription:
+        subscription.delete()
+        status = 'unsubscribed'
+    else:
+        status = 'not subscribed'
+    return JsonResponse({'status': status})
+
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(commentaire, id=comment_id)
+
+    if request.method == 'POST':
+        comment.delete()
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
+
+def report_comment(request, comment_id):
+    comment = get_object_or_404(commentaire, id=comment_id)
+
+    if request.method == 'POST':
+        # Report the comment
+        user = request.user
+        contenue = comment.contenue
+        reports = Report_comment.objects.filter(commentt=comment,contenue=comment.contenue, user=user)
+        if not reports:
+            report = Report_comment.objects.create(commentt=comment, contenue=comment.contenue,user=user)
+
+            # Send email to admin
+            subject = f'Comment reported: {comment.id}'
+            context = {'comment': comment, 'user': user, 'contenue':contenue}
+            html_message = render_to_string('membre/report_comment_email.html', context)
+            plain_message = strip_tags(html_message)
+            send_mail(
+                subject,
+                plain_message,
+                settings.EMAIL_HOST_USER,
+                ['ablackadabra.com@gmail.com'],
+                html_message=html_message,
+                fail_silently=False,
+            )
+
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'success': False, 'message': 'You have already reported this comment.'})
+
+    return JsonResponse({'success': False})
+
+@login_required
+def report_video(request):
+    print(request.POST.get('id_video'))
+    if request.method == 'POST':
+        id_video = request.POST.get('id_video')
+        video = vdeo.objects.get(id=id_video)
+        reporter = request.user
+        report = Report_video.objects.create(video=video, reporter=reporter)
+        report.save()
+
+        subject = f"Video {video.title} has been reported"
+        message = f"Video {video.title} has been reported by user {reporter.username}. Please investigate the issue."
+        email_from = settings.EMAIL_HOST_USER
+        email_to = ['ablackadabra.com@gmail.com']
+        send_mail(subject, message, email_from, email_to, fail_silently=True)
+
+        return JsonResponse({'success': True})
+
+    return JsonResponse({'success': False})
+
+@csrf_protect
+@login_required
+def reply_comment(request, comment_id):
+    comment = get_object_or_404(commentaire, id=comment_id)
+
+    if request.method == 'POST':
+        reply_text = request.POST.get('reply_text', '').strip()
+        if reply_text:
+            # Check if the reply comment already exists
+            reply = commentaire.objects.filter(user=request.user, parent=comment, contenue=reply_text).first()
+            if not reply:
+                reply = commentaire.objects.create(
+                    user=request.user,
+                    parent=comment,
+                    contenue=reply_text
+                )
+            html = render(request, 'membre/reply.html', {'reply': reply}).content.decode('utf-8')
+            return JsonResponse({'success': True, 'html': html})
+    return JsonResponse({'success': False})
+
+def add_stripe(request):
+    user = get_object_or_404(User, id=request.user.id)
+    stripe_info = User.objects.get(id=request.user.id)
+    return render(request,'membre/connect_stripe.html',{'stripe_info':stripe_info})
+
+@login_required
+def stripe_info(request):
+    user = request.user
+
+    if request.method == 'POST':
+        stripe_account_id = request.POST.get('stripe_account_id')
+        stripe_account_holder_name = request.POST.get('stripe_account_holder_name')
+        stripe_account_number = request.POST.get('stripe_account_number')
+        stripe_routing_number = request.POST.get('stripe_routing_number')
+
+        # Check if the Stripe account ID is valid
+        try:
+            stripe.api_key = settings.STRIPE_SECRET_KEY
+            stripe.Account.retrieve(stripe_account_id)
+        except stripe.error.InvalidRequestError:
+            messages.error(request, 'ID de compte Stripe invalide.')
+            return render(request, 'membre/connect_stripe.html')
+
+        # Save the data to the user model
+        user.stripe_account_id = stripe_account_id
+        user.stripe_account_holder_name = stripe_account_holder_name
+        user.stripe_account_number = stripe_account_number
+        user.stripe_routing_number = stripe_routing_number
+        user.save()
+
+        messages.success(request, 'Vos informations Stripe ont été mises à jour avec succès..')
+
+    stripe_info = User.objects.get(id=request.user.id)
+    return render(request, 'membre/connect_stripe.html', {'stripe_info': stripe_info})
+
+
+def stripe_connect(request):
+    user = request.user
+
+    # Check if the user already has a Stripe account connected
+    if user.stripe_account_id:
+        return render(request, "stripe_connect.html", {"message": "You've already connected your Stripe account."})
+
+    if request.method == "POST":
+        # Get the user's email address and redirect URI
+        email = request.POST.get("email")
+        redirect_uri = request.build_absolute_uri("/stripe/connect/callback/")
+
+        # Create a new Stripe account link
+        account_link = stripe.AccountLink.create(
+            account={
+                "country": "US",
+                "type": "custom",
+                "email": email,
+                "capabilities": {
+                    "card_payments": {"requested": True},
+                    "transfers": {"requested": True},
+                },
+            },
+            refresh_url=redirect_uri,
+            return_url=redirect_uri,
+        )
+
+        # Redirect the user to the Stripe account link URL
+        return redirect(account_link.url)
+
+    return render(request, "stripe_connect.html")
+
+
+def stripe_redirect(request):
+    stripe.api_key = STRIPE_SECRET_KEY
+
+    # Exchange the authorization code for an access token
+    code = request.GET.get("code")
+    resp = stripe.oauth.token(
+        grant_type="authorization_code", code=code
+    )
+
+    # Save the user's Stripe account ID and access token in your database
+    user_id = request.GET.get("state")
+    stripe_account_id = resp.stripe_user_id
+    access_token = resp.access_token
+
+    # Save the Stripe account ID and access token in your database
+    user = User.objects.get(id=user_id)
+    user.stripe_account_id = stripe_account_id
+    user.stripe_access_token = access_token
+    user.save()
+
+    # Redirect the user to a success page
+    return render(request, "stripe_success.html")
+
+
+"""def create_charge(payer, payee, amount):
+    stripe.api_key = "YOUR_SECRET_KEY"
+
+    # Get the payee's Stripe account ID and access token
+    payee_id = payee.stripe_account_id
+    access_token = payee.stripe_access_token
+
+    # Create the charge using the payee's Stripe account
+    resp = stripe.Charge.create(
+        amount=amount,
+        currency="usd",
+        source=payer.stripe_customer_id,
+        application_fee_amount=100,  # Your platform's fee
+        stripe_account=payee_id,
+        metadata={
+            "payer_name": payer.name,
+            "payer_email": payer.email,
+            "payee_name": payee.name,
+            "payee_email": payee.email,
+        },
+        idempotency_key=str(uuid.uuid4()),
+    )
+
+    # Record the transaction in your database
+    transaction = Transaction(
+        payer=payer,
+        payee=payee,
+        amount=amount,
+        charge_id=resp.id
+    )
+    transaction.save()
+
+    # Return the Stripe charge ID
+    return resp.id"""

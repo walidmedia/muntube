@@ -11,11 +11,6 @@ from django import forms
         model=Video
         fields=("user","title","detail","vid","img")"""
 
-class ChannelForm(forms.ModelForm):
-    class Meta:
-        model = Channel
-        fields = ['name', 'description']
-
 class ReplyForm(forms.Form):
     text = forms.CharField(widget=forms.Textarea)
 
@@ -23,3 +18,8 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = comment
         fields = '__all__'
+
+class ChannelForm(forms.ModelForm):
+    class Meta:
+        model = Channel
+        fields = ['name', 'description', 'image', 'cover_image']

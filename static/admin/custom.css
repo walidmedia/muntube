@@ -1,0 +1,11 @@
+/* Change the color of the button */
+.custom-button {
+  background-color: #8c5a0d;
+  color: #ffffff;
+}
+
+/* Change the color of the button on hover */
+.custom-button:hover {
+  background-color: rgba(70, 40, 9, 0.81);
+  color: #ffffff;
+}

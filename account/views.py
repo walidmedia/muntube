@@ -3,6 +3,8 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from .forms import LoginForm, SignUpForm
 from .models import User
 from django.contrib.auth import login as Login_process , logout, authenticate
@@ -15,7 +17,7 @@ def index(request):
 
     trending_video = Video.objects.all()
 
-    paginator = Paginator(trending_video, 2)
+    paginator = Paginator(trending_video, 100)
 
     page = request.GET.get('page')
 
@@ -33,66 +35,56 @@ def profile(request):
     return render(request, 'membre/profile.html', context)
 
 
-@login_required
-def update_user(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-
-    if request.method == 'POST':
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.gender = request.POST.get('gender')
-        user.country = request.POST.get('country')
-        user.bio = request.POST.get('bio')
-        user.id_youtube_ch = request.POST.get('id_youtube_ch')
-        user.Active_don = request.POST.get('Active_don') == 'on'
-
-        if request.FILES.get('photo'):
-            user.photo = request.FILES['photo']
-
-        user.save()
-
-        messages.success(request, 'User profile updated successfully.')
-        return redirect('user_profile', user_id=user_id)
-    else:
-        return render(request, 'membre/account.html', {'user': user})
-def save_user(request):
-    if request.method == 'POST':
-        id_user = request.POST.get('id_user')
-        img = request.POST.get('img')
-        firstName = request.POST.get('firstName')
-        lastName = request.POST.get('lastName')
-        Pseudonyme = request.POST.get('Pseudonyme')
-        email = request.POST.get('email')
-        pays = request.POST.get('pays')
-        bio = request.POST.get('bio')
-        phoneNumber = request.POST.get('phoneNumber')
-        id_ytb = request.POST.get('id_ytb')
-
-        # Create a new User object and save it
-        user = User.objects.create_user(username, email, password)
-        user.save()
-
-        return HttpResponse('User saved successfully')
-    else:
-        return render(request, 'membre/account.html')
 
 def register(request):
     msg = None
+    form = SignUpForm(request.POST or None)
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
         if form.is_valid():
-            user=form.save()
-            channel = Channel.objects.create(
-                name=user.username,
-                owner=user
-            )
-            msg = 'user created'
-            return redirect('login')
-        else:
-            msg= 'form is not valid'
+            username = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
+            password1 = form.cleaned_data.get("password1")
+            password2 = form.cleaned_data.get("password2")
+            if password1 == password2:  # check if the passwords match
+                user = form.save()
+                channel = Channel.objects.create(
+                    name=user.username,
+                    owner=user
+                )
+                msg = 'user created'
+                return redirect(reverse('confirm_register', kwargs={'user_id': user.id})) # Pass user ID as URL parameter
+            else:
+                msg = 'Passwords do not match'
     else:
         form = SignUpForm()
-    return render(request, "authenticate/register.html", {"form": form, "msg": msg})
+    return render(request, 'authenticate/register.html', {'form': form, 'msg': msg})
+
+def confirm_register(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == 'POST':
+        # Retrieve form data
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        Gender = request.POST.get('Gender')
+        Gender = request.POST.get('Gender')
+        date_of_birth = request.POST.get('date_of_birth')
+        Country = request.POST.get('Country')
+        phone_number = request.POST.get('phone_number')
+
+        # Update user object with form data
+        user.first_name = first_name
+        user.last_name = last_name
+        user.gender = Gender
+        user.date_of_birth = date_of_birth
+        user.country = Country
+        user.phone_number = phone_number
+
+        # Save user object to database
+        user.save()
+
+        return redirect('login') # Redirect to home page after form submission
+
+    return render(request, 'authenticate/confirm_register.html', {'user': user})
 
 def login(request):
     form = LoginForm(request.POST or None)

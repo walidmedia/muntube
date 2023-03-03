@@ -1,0 +1,1152 @@
+{% load static %}
+{% load social_share %}
+
+{% include 'base.html' %}
+<style>
+    .reply {
+  margin: 0px 25px 10px 0px;
+  padding: 8px;
+  background-color: #000000;
+  border-radius: 8px;
+}
+
+.reply-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.reply-user {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.reply-date {
+  color: #606060;
+  font-size: 12px;
+}
+
+.reply-content {
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+.success-button {
+    background-color: green;
+    border-color: green;
+    color: white;
+}
+.dropdown-menu {
+    background-color: #292b2c;
+    border: none;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 0;
+
+  }
+  .dropdown-item {
+    color: #b9b7b7;
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  .dropdown-item:hover {
+    background-color: #1d2124;
+    color: #fff;
+  }
+
+.subscribe-btn {
+  background-color: rgba(70, 40, 9, 0.81);
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.subscribe-btn:hover {
+  background-color: #ba7900;
+}
+.subscribed {
+    background-color: #ba7900;
+}
+.unsubscribed {
+    background-color: rgba(70, 40, 9, 0.81);
+}
+/* Style for the like button */
+.like-section {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.like-button {
+    border: none;
+    background: none;
+    color: #909090;
+    font-size: 18px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.like-button:hover {
+    color: #8c5a0d;
+}
+
+.like-button.liked {
+    color: #8c5a0d;
+}
+
+.like-count {
+    color: #909090;
+    font-size: 14px;
+    margin-left: 5px;
+}
+    .comment-text {
+    font-size: 13px
+}
+.wish {
+    color: #35b69f
+}
+
+.user-feed {
+    font-size: 14px;
+    margin-top: 12px
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #B88E6D;
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #ffffff;
+    transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out;
+}
+:root {
+    --primary: #B88E6D;
+    --secondary: #191C24;
+    --light: #6C7293;
+    --dark: #000000;
+}
+nav-link:hover {
+    background-color: #e0a800;
+}
+
+</style>
+<title>Muntube</title>
+{% block content %}
+   <div class="container-fluid">
+        <div class="row ">
+            <div id="gauche" class="col-sm-12 col-md-12 col-xl-8">
+            <div class="bg-dark rounded ">
+            {% for v in videos %}
+                {% if forloop.first %}
+                <div class="row d-flex col-xl-12 video_box">
+                <!-- Display the normal video here -->
+                <video width="100%" class=" embed-responsive embed-responsive-16by9" controls>
+                    <source src="{{ v.vid.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+                    <div class="col-sm-12 col-md-12 col-xl-12">
+                      <div style="background-color: #191C24; " class="card mb-2">
+                        <h5 class="card-header" style="color: #fdecdd">{{ v.title }}</h5>
+
+                       <span class="container-fluid fw-semibold" style="color: #6e6a69">{{ v.views }} views • {{ v.date_created.date |date:"d/m/Y" }}</span>
+                        <div class="nav-pills-container p-1">
+                        <div class="nav-pills">
+                            {% for tag in tags %}
+                           <a class="" href="{% url 'search' %}?q={{ tag.strip }}">
+                              <button type="button" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;
+                              background-color: rgba(190,140,13,0.16); padding-bottom: 3px;padding-top: 3px;border: 1px solid rgb(140,90,13) !important;">
+                                  {{ tag }}</button>
+                                {% if not forloop.last %}, {% endif %}
+                           </a>
+                                {% endfor %}
+                        </div>
+                      </div>
+                          <hr class="mt-2">
+                        <div class="y">
+                        <div class="container-fluid">
+                            <div class="row ">
+                            <table class="mt-0">
+                                <tr>
+                                    <td>
+                                    <button id="like_button" style="background-color: {% if request.user in v.n_likes.all %} #8c5a0d {% else %} #533f03 {% endif %}" data-bs-toggle="dropdown" class="btn rounded-pill btn-outline-secondary btn-xs align-content-center">
+                                    <i class="fa {% if request.user in v.n_likes.all %} fa-heart {% else %} fa-heart {% endif %}"></i>
+                                </button>
+                                <span id="likes" class="align-middle small" style="color: #fdecdd">{{ v.likes }} J'aimes</span>
+
+                                        <script>
+                                    const likeButton = document.querySelector('#like_button');
+                                    likeButton.addEventListener('click', function() {
+    fetch(`{% url 'like_video' v.id %}`)
+    .then(response => response.json())
+    .then(data => {
+        const likesElement = document.querySelector('#likes');
+        likesElement.innerHTML = `${data.likes} J'aimes`;
+
+        // Update the like button based on the user's current like status
+        const likeButtonIcon = document.querySelector('#like_button i');
+        if (data.is_liked) {
+            likeButton.style.backgroundColor = "#ba7900";
+            likeButtonIcon.classList.remove('fa-heart-o');
+            likeButtonIcon.classList.add('fa-heart');
+        } else {
+            likeButton.style.backgroundColor = "#533f03";
+            likeButtonIcon.classList.remove('fa-heart');
+            likeButtonIcon.classList.add('fa-heart');
+        }
+    });
+});
+
+                                    </script>
+                                    </td>
+                                    <td>
+                                         <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                            <i class="fa fa-share"></i>
+                                        </button>
+                                         <span class="align-middle small" style="color: #fdecdd"> Partager</span>
+                                        <div class="dropdown-menu dropdown-menu bg-black border-0 rounded-2 rounded-bottom m-0">
+                                            <form>
+                                             {% csrf_token %}
+                                            <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_facebook object_or_url "<span style='color: green;'><i class='fab fa-facebook fa-2x' style='color: #3b5998;'></i></span>" %}
+                                            </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_twitter v.title object_or_url "<span style='color: green;'><i class='fab fa-twitter fa-2x' style='color: #55acee;'></i></span>" %}</button>
+                                                </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% send_email v.title v.detail  object_or_url "<span style='color: green;'><i class='fab fa-google fa-2x' style='color: #dd4b39;'></i></span>" %}</button>
+                                                </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_whatsapp  object_or_url "<span style='color: green;'><i class='fab fa-whatsapp fa-2x' style='color: #25d366;'></i></span>" %}</button>
+                                                </button>
+                                                <button type="button" class="btn btn-square btn m-2">
+                                                    {% post_to_telegram v.title object_or_url "<span style='color: green;'><i class='fab fa-telegram fa-2x' style='color: #095d9a;'></i></span>" %}</button>
+                                                </button>
+                                        </form>
+                                        </div>
+                                    </td>
+                                    <td>
+                                    <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
+                                        <i class="fa fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-end bg-black border-0 rounded-0 rounded-bottom m-0">
+                                        {% if user.is_authenticated %}
+                                            <button class="dropdown-item" type="button" id="report-button" value="{{ v.id }}" name="id_video">
+                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                            </button>
+                                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                            <script>
+                                                $(document).ready(function() {
+                                                $('#report-button').on('click', function() {
+                                                    var id_video = $(this).val();
+                                                    $.ajax({
+                                                        url: '{% url "report_video" %}',
+                                                        type: 'POST',
+                                                        data: {
+                                                            'id_video': id_video,
+                                                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                                                        },
+                                                        success: function(response) {
+                                                            alert('Merci d\'avoir signalé cette vidéo. Nous allons la vérifier dans les plus brefs délais.');
+                                                            $('.alert button').addClass('success-button');
+                                                        },
+                                                        error: function(xhr) {
+                                                            alert('Une erreur s\'est produite lors de la soumission de votre signalement.');
+                                                        }
+                                                    });
+                                                });
+                                            });
+
+                                                </script>
+                                        <form action="{% url 'save_video' v.pk %}" method="post">
+                                            {% csrf_token %}
+                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">À regarder</span>
+                                            </button>
+                                        </form>
+                                        {% else %}
+                                            <form action="{% url 'login' %}" method="post">
+                                             {% csrf_token %}
+                                                <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                    <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Signaler</span>
+                                                </button>
+                                            </form>
+                                            <form action="{% url 'login' %}" method="post">
+                                                {% csrf_token %}
+                                                <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
+                                                    <i class="fa fa-save me-3"></i><span class="align-middle text-black">Enregistrer</span>
+                                                </button>
+                                                </form>
+                                        {% endif %}
+                                    </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="">
+                            <div class="row">
+                                <table>
+                                    <tr>
+
+                                        <td style="text-align: right;padding-right: 10px" rowspan="2">
+                                            <a href="{% url 'chaine_profile' v.user.id %}">
+                                                <img id="img" width="48" src="{% if profil.photo %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" class="rounded-circle">
+                                            </a>
+                                        </td>
+                                        <td colspan="2">
+                                             <span style="color:white;">
+                                                <a href="{% url 'chaine_profile' v.user.id %}" class="text-white">
+                                                    <b style="color: #f8e9c2">{{ chaine.name }}</b>
+                                                </a>
+                                                  {% if don_par_user.total_payments <= 10 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% elif don_par_user.total_payments <= 15 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% elif don_par_user.total_payments <= 20 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% elif don_par_user.total_payments > 20 %}
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                  {% endif %}
+                                             </span>
+                                        </td>
+                                        <td style="text-align: center" rowspan="2">
+                                          {% if user.is_authenticated %}
+                                               {% if is_subscribed %}
+                                                    <button id="subscribe-btn" class="btn rounded-pill subscribe-btn" style="padding-top: 2px;padding-bottom: 2px;padding-right: 10px;padding-left: 10px;border: 2px solid #7f5a07 !important;">Abonné</button>
+                                                {% else %}
+                                                    <button id="subscribe-btn" class="btn rounded-pill subscribe-btn" style="padding-top: 2px;padding-bottom: 2px;padding-right: 10px;padding-left: 10px;border: 2px solid #7f5a07 !important;">S'abonner</button>
+                                                {% endif %}
+                                        {% else %}
+                                                <form action="{% url 'login' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                                                        <i class="fa fa-bell"></i>
+                                                        <span style="color: white">S'abonner</span>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                                <script>
+                                                $(document).ready(function() {
+                                                    var user_id = '{{ request.user.id }}';  // assuming you are using Django's authentication system
+                                                    var channel_id = '{{ chaine.id }}';   // assuming you have a variable named 'channel' in your template
+                                                    var button = $('#subscribe-btn');
+
+                                                    // Make an AJAX call to retrieve the subscription status
+                                                    $.ajax({
+                                                        url: '/subscription-status/',
+                                                        type: 'POST',
+                                                        data: {
+                                                            'user_id': user_id,
+                                                            'channel_id': channel_id,
+                                                            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                                        },
+                                                        dataType: 'json',
+                                                        success: function(data) {
+                                                            if (data.is_subscribed) {
+                                                                button.addClass('subscribed');
+                                                                button.text('Abonné');
+                                                            } else {
+                                                                button.removeClass('subscribed');
+                                                                button.text('Sabonner');
+                                                            }
+                                                        }
+                                                    });
+
+                                                    button.click(function() {
+                                                        if (button.hasClass('subscribed')) {
+                                                            $.ajax({
+                                                                url: '/unsubscribe/',
+                                                                type: 'POST',
+                                                                data: {
+                                                                    'user_id': user_id,
+                                                                    'channel_id': channel_id,
+                                                                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                                                },
+                                                                dataType: 'json',
+                                                                success: function(data) {
+                                                                    button.removeClass('subscribed');
+                                                                    button.text('Sabonner');
+                                                                    localStorage.setItem('subscribed', 'false');
+                                                                },
+                                                                error: function(xhr, textStatus, errorThrown) {
+                                                                    alert('Unsubscription failed: ' + errorThrown);
+                                                                }
+                                                            });
+                                                        } else {
+                                                            $.ajax({
+                                                                url: '/subscribe/',
+                                                                type: 'POST',
+                                                                data: {
+                                                                    'user_id': user_id,
+                                                                    'channel_id': channel_id,
+                                                                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                                                },
+                                                                dataType: 'json',
+                                                                success: function(data) {
+                                                                    button.addClass('subscribed');
+                                                                    button.text('Abonné');
+                                                                    localStorage.setItem('subscribed', 'true');
+                                                                },
+                                                                error: function(xhr, textStatus, errorThrown) {
+                                                                    alert('Subscription failed: ' + errorThrown);
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                });
+                                             </script>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <b id="subscriber-count" style="color:#f8e9c2;font-size: 13px;">{{ total_abonnés }} abonnés</b>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="col-sm-4 col-md-4 col-xl-1">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="text-center mb-4 mt-3">
+                                <script src="https://js.stripe.com/v3/"></script>
+                                    <form action="{% url 'proced_don' v.id %}" method="post">
+                                      {% csrf_token %}
+                                    <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
+                                    <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10">
+                                    <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
+                                    <p class="mb-3" style="position: absolute;right: 40px;">
+                                        <button id="stripe-button" type="submit" class="btn rounded-pill btn-outline-secondary" style="background-color: #B88E6D; color: white; font-size: small">
+                                            <strong>Suivant</strong>
+                                        </button>
+                                    </p>
+
+                                    </form>
+                                <script type="text/javascript">
+                                    var counter = 10;
+                                    function increment(){
+                                        counter = counter+5;
+                                        document.getElementById('don').value = counter;
+                                    }
+                                    function decrement(){
+                                        counter = counter-5;
+                                        if(counter<5){
+                                            counter=5;
+                                        }
+                                        document.getElementById('don').value = counter;
+                                    }
+                                </script>
+                            </div>
+
+                         </div>
+
+                        <div class="container mt-5" style="color: #b9b7b7">
+                            <p style="font-size: 13px">{{ v.detail }}
+                            </p>
+                        </div>
+                        </div>
+                      </div>
+                    <div class="col-sm-12 col-xl-12" style="margin-left: 5px">
+                        <div class="bg-secondary rounded h-100 mt-2">
+                        {% if v.link %}
+                            <ul class="nav nav-pills mb-3 pl-1" id="pills-tab" role="tablist">
+                                <li class="nav-item me-2" role="presentation">
+                                    <button class="nav-link rounded-pill active small" id="pills-home-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                                        aria-selected="true"
+                                            style="border: 1px solid rgb(140,90,13) !important;padding-top: 5px;padding-bottom: 5px; padding-right: 8px;padding-left: 8px"
+                                    >
+                                        <strong  style="font-size: 14px">Liens & documents</strong>
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation" >
+                                    <button class="nav-link rounded-pill small" id="pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile" type="button" role="tab"
+                                        aria-controls="pills-profile" aria-selected="false"
+                                        style="border: 1px solid rgb(140,90,13) !important;padding-top: 5px;padding-bottom: 5px; padding-right: 8px;padding-left: 8px"
+                                     >
+                                        <strong class="me-1"><span style="font-size: 14px" class="me-1">{{ comments }}</span>Commentaires</strong>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" >
+                                    <div class="col-sm-12 col-xl-12 mt-3">
+                                        <div class="bg-secondary rounded h-100 p-4">
+                                        <h6 class="border-bottom" style="color: #6e6a69">Liens Utiles</h6>
+                                            {% if v.link %}
+                                                <p style="color: #ffffff "><span><i class="fa fa-link me-3 text-white"></i></span>liens pour telecharger l'outils de tuto <a style="color: #B88E6D" href="{{ v.link }}">{{ v.link }}</a>.</p>
+                                                <hr>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-xl-12">
+                                        <div class="bg-secondary rounded h-100 p-4">
+                                        <h6 class="border-bottom" style="color: #6e6a69">documents</h6>
+                                            {% if v.documents %}
+                                                <p style="color: white  "><i class="fa fa-file me-3"></i> Lien : <a style="color:#B88E6D " href="{{ v.documents.url }}">Clicquer ici</a>.</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <section>
+                                      <div class="my-2 ">
+                                        <div class="row d-flex justify-content-center">
+                                          <div class="col-md-12 col-lg-12">
+                                            <div style="background-color: #191C24; font-size: small " class="card text-dark">
+
+                                                  <div class="card-body ">
+
+                                                  <form action="{% url 'commenter' v.id %}" method="post">
+                                                          {% csrf_token %}
+                                                          <div class="d-flex flex-start mb-3">
+                                                            <!--<img src="" width="40" height="40" class="rounded-circle shadow-1-strong me-3">-->
+                                                            <input name="video" type="hidden" value="{{ v.id }}">
+                                                            <input name="user" type="hidden" value="{{ user.id}}">
+                                                            <input name="sujet" type="hidden" value="{{ c.name }}">
+                                                              <form>
+                                                                <input name="commentaire" type="text" class="form-control" placeholder="Entrez votre commentaire..."
+                                                                style="  width: 100%;padding: 10px;font-size: 16px;border: none;border-radius: 5px 0 0 5px;">
+                                                                  <button class="btn btn-outline-secondary" type="submit" style=" width: 10%;padding: 10px;background-color: #000000;color: #fff;border: none;border-radius: 0 5px 5px 0;cursor: pointer;transition: all 0.3s ease;">
+                                                                      <i class="fa fa-paper-plane"></i>
+                                                                  </button>
+                                                                </form>
+                                                              <!--<button class="btn btn-outline-secondary" style="background: #533f03; color: white"  type="submit"><i class="fa fa-arrow-right"></i></button>
+                                                            <input style="background: #533f03; color: white" type="submit" value="Commenter" class="btn rounded-pill btn-outline-secondary">-->
+                                                          </div>
+                                                      </form>
+                                                      {% for c in comm %}
+                                                        {% if c.video.id == v.id %}
+                                                        <div style="color: #b9b7b7" class="d-flex flex-start">
+                                                          <img class="rounded-circle shadow-1-strong me-3"
+                                                            src="{% if profil.photo %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="avatar" width="40"
+                                                            height="40" />
+                                                          <div class="comment">
+                                                            <span class="fw-bold mt-0"><strong style="color:#fff;">
+                                                              {{ c.user.username }}</strong>
+                                                              {% if don_par_user.total_payments <= 10 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% elif don_par_user.total_payments <= 15 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% elif don_par_user.total_payments <= 20 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% elif don_par_user.total_payments > 20 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% endif %}
+
+                                                            <button class="btn btn-secondary toggle-replies" style="font-size: 12px;background-color: transparent;border: transparent"
+                                                            data-reply-count="{{ c.children.count }}">Réponses ({{ c.children.count }})</button>
+
+                                                              <div class="mt-0" style="font-size: 10px">{{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}</div>
+
+                                                            </span>
+
+                                                            <div class="d-flex align-items-center mt-0 mb-0">
+                                                              <!-- <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>-->
+                                                            </div>
+                                                            <span style="color: #fdecdd;font-size: 14px;" class="mb-0">
+                                                              {{ c.contenue }}
+                                                            </span>
+                                                            <!-- Add the 3 dots button here -->
+                                                           <button type="button" class="btn btn-link text-muted comment-options-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                  <i class="fas fa-ellipsis-v"></i>
+                                                                </button>
+                                                                <!-- add the dropdown menu -->
+                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-options-button-{{ c.id }}">
+                                                                  {% if request.user.id == c.user.id %}<li><a class="dropdown-item delete-comment-button" data-comment-id="{{ c.id }}" href="#">Suprimer</a></li>{% endif %}
+                                                                  <li><a class="dropdown-item report-comment-button" data-comment-id="{{ c.id }}" href="#">Signaler</a></li>
+                                                                </ul>
+{% if c.children.count > 0 %}
+<div class="replies-container" style="display: none;">
+  {% for reply in c.children.all %}
+  <div class="reply">
+    <div class="reply-info">
+      <span class="reply-user">{{ reply.user.username }}</span>
+      <span class="reply-date">{{ reply.date_added }}</span>
+    </div>
+    <div class="reply-content">{{ reply.contenue }}</div>
+  </div>
+  {% endfor %}
+<!-- Add reply section -->
+    <div class="reply-section mt-3" style="width: 100%">
+                                                                      <form method="POST" class="reply-form" action="{% url 'reply_comment' c.id %}">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="comment_id" value="{{ c.id }}">
+                                                                        <div class="input-group mb-3" style="width: 100%">
+                                                                          <input class="form-control" id="reply-{{ c.id }}" name="reply_text">
+                                                                          <div class="input-group-append">
+                                                                            <button type="submit" class="btn btn-dark"><i class="fa fa-paper-plane"></i></button>
+                                                                          </div>
+                                                                        </div>
+                                                                      </form>
+                                                                    </div>
+</div>
+
+{% endif %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var toggleRepliesButtons = document.querySelectorAll(".toggle-replies");
+
+    toggleRepliesButtons.forEach(function(button) {
+      var replyCount = button.getAttribute("data-reply-count");
+      var repliesVisible = false;
+      var commentElement = button.closest(".comment");
+      var repliesContainer = commentElement.querySelector(".replies-container");
+
+      if (replyCount == 0) {
+        button.style.display = "none";
+      }
+
+      button.addEventListener("click", function() {
+        if (repliesVisible) {
+          repliesContainer.style.display = "none";
+          button.innerText = "Afficher les réponses(" + replyCount + ")";
+          repliesVisible = false;
+        } else {
+          repliesContainer.style.display = "block";
+          button.innerText = "Masquer les réponses";
+          repliesVisible = true;
+        }
+      });
+    });
+  });
+</script>
+
+                                                          <script>
+                                                              $(document).ready(function() {
+                                                                // Delete comment when delete button is clicked
+                                                                $('.delete-comment-button').click(function(event) {
+                                                                    var commentId = $(this).data('comment-id');
+                                                                    $.ajax({
+                                                                        url: '/delete_comment/' + commentId + '/',
+                                                                        type: 'POST',
+                                                                        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+                                                                        success: function(response) {
+                                                                            if (response.success) {
+                                                                                // If delete was successful, remove comment from DOM
+                                                                                $('#comment-' + commentId).remove();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+
+                                                                // Report comment when report button is clicked
+                                                                $('.report-comment-button').click(function(event) {
+                                                                    var commentId = $(this).data('comment-id');
+                                                                    $.ajax({
+                                                                        url: '/report_comment/' + commentId + '/',
+                                                                        type: 'POST',
+                                                                        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+                                                                        success: function(response) {
+                                                                            if (response.success) {
+                                                                                alert('Comment reported successfully.');
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+                                                                 // Reply to comment when reply form is submitted
+                                                                $(document).ready(function() {
+                                                                    $('.reply-form').submit(function(event) {
+                                                                        event.preventDefault();
+                                                                        var form = $(this);
+                                                                        var url = form.attr('action');
+                                                                        var formData = form.serialize();
+                                                                        $.ajax({
+                                                                            url: url,
+                                                                            type: 'POST',
+                                                                            data: formData,
+                                                                            success: function(response) {
+                                                                                if (response.success) {
+                                                                                    var replyList = form.closest('.comment').find('.reply-list');
+                                                                                    replyList.append(response.html);
+                                                                                    var newForm = replyList.children().last().find('.reply-form');
+                                                                                    bindReplyForm(newForm);
+                                                                                    form[0].reset();
+                                                                                }
+                                                                            }
+
+                                                                        });
+                                                                    });
+                                                                });
+
+                                                            });
+                                                              function bindReplyForm(form) {
+                                                                form.submit(function(event) {
+                                                                    event.preventDefault();
+                                                                    var url = form.attr('action');
+                                                                    var formData = form.serialize();
+                                                                    $.ajax({
+                                                                        url: url,
+                                                                        type: 'POST',
+                                                                        data: formData,
+                                                                        success: function(response) {
+                                                                            if (response.success) {
+                                                                                var replyList = form.closest('.comment').find('.reply-list');
+                                                                                replyList.append(response.html);
+                                                                                var newForm = replyList.children().last().find('.reply-form');
+                                                                                bindReplyForm(newForm);
+                                                                                form[0].reset();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+                                                            }
+
+                                                          </script>
+                                                        </div>
+                                                        </div>
+
+                                                              <div class="like-section">
+                                                                <button class="like-button{% if request.user.is_authenticated and request.user in c.n_likes.all %} liked{% endif %}"
+                                                                        data-comment-id="{{ c.id }}">
+                                                                    <i class="fa fa-heart"></i>
+                                                                </button>
+                                                                <span id="like_count_{{ c.id }}" class="like-count">{{ c.n_likes.count }}</span>
+                                                            </div>
+                                                            <script>
+const likeButtons = document.querySelectorAll('.like-button');
+const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+likeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const commentId = button.dataset.commentId;
+        console.log(`Clicked like button for comment ${commentId}`);
+        const liked = button.classList.contains('liked');
+        const likeCount = document.querySelector(`#like_count_${commentId}`);
+
+        fetch(`/like/comment/${commentId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                liked: !liked
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            likeCount.innerText = data.likes;
+
+            if (liked) {
+                button.classList.remove('liked');
+            } else {
+                button.classList.add('liked');
+            }
+        })
+        .catch(error => console.error(error));
+    });
+});
+
+</script>
+                                                            <hr style="color:#b9b7b7;" class="mb-3">
+                                                          {% endif %}
+                                                      {% endfor %}
+                                                  </div>
+                                                  <hr class="mt-0" />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </section>
+                                </div>
+                            </div>
+                        {% else %}
+                            <ul class="nav nav-pills mb-1 pl-1" id="pills-tab" role="tablist">
+                                <li class="nav-item" role="presentation" >
+                                    <button class="nav-link rounded-pill active small" id="pills-profile-tab" data-bs-toggle="pill"
+                                        data-bs-target="#pills-profile" type="button" role="tab"
+                                        aria-controls="pills-profile" aria-selected="false"
+                                     >
+                                        <strong class="me-1"><span style="font-size: 12px" class="me-1">{{ comments }}</span>Commentaires</strong>
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="pills-tabContent">
+                                <div class="tab-pane fade show active" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                                    <section>
+                                      <div class="my-2 ">
+                                        <div class="row d-flex justify-content-center">
+                                          <div class="col-md-12 col-lg-12">
+                                            <div style="background-color: #191C24; font-size: small " class="card text-dark">
+
+                                                  <div class="card-body p-4">
+
+                                                  <form action="{% url 'commenter' v.id %}" method="post">
+                                                          {% csrf_token %}
+                                                          <div class="d-flex flex-start mb-4">
+                                                            <!--<img src="{% if profil.photo %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" width="40" height="40" class="rounded-circle shadow-1-strong me-3">-->
+                                                            <input name="video" type="hidden" value="{{ v.id }}">
+                                                            <input name="user" type="hidden" value="{{ user.id}}">
+                                                            <input name="sujet" type="hidden" value="{{ c.name }}">
+                                                              <form>
+                                                                <input name="commentaire" type="text" class="form-control" placeholder="Entrez votre commentaire..."
+                                                                style="  width: 100%;padding: 10px;font-size: 16px;border: none;border-radius: 5px 0 0 5px;">
+                                                                  <button class="btn btn-outline-secondary" type="submit" style=" width: 10%;padding: 10px;background-color: #000000;color: #fff;border: none;border-radius: 0 5px 5px 0;cursor: pointer;transition: all 0.3s ease;">
+                                                                      <i class="fa fa-arrow-right"></i>
+                                                                  </button>
+                                                                </form>
+                                                              <!--<button class="btn btn-outline-secondary" style="background: #533f03; color: white"  type="submit"><i class="fa fa-arrow-right"></i></button>
+                                                            <input style="background: #533f03; color: white" type="submit" value="Commenter" class="btn rounded-pill btn-outline-secondary">-->
+                                                          </div>
+                                                      </form>
+                                                      {% for c in comm %}
+                                                        {% if c.video.id == v.id %}
+                                                        <div style="color: #b9b7b7" class="d-flex flex-start">
+                                                          <img class="rounded-circle shadow-1-strong me-3"
+                                                            src="{% if profil.photo %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="avatar" width="40"
+                                                            height="40" />
+                                                          <div class="comment">
+                                                            <span class="fw-bold mt-0"><strong style="color:#fff;">
+                                                              {{ c.user.username }}</strong>
+                                                              {% if don_par_user.total_payments <= 10 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% elif don_par_user.total_payments <= 15 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% elif don_par_user.total_payments <= 20 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% elif don_par_user.total_payments > 20 %}
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                                <i class="fas fa-gem" style="color: #d39e00"></i>
+                                                              {% endif %}
+
+                                                            <button class="btn btn-secondary toggle-replies" style="font-size: 12px;background-color: transparent;border: transparent"
+                                                            data-reply-count="{{ c.children.count }}">réponses ({{ c.children.count }})</button>
+
+                                                              <div class="mt-0" style="font-size: 10px">{{ c.date_added | date:"d/m/Y" }}|{{ c.date_added|time:"H:i:s" }}</div>
+
+                                                            </span>
+
+                                                            <div class="d-flex align-items-center mt-0 mb-0">
+                                                              <!-- <a href="#!" class="link-muted"><i class="bx bx-heart ms-2"></i></a>-->
+                                                            </div>
+                                                            <span style="color: #fdecdd;font-size: 14px;" class="mb-0">
+                                                              {{ c.contenue }}
+                                                            </span>
+                                                            <!-- Add the 3 dots button here -->
+                                                           <button type="button" class="btn btn-link text-muted comment-options-button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                  <i class="fas fa-ellipsis-v"></i>
+                                                                </button>
+                                                                <!-- add the dropdown menu -->
+                                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="comment-options-button-{{ c.id }}">
+                                                                  {% if request.user.id == c.user.id %}<li><a class="dropdown-item delete-comment-button" data-comment-id="{{ c.id }}" href="#">Suprimer</a></li>{% endif %}
+                                                                  <li><a class="dropdown-item report-comment-button" data-comment-id="{{ c.id }}" href="#">Signaler</a></li>
+                                                                </ul>
+{% if c.children.count > 0 %}
+<div class="replies-container" style="display: none;">
+  {% for reply in c.children.all %}
+  <div class="reply">
+    <div class="reply-info">
+      <span class="reply-user">{{ reply.user.username }}</span>
+      <span class="reply-date">{{ reply.date_added }}</span>
+    </div>
+    <div class="reply-content">{{ reply.contenue }}</div>
+  </div>
+  {% endfor %}
+<!-- Add reply section -->
+    <div class="reply-section mt-3" style="width: 100%">
+                                                                      <form method="POST" class="reply-form" action="{% url 'reply_comment' c.id %}">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="comment_id" value="{{ c.id }}">
+                                                                        <div class="input-group mb-3" style="width: 100%">
+                                                                          <input class="form-control" id="reply-{{ c.id }}" name="reply_text">
+                                                                          <div class="input-group-append">
+                                                                            <button type="submit" class="btn btn-dark"><i class="fa fa-paper-plane"></i></button>
+                                                                          </div>
+                                                                        </div>
+                                                                      </form>
+                                                                    </div>
+</div>
+
+{% endif %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var toggleRepliesButtons = document.querySelectorAll(".toggle-replies");
+
+    toggleRepliesButtons.forEach(function(button) {
+      var replyCount = button.getAttribute("data-reply-count");
+      var repliesVisible = false;
+      var commentElement = button.closest(".comment");
+      var repliesContainer = commentElement.querySelector(".replies-container");
+
+      if (replyCount == 0) {
+        button.style.display = "none";
+      }
+
+      button.addEventListener("click", function() {
+        if (repliesVisible) {
+          repliesContainer.style.display = "none";
+          button.innerText = "Afficher les réponses(" + replyCount + ")";
+          repliesVisible = false;
+        } else {
+          repliesContainer.style.display = "block";
+          button.innerText = "Masquer les réponses";
+          repliesVisible = true;
+        }
+      });
+    });
+  });
+</script>
+
+                                                          <script>
+                                                              $(document).ready(function() {
+                                                                // Delete comment when delete button is clicked
+                                                                $('.delete-comment-button').click(function(event) {
+                                                                    var commentId = $(this).data('comment-id');
+                                                                    $.ajax({
+                                                                        url: '/delete_comment/' + commentId + '/',
+                                                                        type: 'POST',
+                                                                        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+                                                                        success: function(response) {
+                                                                            if (response.success) {
+                                                                                // If delete was successful, remove comment from DOM
+                                                                                $('#comment-' + commentId).remove();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+
+                                                                // Report comment when report button is clicked
+                                                                $('.report-comment-button').click(function(event) {
+                                                                    var commentId = $(this).data('comment-id');
+                                                                    $.ajax({
+                                                                        url: '/report_comment/' + commentId + '/',
+                                                                        type: 'POST',
+                                                                        data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+                                                                        success: function(response) {
+                                                                            if (response.success) {
+                                                                                alert('Comment reported successfully.');
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+                                                                 // Reply to comment when reply form is submitted
+                                                                $(document).ready(function() {
+                                                                    $('.reply-form').submit(function(event) {
+                                                                        event.preventDefault();
+                                                                        var form = $(this);
+                                                                        var url = form.attr('action');
+                                                                        var formData = form.serialize();
+                                                                        $.ajax({
+                                                                            url: url,
+                                                                            type: 'POST',
+                                                                            data: formData,
+                                                                            success: function(response) {
+                                                                                if (response.success) {
+                                                                                    var replyList = form.closest('.comment').find('.reply-list');
+                                                                                    replyList.append(response.html);
+                                                                                    var newForm = replyList.children().last().find('.reply-form');
+                                                                                    bindReplyForm(newForm);
+                                                                                    form[0].reset();
+                                                                                }
+                                                                            }
+
+                                                                        });
+                                                                    });
+                                                                });
+
+                                                            });
+                                                              function bindReplyForm(form) {
+                                                                form.submit(function(event) {
+                                                                    event.preventDefault();
+                                                                    var url = form.attr('action');
+                                                                    var formData = form.serialize();
+                                                                    $.ajax({
+                                                                        url: url,
+                                                                        type: 'POST',
+                                                                        data: formData,
+                                                                        success: function(response) {
+                                                                            if (response.success) {
+                                                                                var replyList = form.closest('.comment').find('.reply-list');
+                                                                                replyList.append(response.html);
+                                                                                var newForm = replyList.children().last().find('.reply-form');
+                                                                                bindReplyForm(newForm);
+                                                                                form[0].reset();
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+                                                            }
+
+                                                          </script>
+                                                        </div>
+                                                        </div>
+
+                                                             <div class="like-section">
+            <button class="like-button comment-{{ c.id }}{% if request.user.is_authenticated and request.user in c.n_likes.all %} liked{% endif %}" data-comment-id="{{ c.id }}">
+                <i class="fa fa-heart"></i>
+            </button>
+            <span id="like_count_{{ c.id }}" class="like-count">{{ c.n_likes.count }}</span>
+        </div>
+<script>
+    const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+    // Select all the like buttons for each comment
+    const likeButtons = document.querySelectorAll('.like-button');
+
+    likeButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const commentId = button.dataset.commentId;
+            console.log(`Clicked like button for comment ${commentId}`);
+
+            // Get the like count and whether the comment is already liked
+            const likeCount = document.querySelector(`#like_count_${commentId}`);
+            const liked = button.classList.contains('liked');
+
+            // Send a POST request to the server to update the like status
+            fetch(`/like/comment/${commentId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    liked: !liked
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update the like count and button class based on the server response
+                likeCount.innerText = data.likes;
+
+                if (liked) {
+                    button.classList.remove('liked');
+                } else {
+                    button.classList.add('liked');
+                }
+            })
+            .catch(error => console.error(error));
+        });
+    });
+</script>
+                                                            <hr style="color:#b9b7b7;" class="mb-3">
+                                                          {% endif %}
+                                                      {% endfor %}
+                                                  </div>
+                                                  <hr class="my-0" />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </section>
+                                </div>
+                            </div>
+                        {% endif %}
+                        </div>
+                    </div>
+                        <!-- commentaires -->
+
+                    </div>
+
+                </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+            </div>
+            <div id="droit" class="col-sm-12 col-md-12 col-xl-4">
+                <div class="h-100 bg-dark rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">{{ playlist.nom_playlist }}</h6>
+                        <a style="color: #B88E6D" href="{% url 'machaine' %}">Toutes les playlists</a>
+                    </div>
+                    <div>
+                    {% for v in rest_videos %}
+                    <div class="col-sm-12 col-xl-12">
+                        <div class="rounded d-flex align-items-center justify-content-between h-100">
+                            <div style="background-color: #191C24; " class="card h-100">
+                             <a href="{% url 'video' v.id %}?video={{ v.vid.url }}">
+
+                                <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
+                                    <source src="{{ v.vid.url }}#t={{ history.time_paused }}" type="video/mp4" />
+                                </video>
+
+                                <!--<form method="post">
+                                  {% csrf_token %}
+                                  <input type="submit" value="Pause">
+                                </form>-->
+
+                                <script>
+                                  var video = document.getElementById("video");
+                                  var form = document.querySelector("form");
+
+                                  form.addEventListener("submit", function(event) {
+                                    event.preventDefault();
+                                    var time_paused = video.currentTime;
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open("POST", ".");
+                                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                    xhr.send("time_paused=" + time_paused);
+                                  });
+                                </script>
+
+                            </a>
+                            <div class="row justify-content-between ">
+                                <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-1">
+                                    <a href="{% url 'video' v.id %}" class="text-white" style="font-size: 13px;overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
+                                </div>
+                            </div>
+                            <span>
+                                <div style="margin-left: 0.1rem" class="row">
+                                <div class="col-2 mt-2">
+                                    {% if v.miniature %}
+                                    <div class="">
+
+                                        <img id="img" width="35" src="{% if profil.photo %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" class="rounded-circle">
+
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-10">
+                                    <span style="color:#A77443;">
+                                        {{ v.user.username }} <i class="fas fa-check-circle"></i><br>
+                                        <small>{{ v.views }} vues  {{ v.date_created.date|date:"d/m/Y" }}</small>
+                                    </span>
+                                </div>
+                            </div>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                        <hr>
+                    {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+{% include 'footer.html' %}

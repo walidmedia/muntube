@@ -1,13 +1,50 @@
-{% extends 'base.html' %}
+{% load static %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+{% include 'base.html' %}
 
 {% block content %}
-<div class="container-fluid pt-4 px-4">
-    <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
-        <h3 style="color:#fdf1ce;">Ma chaine</h3>
-        <div class="col-md-6 text-center">
-            <a href="{% url 'connect_stripe' %}">Connect with Stripe</a>
-        </div>
-    </div>
+<div class="container-fluid col-md-10 bg-secondary p-3 mt-2">
+  <h1>Connectez-vous avec Stripe</h1>
+{% if messages %}
+  <span class="messages">
+    {% for message in messages %}
+      <span style="background-color: #533f03;color: white" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {{ message }}
+      </span>
+    {% endfor %}
+  </span>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      setTimeout(function() {
+        $('.messages').fadeOut('slow');
+      }, 4000); // 4000 milliseconds = 4 seconds
+    });
+  </script>
+{% endif %}
+
+  <p class="text-muted">
+    Afin d'accepter les paiements en votre nom, nous devons nous connecter à votre compte Stripe. Veuillez cliquer sur le bouton ci-dessous pour commencer le processus de connexion.
+  </p>
+<form action="{% url 'stripe_info' %}" method="post">
+  {% csrf_token %}
+  <label class="text-muted" for="stripe_account_id">ID de compte Stripe :</label>
+  <input class="form-control" style="background-color: black" type="text" name="stripe_account_id" id="stripe_account_id" value="{{ stripe_info.stripe_account_id }}">
+
+  <label class="text-muted" for="stripe_account_holder_name">Nom du titulaire du compte:</label>
+  <input class="form-control" type="text" name="stripe_account_holder_name" id="stripe_account_holder_name" {% if stripe_info.stripe_account_holder_name %} value="{{ stripe_info.stripe_account_holder_name }}" {% else %}value=""{% endif %}>
+
+  <label class="text-muted" for="stripe_account_number">Numéro de compte :</label>
+  <input class="form-control" type="text" name="stripe_account_number" id="stripe_account_number" {% if stripe_info.stripe_account_number %} value="{{ stripe_info.stripe_account_number }}" {% else %}value=""{% endif %}>
+
+  <label class="text-muted" for="stripe_routing_number">Numéro de routage :</label>
+  <input class="form-control mb-3" type="text" name="stripe_routing_number" id="stripe_routing_number" {% if stripe_info.stripe_routing_number %} value="{{ stripe_info.stripe_routing_number }}" {% else %}value=""{% endif %}>
+
+  <button class="form-control" style="background-color: #533f03;color: white" type="submit" class="text-muted">Enregistrer</button>
+</form>
+
 </div>
 
+
 {% endblock %}
+{% include 'footer.html' %}

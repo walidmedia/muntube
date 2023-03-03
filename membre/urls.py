@@ -7,7 +7,11 @@ from .views import checkout, upload, success_upload, addvideo, mesvideos, checko
         vidéosjaime, bibliothèque, a_regarder, chaine, AddPlaylist, maintenance, checkout_sess_don, checkout_don, \
         charge, mescommentaires, like_comment, view_history, success, proced_don, payment, \
         display_notification, mesnotifications, search, channel_muntube, chart_data, like_video, subscribe, mesdons, \
-        soutenir, soutien, connect_stripe, get_stripe_account_id, get_stripe_access_token, newvideo, chaine_profile
+        soutenir, soutien, newvideo, chaine_profile, \
+        update_user, updatevideo, confirmupdatevideo, delete_video, revendiquer, unsubscribe, subscription_status, \
+        delete_comment, report_comment, report_video, reply_comment, increment_videos_watched_count, progress_view, \
+        get_playlist_videos, update_channel, publier_info_gene, stripe_connect, stripe_redirect,  \
+        add_stripe, stripe_info
 
 urlpatterns = [
         #path('pricing/', pricing, name='pricing'),
@@ -24,13 +28,18 @@ urlpatterns = [
         path('pay_success', pay_success, name='pay_success'),
         path('success', success, name='success'),
         path('pay_cancel', pay_cancel, name='pay_cancel'),
-        path('video/<int:id>', video, name='video'),
+        path('video/<int:id>/', video, name='video'),
         path('commenter/<int:id>', commenter, name='commenter'),
         path('video/<int:video_id>/like/', like_video, name='like_video'),
-        path('like_comment/<int:comment_id>/', like_comment, name='like_comment'),
-        path('subscribe/', subscribe, name='subscribe'),
+        #path('like_comment/<int:comment_id>/', like_comment, name='like_comment'),
+        path('like/comment/<int:comment_id>/', like_comment, name='like_comment'),
+        path('delete_comment/<int:comment_id>/', delete_comment, name='delete_comment'),
+        path('report_comment/<int:comment_id>/', report_comment, name='report_comment'),
+        path('report-video/', report_video, name='report_video'),
+        path('reply_comment/<int:comment_id>/', reply_comment, name='reply_comment'),
+
         path('save_video/<int:pk>', save_video, name='save_video'),
-        path('monprofile/<int:id>', monprofile, name='monprofile'),
+        path('monprofile/<int:user_id>', monprofile, name='monprofile'),
         path('vidéosjaime/', vidéosjaime, name='vidéosjaime'),
         path('bibliothèque/', bibliothèque, name='bibliothèque'),
         path('a_regarder/', a_regarder, name='a_regarder'),
@@ -53,10 +62,25 @@ urlpatterns = [
         path('mesdons/', mesdons, name='mesdons'),
         path('soutenir/', soutenir, name='soutenir'),
         path('soutien/', soutien, name='soutien'),
-        path('connect_stripe/', connect_stripe, name='connect_stripe'),
-        path('get_stripe_account_id/', get_stripe_account_id, name='get_stripe_account_id'),
-        path('get_stripe_access_token/', get_stripe_access_token, name='get_stripe_access_token'),
         path('newvideo/', newvideo, name='newvideo'),
         path('chaine/<int:chaine_id>/', chaine_profile, name='chaine_profile'),
+        path('update_user/<int:user_id>/', update_user, name='update_user'),
+        path('updatevideo/<int:video_id>/', updatevideo, name='updatevideo'),
+        path('confirmupdatevideo/<int:video_id>/', confirmupdatevideo, name='confirmupdatevideo'),
+        path('delete/<int:video_id>/', delete_video, name='delete_video'),
+        path('revendiquer/', revendiquer, name='revendiquer'),
+        path('subscribe/', subscribe, name='subscribe'),
+        path('unsubscribe/', unsubscribe, name='v'),
+        path('subscription-status/<int:channel_id>/', subscription_status, name='subscription_status'),
+        path('increment_videos_watched_count/', increment_videos_watched_count,
+             name='increment_videos_watched_count'),
+        path('progress/', progress_view, name='progress_view'),
+        path('get_playlist_videos/<int:playlist_id>/', get_playlist_videos, name='get_playlist_videos'),
+        path('channel/update/', update_channel, name='update_channel'),
+        path('publier_infos/', publier_info_gene, name='publier_info_gene'),
+        path("connect/", stripe_connect, name="stripe_connect"),
+        path("add_stripe/", add_stripe, name="add_stripe"),
+        path("redirect/", stripe_redirect, name="stripe_redirect"),
+        path("stripe_info/", stripe_info, name="stripe_info"),
 
 ]

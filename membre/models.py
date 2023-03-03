@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django.urls import reverse
 from moviepy.video.io.VideoFileClip import VideoFileClip
 
@@ -29,32 +31,41 @@ class Channel(models.Model):
     def get_absolute_url(self):
         return reverse('chaine_profile', args=[str(self.id)])
 
-
 class Subscription_channel(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscription_channel')
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     subscribed_at = models.DateTimeField(auto_now_add=True)
+    is_subscribed = models.BooleanField(default=False)
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
 
 class Video(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    title = models.CharField(max_length=255, db_index=True)
+    title = models.CharField(max_length=512, db_index=True)
     detail = models.TextField()
     vid = models.FileField(blank=True, upload_to='videos')
-    miniature = models.ImageField(null=True, blank=True, upload_to='imagevid')
+    miniature = models.ImageField(null=True, blank=True, upload_to='imagevid',default="/static/images/Playlist non classée.svg")
     n_likes = models.ManyToManyField(User, related_name='likes', blank=True)
     likes = models.PositiveIntegerField(default=0)
     n_comments = models.ManyToManyField(User, related_name='comments', blank=True)
     views = models.IntegerField(default=0)
-    play_lists = models.ForeignKey(playlist, on_delete=models.CASCADE, null=True, blank=True, default='NonClassifié')
-    categorie = models.CharField(max_length=150, blank=True, default=False)
-    tags = models.CharField(max_length=150, blank=True, default=False)
+    play_lists = models.ForeignKey(playlist, on_delete=models.CASCADE, null=True, blank=True, default=False)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
+    tags = models.CharField(max_length=512, blank=True, default=False)
     status_video = models.IntegerField(null=True, blank=True, default=0)
     # abonnements=models.ManyToManyField(User, related_name='abonnements', null=True, blank=True)
     link = models.TextField(null=True, blank=True)
     documents = models.FileField(upload_to='filesvideo', null=True, blank=True)
     date_created = models.DateTimeField(default=datetime.today)
     view_count = models.IntegerField(default=0)
+    contenue_18 = models.BooleanField(default=False)
+    signal = models.BooleanField(default=False)
 
     """def view_count_total(self):
 		self.view_count += 1
@@ -82,14 +93,34 @@ class Video(models.Model):
         return self.views_set.first().views
 
         def image_tag(self):
-            return mark_safe('<img src="%s" width="80" />' % (self.miniature.url))
+            if self.miniature:
+                return mark_safe('<img src="%s" width="80" />' % (self.miniature.url))
+            else:
+                try:
+                    clip = VideoFileClip(self.vid.path)
+                    thumbnail_path = f"{self.vid.path}.jpg"
+                    clip.save_frame(thumbnail_path, t=1)
+                    return mark_safe('<img src="%s" width="80" />' % (thumbnail_path))
+                except:
+                    return None
 
+class Report_video(models.Model):
+    video = models.ForeignKey(Video, on_delete=models.CASCADE)
+    reporter = models.ForeignKey(User, on_delete=models.CASCADE)
+    reason = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def is_liked(self, user, video):
+        try:
+            like = Like.objects.get(user=user, video=video)
+            return True
+        except Like.DoesNotExist:
+            return False
 
 class VideoHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -108,6 +139,15 @@ class Don(models.Model):
     def __str__(self):
         return '%s - %s' % (self.user_don.username, self.cout_don)
 
+class Reclamations_Don(models.Model):
+    user_don = models.ForeignKey(User, on_delete=models.CASCADE, related_name='donneur_rec', null=True, blank=True)
+    to_user_don = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receveur_rec', null=True, blank=True)
+    video = models.ForeignKey(Video, on_delete=models.CASCADE, null=True, blank=True)
+    cout_don = models.IntegerField(default=10)
+    date_don = models.DateTimeField(default=datetime.today)
+
+    def __str__(self):
+        return '%s - %s' % (self.user_don.username, self.cout_don)
 
 class Notification(models.Model):
     recipient = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -121,18 +161,23 @@ class comment(models.Model):
     video = models.ForeignKey(Video, related_name='comments', on_delete=models.CASCADE, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=256)
-    #
     contenue = models.TextField()
     date_added = models.DateTimeField(default=datetime.today)
     n_likes = models.ManyToManyField(User, related_name='likes_comments', blank=True)
     likes = models.PositiveIntegerField(default=0)
     parent = models.ForeignKey('self', null=True, blank=True, related_name='children', on_delete=models.CASCADE)
 
-    def __str__(self):
-        return '%s - %s' % (self.video.title, self.name)
+    """def __str__(self):
+        return '%s - %s' % (self.video.title, self.name)"""
 
     def total_likes(self):
         return self.n_likes.count()
+
+class Report_comment(models.Model):
+    commentt = models.ForeignKey(comment, on_delete=models.CASCADE)
+    contenue = models.TextField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_reported = models.DateTimeField(auto_now_add=True)
 
 
 class Like_comment(models.Model):
@@ -441,3 +486,17 @@ class soutien(models.Model):
     donneur = models.ForeignKey(User, on_delete=models.CASCADE, related_name='donneur_soutien', null=True, blank=True)
     amount = models.IntegerField(default=10)
     date_don = models.DateTimeField(default=datetime.today)
+
+class revendication(models.Model):
+    pseudonyme = models.CharField(max_length=255)
+    prenom = models.CharField(max_length=255)
+    nom = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255)
+    date = models.DateField()
+    pays = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=20)
+    message = models.TextField()
+    date_created = models.DateTimeField(default=datetime.today)
+
+    def __str__(self):
+        return self.pseudonyme

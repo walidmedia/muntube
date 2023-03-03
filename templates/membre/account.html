@@ -1,15 +1,42 @@
 {% load static %}
-
-{% block content %}
 {% include 'base.html' %}
+<style>
+.question_mark {
+    position: relative;
+    display: inline-block;
+}
+
+.question_mark .popup {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    top: -10px;
+    left: 30px;
+    width: 200px;
+    background-color: #fff;
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    padding-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.question_mark:hover .popup {
+    visibility: visible;
+}
+
+</style>
+{% block content %}
+
 
   <div class="content-wrapper bg-dark">
     <!-- Content -->
 
     <div class="bg-dark text-white container-xxl flex-grow-1 container-p-y">
         <div class="row bg-dark">
-            {% for info in profil %}
-                {% if info.id == user.id %}
+                {% if profil.id == user.id %}
                 <div class="col-md-12 ">
                   <div class="card bg-dark mb-4">
                     <h5 class="card bg-dark">Détails du profil</h5>
@@ -17,82 +44,46 @@
 
                     <hr class="my-0" />
                     <div class="card bg-dark">
-                      <form id="formAccountSettings" method="POST" action="{% url 'update_user' request.user.id %}">
+                      <form id="formAccountSettings" method="POST" action="{% url 'update_user' user.id %}" enctype="multipart/form-data">
+                      {% csrf_token %}
                       <input hidden name="id_user" value="{{ user.id }}">
                         <div class="card-body bg-dark">
-                      <div class="d-flex align-items-start align-items-sm-center gap-4">
-                        {% if v.user.is_superuser %}
-                        <img
-                          src="{{ user.photo.url }}"
-                          alt="user-avatar"
-                          class="d-block rounded"
-                          height="100"
-                          width="100"
-                          id="uploadedAvatar"
-                        />
-                        {% else %}
-                            {% if info.photo %}
-                            <img
-                          src="{{ info.photo }}"
-                          alt="user-avatar"
-                          class="d-block rounded"
-                          height="100"
-                          width="100"
-                          id="uploadedAvatar"
-                        />
-                                {% else %}
-                                <img
-                          src="{{ info.photo.url }}"
-                          alt="user-avatar"
-                          class="d-block rounded"
-                          height="100"
-                          width="100"
-                          id="uploadedAvatar"
-                        />
-                                {% endif %}
-                        {% endif %}
-                        <div class="button-wrapper">
-                          <label for="upload" class="btn btn-secondary me-2 mb-4" tabindex="0">
-                            <span class="d-none d-sm-block">Télécharger une nouvelle photo</span>
-                            <i class="bx bx-upload d-block d-sm-none"></i>
-                            <input
-                                    name="img"
-                              type="file"
-                              id="upload"
-                              class="account-file-input"
-                              hidden
-                              accept="image/png, image/jpeg"
-                            />
-                          </label>
-                          <!--<button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                            <i class="bx bx-reset d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Reset</span>
-                          </button>-->
+                          <div class="d-flex align-items-start align-items-sm-center gap-4">
 
-                          <p class="text-muted mb-0">JPG, GIF ou PNG autorisés. Taille maximale de 800K</p>
-                        </div>
-                      </div>
+    <img src="{% if profil.photo == True %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="{{ profil.username }}" class="d-block rounded" height="100" width="100" id="uploadedAvatar">
+
+  <div class="button-wrapper">
+    <label for="upload" class="btn btn-secondary me-2 mb-4" tabindex="0">
+      <span class="d-none d-sm-block">Nouvelle photo</span>
+      <i class="bx bx-upload d-block d-sm-none"></i>
+      <input name="img" type="file" id="upload" hidden class="account-file-input" accept="image/png, image/jpeg">
+    </label>
+  </div>
+</div>
+
+
+
                     </div>
                         <div class="row">
                           <div class="mb-3 col-md-6">
                             <label for="firstName" class="form-label">Prénom</label>
                             <input
-                              style="border: 1px solid #7f5a07 !important;"
+                              style="border: 1px solid #7f5a07 !important;background-color: #191C24"
                               class="form-control"
                               type="text"
                               id="firstName"
                               name="firstName"
-                              value="{{ info.first_name }}"
+                              value="{{ profil.first_name }}"
                               autofocus
                             />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="lastName" class="form-label">Nom</label>
-                            <input style="border: 1px solid #7f5a07 !important;" class="form-control" type="text" name="lastName" id="lastName" value="{{ info.last_name }}" />
+                            <input style="border: 1px solid #7f5a07 !important;background-color: #191C24" class="form-control" type="text" name="lastName" id="lastName" value="{{ profil.last_name }}" />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="Pseudonyme" class="form-label">Pseudonyme</label>
-                            <input style="border: 1px solid #7f5a07 !important;" class="form-control" type="text" name="Pseudonyme" id="Pseudonyme" value="{{ info.username }}" />
+                            <input style="border: 1px solid #7f5a07 !important;background-color: #191C24" class="form-control" type="text" name="Pseudonyme" id="Pseudonyme" value="{{ profil.username }}" />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="email" class="form-label">E-mail</label>
@@ -101,15 +92,15 @@
                               type="text"
                               id="email"
                               name="email"
-                              value="{{ info.email }}"
+                              value="{{ profil.email }}"
                               placeholder="john.doe@example.com"
-                              style="border: 1px solid #7f5a07 !important;"
+                              style="border: 1px solid #7f5a07 !important;background-color: #191C24"
                             />
                           </div>
                           <div class="mb-3 col-md-6">
                           <label for="email" class="form-label">Pays</label>
-                          <select name="pays" aria-controls="pays" style="border: 1px solid #7f5a07 !important;" class="form-select mb-3" aria-label="Default select example" id="country-select">
-                              <option value="">Choisissez un pays</option>
+                          <select name="pays" aria-controls="pays" style="border: 1px solid #7f5a07 !important;background-color: #191C24" class="form-select mb-3" aria-label="Default select example" id="country-select">
+                              <option value="">{% if profil.country %}{{ profil.country }}{% else %}Choisissez un pays{% endif %}</option>
                             </select>
                           </div>
 
@@ -138,48 +129,68 @@ document.getElementById('country-select').addEventListener('change', (event) => 
 
                             </script>
                           <div class="mb-3 col-md-6">
-                            <label for="organization" class="form-label">Bio</label>
+                            <label for="bio" class="form-label">Bio</label>
                             <input
                               type="text"
                               class="form-control"
-                              id="organization"
+                              id="bio"
                               name="bio"
-                              value=""
-                               style="border: 1px solid #7f5a07 !important;"
+                              value="{{ profil.bio }}"
+                               style="border: 1px solid #7f5a07 !important;background-color: #191C24"
                             />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label class="form-label" for="phoneNumber">N° de téléphone</label>
                             <div class="input-group input-group-merge">
-                              <span class="input-group-text">{{ info.country }}</span>
                               <input
                                 type="text"
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 class="form-control"
-                                placeholder="22 5505 0111"
-                                 style="border: 1px solid #7f5a07 !important;"
+                                value="{{ profil.phone_number }}"
+                                 style="border: 1px solid #7f5a07 !important;background-color: #191C24"
                               />
                             </div>
                           </div>
 
                           <div class="mb-3 col-md-6">
                             <label for="state" class="form-label">Code Chaine YouTube</label>
-                            <input style="border: 1px solid #7f5a07 !important;" class="form-control" type="text" id="state" name="id_ytb" placeholder="UCKk4XQXSquh88TnnoQf6MVg" />
+                            <input style="border: 1px solid #7f5a07 !important;background-color: #191C24" class="form-control" value="{{ profil.id_youtube_ch }}" type="text" id="state" name="id_ytb" placeholder="Code d'fidentifiant de votre chaine yotube" />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="zipCode" class="form-label">Dons</label>
                               <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                        id="flexSwitchCheckChecked"checked>
-                                    <label class="form-check-label" for="flexSwitchCheckChecked">Avec l'acceptation 15/85</label>
+                                    <input style="background-color: #664d03;background-color: #191C24;" name="Active_don" class="form-check-input" type="checkbox" role="switch"
+                                        id="flexSwitchCheckChecked" {% if profil.Active_don %} checked {% endif %}>
+                                    <label class="form-check-label" for="flexSwitchCheckChecked">Avec l'acceptation 15/85{% if profil.Active_don %} (Activée) {% else %} (desactivée) {% endif %}</label>
                                 </div>
                           </div>
+                        <div class="question_mark">
+                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                            <div class="popup">
+                                <p>Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données</p>
+                            </div>
+                        </div>
+                        <script>
+                            // Récupération de la popup et du point d'interrogation
+var popup = document.querySelector('.question_mark .popup');
+var questionMark = document.querySelector('.question_mark i');
+
+// Ajout de l'événement "mouseenter" au point d'interrogation
+questionMark.addEventListener('mouseenter', function() {
+    popup.style.visibility = 'visible';
+});
+
+// Ajout de l'événement "mouseleave" à la popup
+popup.addEventListener('mouseleave', function() {
+    popup.style.visibility = 'hidden';
+});
+
+                        </script>
 
 
                         <div class="mt-2">
                           <button type="submit" class="btn btn me-2" style="background-color: #533f03; color: white">Sauvegarder</button>
-                          <button type="reset" class="btn btn-outline-secondary" style="background-color: rgb(186,121,0);color: white">Annuler</button>
                         </div>
                       </form>
                     </div>
@@ -189,7 +200,7 @@ document.getElementById('country-select').addEventListener('change', (event) => 
 
                 </div>
                 {% endif %}
-            {% endfor %}
+
               </div>
             </div>
   </div>

@@ -1,0 +1,198 @@
+{% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+  :root {
+--primary: #B88E6D;
+--secondary: #191C24;
+--light: #6C7293;
+--dark: #000000;
+}
+
+
+.nav-pills-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-top: 10px;
+}
+
+.nav-pills {
+  display: flex;
+}
+
+.nav-pill {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  color: gray;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.nav-pill.active {
+  color: #B88E6D;
+}
+.nav-pills .nav-pill:hover {
+    color: #ba7900;
+}
+
+.cover-image {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cover-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+}
+
+.edit-profile-button {
+  position: absolute;
+  top: 160px;
+  right: 20px;
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: rgba(70, 40, 9, 0.81);
+  color: #fff;
+  border: 1px solid rgba(70, 40, 9, 0.81);
+}
+
+.edit-profile-button:hover {
+  background-color: #ad6800;
+}
+.edit-profile-button input[type="file"] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.button-wrapper {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.account-file-input {
+  position: absolute;
+  font-size: 100px;
+  opacity: 0;
+  right: 0;
+  top: 0;
+}
+
+.account-file-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: rgba(70, 40, 9, 0.81);
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  border: 1px solid rgba(70, 40, 9, 0.81);
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.account-file-button:hover {
+  background-color: rgba(70, 40, 9, 0.81);
+}
+  </style>
+
+{% block content %}
+{% include 'base.html' %}
+<body style="margin-bottom: 150px">
+<div class="container-fluid">
+
+  <div class="nav-pills-container">
+    <div class="nav-pills">
+      <a class="nav-pill" href="#home-results" onclick="showResult('home-results')">Personnalisation de la chaîne</a>
+      <a class="nav-pill" href="#video-results" onclick="showResult('video-results')">Playlists</a>
+      <a class="nav-pill" href="#Mes-chaînes" onclick="showResult('mes-chaines')">Mes chaînes</a>
+    </div>
+      <hr>
+  </div>
+  <div id="home-results">
+    {% if channel %}
+
+        <form action="{% url 'publier_info_gene' %}" method="POST" enctype="multipart/form-data" class="">
+    {% csrf_token %}
+        {% if channel.cover_image %}
+     <div class="cover-image">
+        <img src="{{ channel.cover_image.url }}" alt="Cover Image">
+     <div class="edit-profile-button">
+      <label for="upload">
+        <span>Choisir une couverture</span>
+        <i class="bx bx-upload ms-2"></i>
+      </label>
+      <input name="cover" type="file" id="upload" accept="image/png, image/jpeg">
+    </div>
+     </div><br>
+     {% else %}
+            <div class="cover-image">
+        <img src="{{ channel.cover_image.url }}" alt="Cover Image">
+            <div class="edit-profile-button">
+              <label for="upload">
+                <span>Choisir une couverture</span>
+                <i class="bx bx-upload ms-2"></i>
+              </label>
+              <input name="cover" type="file" id="upload" accept="image/png, image/jpeg">
+            </div>
+
+     </div><br>
+            {% endif %}
+        <div class="col-sm-12 col-md-12 col-xl-12" >
+                <div class="bg-secondary rounded p-4">
+                    <h6 class="mb-4">Personnaliser la chaine</h6>
+
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                      {% if channel.image %}
+                        <img src="{{ channel.image.url }}" alt="{{ channel.name }}" class="d-block rounded mb-3" height="100" width="100" id="uploadedAvatar">
+                      {% else %}
+                        <img src="{% static 'images/profile1.jpg' %}" alt="{{ channel.name }}" class="d-block rounded" height="100" width="100" id="defaultAvatar">
+                      {% endif %}
+                    <div class="button-wrapper">
+                      <label for="upload" class="account-file-button">
+                        <span>Choisir un profile</span>
+                        <i class="bx bx-upload ms-2"></i>
+                      </label>
+                      <input name="image" type="file" id="upload" class="account-file-input" accept="image/png, image/jpeg">
+                    </div>
+                    </div>
+                <p class="text-muted">Informations générales</p>
+                    <div class="form-floating mb-3">
+                        <input name="name" type="text" class="form-control" id="floatingInput"
+                            placeholder="" style="background-color: black" value="{{ channel.name }}">
+                        <label for="floatingInput">Identifiant</label>
+                    </div>
+                    <div class="form-floating">
+                        <textarea name="description" class="form-control" placeholder="description"
+                            id="floatingTextarea" style="height: 150px;">{{ channel.description }}</textarea>
+                        <label for="floatingTextarea">description</label>
+                    </div>
+                    <button type="submit" class="btn btn-dark mt-2" style="background-color: #533f03">Publier</button>
+                </div>
+            </div>
+
+    </form>
+    {% endif %}
+  </div>
+    <!-- Content -->
+</div>
+{% endblock %}
+
+{% include 'footer.html' %}

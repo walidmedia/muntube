@@ -1,0 +1,265 @@
+{% load static %}
+<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f1f1f1;
+}
+
+#regForm {
+  background-color: #191C24;
+  border: solid 1px #B88E6D;
+  margin: 100px auto;
+  font-family: Raleway;
+  padding: 40px;
+
+}
+
+h1 {
+  text-align: center;
+}
+
+input {
+  padding: 10px;
+  width: 100%;
+  font-size: 17px;
+  font-family: Raleway;
+  border: 1px solid #aaaaaa;
+}
+
+/* Mark input boxes that gets an error on validation: */
+input.invalid {
+  background-color: #ffdddd;
+}
+
+/* Hide all steps by default: */
+.tab {
+  display: none;
+}
+
+button {
+  background-color: #B88E6D;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 17px;
+  font-family: Raleway;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+#prevBtn {
+  background-color: #bbbbbb;
+}
+
+/* Make circles that indicate the steps of the form: */
+.step {
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbbbbb;
+  border: none;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+/* Mark the steps that are finished and valid: */
+.step.finish {
+  background-color: #B88E6D;
+}
+</style>
+{% block content %}
+    {% include 'base.html' %}
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-xl-1"></div>
+        <div class="col-sm-12 col-xl-10">
+            <div class="bg-secondary rounded text-white">
+                <form id="regForm" action="{% url 'confirmupdatevideo' video.id %}" method="post"enctype="multipart/form-data">
+                {% csrf_token %}
+                  <h4 class="mb-5">Modifier {{ video.title }} </h4>
+                  <!-- One "tab" for each step in the form: -->
+                  <div class="tab"><h5 class="mb-3">Détails </h5>
+                    <div class="input-group">
+                    <textarea required class="form-control mb-3" name="titre" aria-label="With textarea" value="">{{ video.title }}</textarea>
+                  </div>
+                 <div class="input-group">
+                    <textarea required class="form-control mb-3" style="height: 180px" name="description" aria-label="With textarea"  value="">{{ video.detail }}</textarea>
+                  </div>
+                  </div>
+                  <div class="tab"><h5 class="mb-3">Contenue</h5>
+                      <div class="mb-3">
+                                <label for="formFile" class="form-label">Déposez les fichiers vidéo que vous souhaitez mettre en ligne</label>
+                                <input name="video" class="form-control bg-dark" type="file" id="formFile" value="{{ video_url }}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="formFileMultiple" class="form-label">Sélectionnez ou importez une image qui donne un aperçu du contenu de votre vidéo. Une bonne image se remarque et attire l'attention des spectateurs.</label>
+                                <input name="image" class="form-control bg-dark" type="file" id="formFileMultiple" multiple value="{{ miniature_url }}">
+                            </div>
+
+                  </div>
+                  <div class="tab"><h5 class="mb-3">Visibilité</h5>
+                    <div class="mb-3">
+                         <select required style="color: white" class="form-select" name="categorie" aria-label="Default select example">
+                            <option selected>Catégorie</option>
+                            <option value="Actualités et Politique">Actualités et Politique</option>
+                            <option value="Culture">Culture</option>
+                            <option value="Animaux">Animaux</option>
+                            <option value="Associations et engagement">Associations et engagement</option>
+                            <option value="Auto/Moto">Auto/Moto</option>
+                            <option value="Education">Education</option>
+                            <option value="Films et animations">Films et animations</option>
+                            <option value="Humour">Humour</option>
+                            <option value="Jeux vidéos">Jeux vidéos</option>
+                            <option value="Musique">Musique</option>
+                            <option value="Science et technologie">Science et technologie</option>
+                            <option value="Sport">Sport</option>
+                            <option value="Vie pratique et style">Vie pratique et style</option>
+                            <option value="Voyages et événnements">Voyages et événnements</option>
+                        </select>
+                         <small style="color: #9c999a">Ajoutez votre vidéo à une catégorie pour permettre aux spectateurs de la trouver plus facilement.</small>
+                     </div>
+                     <div class="mb-3">
+                         <select required style="color: white" class="form-select" name="play_list" aria-label="Default select example">
+                            <option>Playlists</option>
+                            {% for play in play_lists %}
+                                 <option value="{{ play.id }}">{{ play.nom_playlist }}</option>
+                             {% endfor %}
+                        </select>
+                     <small style="color: #9c999a">Ajoutez votre vidéo à une ou plusieurs playlists. Les playlists peuvent aider les spectateurs à trouver vos contenus plus rapidement. </small>
+                     </div>
+                     <div class="form-floating mb-3">
+                        <textarea required style="color: white" class="form-control" name="tags" placeholder=""
+                            id="floatingTextarea" style="height: 80px;">
+                        </textarea>
+                        <label for="floatingTextarea">Tags</label>
+                         <small style="color: #9c999a">Séparez chaque tag par une virgule</small>
+                    </div>
+                  <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" name="statut" value="0" type="checkbox" role="switch"
+                            id="flexSwitchCheckChecked">
+                        <label style="color: #9c999a" class="form-check-label" for="flexSwitchCheckChecked">
+                            Mettre la vidéo publique
+                        </label>
+                    </div>
+                      <div class="form-check form-switch">
+                            <input style="background-color: #664d03;" name="contenue_18" class="form-check-input" type="checkbox" role="switch"
+                                id="flexSwitchCheckChecked">
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Contenue +18</label>
+                        </div>
+                  </div>
+
+                  <div style="overflow:auto;">
+                    <div style="float:right;">
+                      <button type="button" id="prevBtn" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;
+                    border-color: #ba7900;
+                    background: rgba(70,40,9,0.81);" onclick="nextPrev(-1)">Précédent</button>
+                      <button type="button" id="nextBtn" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;
+                    border-color: #ba7900;
+                    background: rgba(70,40,9,0.81);" onclick="nextPrev(1)">Suivant</button>
+                    </div>
+                  </div>
+
+                  <!-- Circles which indicates the steps of the form: -->
+                  <div style="text-align:center;margin-top:40px;">
+                    <span class="step"></span>
+                    <span class="step"></span>
+                    <span class="step"></span>
+                  </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-xl-1"></div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+<script>
+var currentTab = 0; // Current tab is set to be the first tab (0)
+showTab(currentTab); // Display the current tab
+
+function showTab(n) {
+  // This function will display the specified tab of the form...
+  var x = document.getElementsByClassName("tab");
+  x[n].style.display = "block";
+  //... and fix the Previous/Next buttons:
+  if (n == 0) {
+    document.getElementById("prevBtn").style.display = "none";
+  } else {
+    document.getElementById("prevBtn").style.display = "inline";
+  }
+  if (n == (x.length - 1)) {
+    document.getElementById("nextBtn").innerHTML = "Valider";
+  } else {
+    document.getElementById("nextBtn").innerHTML = "Suivant";
+  }
+  //... and run a function that will display the correct step indicator:
+  fixStepIndicator(n)
+}
+
+function nextPrev(n) {
+  // This function will figure out which tab to display
+  var x = document.getElementsByClassName("tab");
+  // Exit the function if any field in the current tab is invalid:
+  if (n == 1 && !validateForm()) return false;
+  // Hide the current tab:
+  x[currentTab].style.display = "none";
+  // Increase or decrease the current tab by 1:
+  currentTab = currentTab + n;
+  // if you have reached the end of the form...
+  if (currentTab >= x.length) {
+    // ... the form gets submitted:
+    document.getElementById("regForm").submit();
+    return false;
+  }
+  // Otherwise, display the correct tab:
+  showTab(currentTab);
+}
+
+function validateForm() {
+  // This function deals with validation of the form fields
+  var x, y, i, valid = true;
+  x = document.getElementsByClassName("tab");
+  y = x[currentTab].getElementsByTagName("input");
+  // A loop that checks every input field in the current tab:
+  for (i = 0; i < y.length; i++) {
+    // If a field is empty...
+    if (y[i].value == "") {
+      // add an "invalid" class to the field:
+      y[i].className += " invalid";
+      // and set the current valid status to false
+      valid = false;
+    }
+  }
+  // If the valid status is true, mark the step as finished and valid:
+  if (valid) {
+    document.getElementsByClassName("step")[currentTab].className += " finish";
+  }
+  return valid; // return the valid status
+}
+
+function fixStepIndicator(n) {
+  // This function removes the "active" class of all steps...
+  var i, x = document.getElementsByClassName("step");
+  for (i = 0; i < x.length; i++) {
+    x[i].className = x[i].className.replace(" active", "");
+  }
+  //... and adds the "active" class on the current step:
+  x[n].className += " active";
+}
+</script>
+{% include 'footer.html' %}

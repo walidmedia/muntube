@@ -31,7 +31,7 @@
                                     {% if v.user.is_superuser %}
                                         <img id="img" width="35" src="{{ v.user.photo }}" class="rounded-circle">
                                         {% else %}
-                                        <img id="img" width="35" src="{{ v.user.photo.url }}" class="rounded-circle">
+                                        <img id="img" width="35" src="{% if profil.photo %}{{ profil.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" class="rounded-circle">
                                         {% endif %}
                                     </div>
                                     {% endif %}

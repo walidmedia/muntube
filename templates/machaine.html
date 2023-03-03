@@ -115,308 +115,683 @@
 .nav-pills .nav-pill:hover {
     color: #ba7900;
 }
+.playlist-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.playlist {
+  width: calc(33.33% - 10px);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.playlist img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.playlist-info {
+  text-align: center;
+}
+
+.playlist-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #212121;
+}
+
+.playlist-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #757575;
+}
+
+@media screen and (max-width: 768px) {
+  .playlist {
+    width: calc(50% - 10px);
+  }
+}
+
+.video-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.video {
+  display: flex;
+  flex-direction: column;
+}
+
+.video img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+
+.video-info h3 {
+  font-size: 16px;
+  margin: 0 0 5px 0;
+}
+
+.video-info p {
+  font-size: 14px;
+  margin: 0;
+}
+
+
+.subscriptions {
+  margin: 20px;
+}
+
+.subscriptions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.subscriptions-header h2 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #212121;
+}
+
+.subscription {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.subscription img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.subscription-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #212121;
+}
+
+.subscription-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #757575;
+}
+
+.unsubscribe-button {
+  margin-left: auto;
+  background-color: #ba7900;
+  color: #fff;
+  border: none;
+  border-radius: 2px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.unsubscribe-button:hover {
+  background-color: rgba(70, 40, 9, 0.81);
+}
+
+
+.video-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  background-color: #191C24;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.video-thumbnail {
+  position: relative;
+  flex: 1 1 200px;
+  max-width: 200px;
+  margin-right: 10px;
+}
+
+.video-thumbnail img {
+  width: 200px;
+  height: 110px;
+}
+
+
+.video-info {
+  padding: 10px;
+  flex: 1 1 200px;
+  max-width: 100%;
+}
+
+.video-title {
+  margin: 0 0 5px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #333;
+}
+
+.video-author {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #666;
+}
+
+.video-views {
+  margin: 0 0 5px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: #666;
+}
+
+.video-menu {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.video-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.video-dropdown-btn {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.video-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  min-width: 160px;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.video-dropdown-content a {
+  color: #333;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.video-dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.video-dropdown:hover .video-dropdown-content {
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  .video-thumbnail {
+    flex: 1 1 100%;
+    max-width: 100%;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .video-info {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}
+
+.subscribe-btn {
+  background-color: rgba(70, 40, 9, 0.81);
+  border: none;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.subscribe-btn:hover {
+  background-color: #ba7900;
+}
+.subscribed {
+    background-color: #ba7900;
+}
+
   </style>
 
 {% block content %}
 {% include 'base.html' %}
-<body>
+<body style="margin-bottom: 100px">
 <div class="container">
   <div class="cover-image">
-  {% if chaine %}
-    <img src="{{ chaine.cover_image.url }}" alt="Cover Image">
-  {% else %}
-      <img src="{% static 'images/ablackadabra.jpg' %}" alt="Cover Image">
-{% endif %}
-      {% if request.user == chaine.owner %}
+    {% if chaine %}
+        <img src="{{ chaine.cover_image.url }}" alt="Cover Image">
+    {% else %}
+        <img src="{% static 'images/ablackadabra.jpg' %}" alt="Cover Image">
+    {% endif %}
+      {% if request.user.id == chaine.owner.id %}
     <button class="edit-profile-button">Edit Profile</button>
       {% endif %}
+
+    <script>
+        const subscribeBtn = document.getElementById("subscribe-btn");
+        subscribeBtn.addEventListener("click", function() {
+          subscribeBtn.classList.add("clicked");
+        });
+    </script>
   </div>
   <div class="profile">
       {% if chaine %}
-            <img src="{% static 'images/profile1.jpg' %}" alt="Profile Image">
-            <h1 class="channel-name" style="color: white">{{ chaine.owner }}</h1>
-            <p class="bio text-white">{{ chaine.description }}</p>
+            <img  src="{% if chaine.owner.photo %}{{ chaine.owner.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="Profile Image">
+            <h1 class="channel-name" style="color: white">{{ chaine.name }}</h1>
+            <span>
+            {% if user.is_authenticated %}
+                   {% if is_subscribed %}
+                        <button id="subscribe-btn" class="btn rounded-pill subscribe-btn" style="padding-top: 2px;padding-bottom: 2px;padding-right: 10px;padding-left: 10px;border: 2px solid #7f5a07 !important;color: white">Abonné</button>
+                    {% else %}
+                        <button id="subscribe-btn" class="btn rounded-pill subscribe-btn" style="padding-top: 2px;padding-bottom: 2px;padding-right: 10px;padding-left: 10px;border: 2px solid #7f5a07 !important;">S'abonner</button>
+                    {% endif %}
+
+            {% else %}
+                    <form action="{% url 'login' %}" method="post">
+                        {% csrf_token %}
+                        <button style="background-color: #533f03" type="submit" name="chaine_id" value="{{ v.user.id }}" class="btn rounded-pill btn-outline-secondary">
+                            <i class="fa fa-bell"></i>
+                            <span style="color: white">S'abonner</span>
+                        </button>
+                    </form>
+                {% endif %}
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                <script>
+                                                $(document).ready(function() {
+                                                    var user_id = '{{ request.user.id }}';  // assuming you are using Django's authentication system
+                                                    var channel_id = '{{ chaine.id }}';   // assuming you have a variable named 'channel' in your template
+                                                    var button = $('#subscribe-btn');
+
+                                                    // Make an AJAX call to retrieve the subscription status
+                                                    $.ajax({
+                                                        url: '/subscription-status/',
+                                                        type: 'POST',
+                                                        data: {
+                                                            'user_id': user_id,
+                                                            'channel_id': channel_id,
+                                                            'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                                        },
+                                                        dataType: 'json',
+                                                        success: function(data) {
+                                                            if (data.is_subscribed) {
+                                                                button.addClass('subscribed');
+                                                                button.text('Abonné');
+                                                            } else {
+                                                                button.removeClass('subscribed');
+                                                                button.text('Sabonner');
+                                                            }
+                                                        }
+                                                    });
+
+                                                    button.click(function() {
+                                                        if (button.hasClass('subscribed')) {
+                                                            $.ajax({
+                                                                url: '/unsubscribe/',
+                                                                type: 'POST',
+                                                                data: {
+                                                                    'user_id': user_id,
+                                                                    'channel_id': channel_id,
+                                                                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                                                },
+                                                                dataType: 'json',
+                                                                success: function(data) {
+                                                                    button.removeClass('subscribed');
+                                                                    button.text('Sabonner');
+                                                                    localStorage.setItem('subscribed', 'false');
+                                                                },
+                                                                error: function(xhr, textStatus, errorThrown) {
+                                                                    alert('Unsubscription failed: ' + errorThrown);
+                                                                }
+                                                            });
+                                                        } else {
+                                                            $.ajax({
+                                                                url: '/subscribe/',
+                                                                type: 'POST',
+                                                                data: {
+                                                                    'user_id': user_id,
+                                                                    'channel_id': channel_id,
+                                                                    'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+                                                                },
+                                                                dataType: 'json',
+                                                                success: function(data) {
+                                                                    button.addClass('subscribed');
+                                                                    button.text('Abonné');
+                                                                    localStorage.setItem('subscribed', 'true');
+                                                                },
+                                                                error: function(xhr, textStatus, errorThrown) {
+                                                                    alert('Subscription failed: ' + errorThrown);
+                                                                }
+                                                            });
+                                                        }
+                                                    });
+                                                });
+                                             </script>
+                <span style="font-size: 13px;color: white">{{ total_abonnés }} abonnés</span>
+            </span>
+            <!--<p class="bio text-white">{{ chaine.description }}</p>-->
       {% else %}
             <img src="{{ chaine.image.url }}{% static 'images/profile1.jpg' %}" alt="Profile Image">
             <h1 class="channel-name" style="color: white">{{ chaine.owner }}</h1>
             <p class="bio text-white">{{ user.description }}</p>
       {% endif %}
   </div>
-  <div class="nav-pills-container">
+  <div class="nav-pills-container p-1">
     <div class="nav-pills">
       <a class="nav-pill" href="#home-results" onclick="showResult('home-results')">Home</a>
-      <a class="nav-pill" href="#video-results" onclick="showResult('video-results')">Videos</a>
-      <a class="nav-pill" href="#playlist-results" onclick="showResult('playlist-results')">Playlists</a>
+      <a class="nav-pill" href="#video-results" onclick="showResult('video-results')">Playlists</a>
       <a class="nav-pill" href="#channel-results" onclick="showResult('channel-results')">Channels</a>
+      <a class="" href="#Revendiquer" onclick="showResult('Revendiquer')">
+          <button type="button" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;background-color: rgba(70,40,9,0.81);border: 2px solid #7f5a07 !important;">Revendiquer cette chaine</button>
+      </a>
     </div>
       <hr>
   </div>
-  <div class="result col-sm-12 col-md-12 col-xl-12" id="home-results">
-    <div class="">
-        <div class="row g-4">
-        <h6>Vidéos</h6>
-        {% for v in mesvideos %}
-            <div class="col-sm-6 col-xl-3">
-                <div class="rounded d-flex align-items-center justify-content-between h-100">
-                    <div style="background-color: #191C24; " class="card h-100">
-                    <a href="">
-                        <video width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
-                            <source src="{{ v.vid.url }}" type="video/mp4" />
-                        </video>
-                    </a>
-                    <div class="row justify-content-between">
-                            <div class="col-10 mt-3">
-                                <a href="" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
-                                <p style="color:#A77443;">
-                                    <small>{{ v.views }} vues . {{ v.date_created.date|date:"d/m/Y" }}</small>
+    <div class="result col-sm-12 col-md-12 col-xl-12" id="home-results">
+      <div class="container-fluid pt-4 px-4">
+            <div class="row g-4">
+                <div class="col-sm-12 col-md-12 col-xl-12">
+                    <div id="videos" class="row g-4">
+                    {% for v in videos %}
+                        <div class="col-sm-6 col-xl-3">
+                            <div class="rounded d-flex align-items-center justify-content-between h-100">
+                                <div style="background-color: #191C24; " class="card h-100">
+                                <a href="{% url 'video' v.id %}">
+                                    {%  if v.miniature %}
+                                    <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
+                                        <source src="{{ v.vid.url }}" type="video/mp4" />
+                                    </video>
+                                    {% else %}
+                                        <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{% static 'images/Playlist non classée.svg' %}" >
+                                            <source src="{{ v.vid.url }}" type="video/mp4" />
+                                        </video>
+                                    {% endif %}
+
+                                    <!--<div class="video-duration" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; bottom: 0; right: 0; padding: 0.1rem 0.5rem; color: white; font-size: 0.8rem;">{{ v.duration }}</div>-->
+                                </a>
+                                <div class="row justify-content-between ">
+                                    <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
+                                        <a href="{% url 'video' v.id %}" class="text-white mb-2 " style="overflow-wrap: break-word; font-size: 13px" title="{{ v.title }}">{{ v.title }}</a>
+                                    </div>
+                                </div>
+                                <p>
+                                    <div style="margin-left: 0.1rem" class="row">
+
+                                    <div class="col-12">
+                                        <span style="color:#A77443;">
+                                            <small class="mt-0" style="font-size: 12px">{{ v.views }} vues Il y a {{ v.date_created.date|timesince }}</small>
+                                        </span>
+                                    </div>
+                                </div>
                                 </p>
+                                </div>
                             </div>
                         </div>
+                {% endfor %}
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="result col-sm-12 col-md-12 col-xl-12 p-1" id="video-results" style="display:none;">
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-sm-12 col-md-12 col-xl-12">
+        {% for p in play_lists %}
+            <div class="video-container">
+            <!--<video width="100%" height="100%" class="video-thumbnail card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" controls >
+                <source src="" type="video/mp4" />
+            </video>-->
+                {% if p.miniature_playlist %}
+              <div class="video-thumbnail">
+                <img src="{{ p.miniature_playlist.url }}" alt="Video thumbnail">
+              </div>
+                {% else %}
+                <div class="video-thumbnail">
+                <img src="{% static 'images/Playlist non classée.svg' %}" alt="Video thumbnail">
+              </div>
+                {% endif %}
+              <div class="video-info">
+                <h3 class="video-title text-white">{{ p.nom_playlist }}</h3>
+                <p class="video-author">{{ p.desc_playlist }}</p>
+                <p class="video-views">2321 views</p>
+                <div class="video-menu">
+                  <div class="video-dropdown">
+                    <button style="color: white" class="video-dropdown-btn"></button>
+                    <div class="video-dropdown-content">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
         {% endfor %}
         </div>
     </div>
+    </div>
   </div>
-  <div class="result col-sm-12 col-md-12 col-xl-12 p-1" id="video-results" style="display:none;">
-    <h6>Toutes mes vidéos</h6>
-    <a href="#newplaylist" class=" btn rounded-pill mb-3" style="background-color: #72473b"><span style="color:rgb(255,246,224);">Nouvelle playlist</span></a>
-    <div class="col-sm-12 col-md-12 col-xl-12">
-    <div class="row g-4">
-        {% for v in play_lists %}
-        <div class="col-sm-6 col-xl-3">
-            <div class="rounded d-flex align-items-center justify-content-between h-100">
-                <div style="background-color: #191C24; " class="card h-100">
-                <a href="">
-                    <video width="180" height="100" class="card embed-responsive embed-responsive-16by9" poster="" >
-                        <source src="" type="video/mp4" />
-                    </video>
-                </a>
-                <div class="row justify-content-between">
-                        <div class="col-11 mt-3">
-                            <a href="" class="text-white mb-2 " style="overflow-wrap: break-word" title="{{ v.title }}">{{ v.title }}</a>
-                            <p style="color:#A77443;">
-                                <h6>{{ v.nom_playlist }}</h6>
-                            </p>
-                        </div>
+    <div class="result col-sm-12 col-md-12 col-xl-12" id="channel-results" style="display:none;">
+        <div class="container-fluid">
+        <div class="row ">
+        {% if all_chaine.count > 1 %}
+            <div class="col-sm-12 col-md-12 col-xl-12">
+            <h5 style="color: #B88E6D">Mes chaines sur muntube</h5>
+                <div class="subscriptions">
+                  <div class="subscriptions-header">
+                  </div>
+                  <div class="subscriptions-list">
+                  {% if all_chaine %}
+                      {% for chaine in all_chaine %}
+                    <div class="subscription">
+                    {% if chaine.image %}
+                      <img src="" alt="Channel thumbnail">
+                    {% else %}
+                        <img src="{% static 'images/logo user.jpg' %}" alt="Channel thumbnail">
+                    {% endif %}
+                      <div class="subscription-info">
+                        <h3 style="color: white; font-size: 12px"><strong>{{ chaine.name }}</strong></h3>
+                        <p style="font-size: 12px">{{ chaine.description }}</p>
+                      </div>
+                      <button class="unsubscribe-button" style="font-size: 12px">Revendiquer</button>
                     </div>
+                    {% endfor %}
+                  {% else %}
+                  <p style="color: white">Cette chaîne ne présente aucune autre chaîne.</p>
+                  {% endif %}
+                  </div>
                 </div>
+                <script>
+                    // Add click event listener to all unsubscribe buttons
+                const unsubscribeButtons = document.querySelectorAll('.unsubscribe-button');
+                unsubscribeButtons.forEach(button => {
+                  button.addEventListener('click', e => {
+                    const subscriptionItem = e.target.parentNode;
+                    subscriptionItem.remove(); // Remove the subscription item from the DOM
+                  });
+                });
+
+                </script>
             </div>
+        {% else %}
+            <p class="text-muted">Cette chaîne ne présente aucune autre chaîne.</p>
+        {% endif %}
         </div>
-    {% endfor %}
-    <hr>
-    <div id="newplaylist" class="row h-100 bg-secondary rounded align-items-center justify-content-center mx-0">
-                    <div class="col-md-6 text-center">
-                        <h6 class="mb-4 mt-4">Créer une nouvelle PlayList</h6>
-                        <form action="{% url 'AddPlaylist' %}" method="post">
-                            {% csrf_token %}
-                            <input name="id_user" hidden value="{{ user.id }} ">
-                            <div class="form-floating mb-3">
-                                <input name="playlist" type="text" class="form-control" id="floatingInput"
-                                    placeholder="Nom de playlist">
-                                <label for="floatingInput">playlist</label>
-                            </div>
-                            <div class="mb-3">
-                                <label for="formFileSm" class="form-label">Miniature Playlist</label>
-                                <input name="miniature" class="form-control form-control-sm bg-dark" id="formFileSm" type="file">
-                            </div>
-                            <div class="form-floating">
-                            <textarea name="description" class="form-control mb-3" placeholder="Leave a comment here"
-                                id="floatingTextarea" style="height: 150px;"></textarea>
-                            <label for="floatingTextarea">Description</label>
-                        </div>
-                            <button type="submit"class="form-control btn btn-dark mb-lg-5" style="background-color: #72473b;"><strong style="color: #fff6e0">Ajouter</strong></button>
-                        </form>
-                    </div>
-                </div>
-    </div>
     </div>
   </div>
-  <div class="result col-sm-12 col-md-12 col-xl-12" id="playlist-results" style="display:none;">
-    <div class="col-12">
-                                        <div class="bg-secondary rounded h-100 p-4">
-                                            <h5 class="mb-4">Contenu de la chaîne</h5>
-                                            <div class="table-responsive mb-3">
-                                                <table class="table text-white">
-                                                    <thead class="text-white">
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">Video</th>
-                                                            <th scope="col">detail</th>
-                                                            <th scope="col">Vues</th>
-                                                            <th scope="col">j'aimes</th>
-                                                            <th scope="col">Commentaires</th>
-                                                            <th scope="col">Catégorie</th>
-                                                            <th scope="col">Status</th>
-                                                            <th scope="col">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for v in mesvideos %}
-                                                        <tr>
-                                                            <th scope="row">{{ v.id }}</th>
-                                                            <td>{{ v.title }}</td>
-                                                            <td>{{ v.detail }}</td>
-                                                            <td>{{ v.views }}</td>
-                                                            <td>{{ v.total_likes }}</td>
-                                                            <td>{{ v.total_comments }}</td>
-                                                            <td>{{ v.categorie }}</td>
-                                                            <td>{{ v.status_video }}</td>
-                                                            <td>
-                                                                <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
-                                                                    <i class="fa fa-ellipsis-h"></i>
-                                                                </button>
-                                                                <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
-                                                                    {% if user.is_authenticated %}
-                                                                    <form>
-                                                                         {% csrf_token %}
-                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
-                                                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
-                                                                        </button>
-                                                                    </form>
-                                                                    <form action="#" method="post">
-                                                                        {% csrf_token %}
-                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
-                                                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
-                                                                        </button>
-                                                                    </form>
-                                                                    {% else %}
-                                                                        <form>
-                                                                         {% csrf_token %}
-                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
-                                                                            </button>
-                                                                        </form>
-                                                                        <form action="{% url 'login' %}" method="post">
-                                                                            {% csrf_token %}
-                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
-                                                                            </button>
-                                                                            </form>
-                                                                    {% endif %}
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <h5>Playlists</h5>
-                                            <div class="table-responsive mb-3">
-                                                <table class="table text-white">
-                                                    <thead class="text-white">
-                                                        <tr>
-                                                            <th scope="col">#</th>
-                                                            <th scope="col">Playlist</th>
-                                                            <th scope="col">detail</th>
-                                                            <th scope="col">Vidéos</th>
-                                                            <th scope="col">Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {% for p in play_lists %}
-                                                        <tr>
-                                                            <th scope="row">{{ p.id }}</th>
-                                                            <td>{{ p.nom_playlist }}</td>
-                                                            <td>{{ p.desc_playlist }}</td>
-                                                            <td>10</td>
-                                                            <td>
-                                                                <button style="background-color: #533f03" data-bs-toggle="dropdown" class=" btn rounded-pill btn-outline-secondary btn-xs align-content-center" >
-                                                                    <i class="fa fa-ellipsis-h"></i>
-                                                                </button>
-                                                                <div class="dropdown-menu dropdown-menu-start bg-black border-0 rounded-0 rounded-bottom m-0">
-                                                                    {% if user.is_authenticated %}
-                                                                    <form>
-                                                                         {% csrf_token %}
-                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
-                                                                            <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
-                                                                        </button>
-                                                                    </form>
-                                                                    <form action="#" method="post">
-                                                                        {% csrf_token %}
-                                                                        <button class="dropdown-item" type="submit" value="" name="id_video">
-                                                                            <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
-                                                                        </button>
-                                                                    </form>
-                                                                    {% else %}
-                                                                        <form>
-                                                                         {% csrf_token %}
-                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                                                                <i class="fa fa-flag me-3"></i><span class="align-middle text-black">Modifier</span>
-                                                                            </button>
-                                                                        </form>
-                                                                        <form action="{% url 'login' %}" method="post">
-                                                                            {% csrf_token %}
-                                                                            <button class="dropdown-item" type="submit" value="{{ v.id }}" name="id_video">
-                                                                                <i class="fa fa-save me-3"></i><span class="align-middle text-black">Supprimer</span>
-                                                                            </button>
-                                                                            </form>
-                                                                    {% endif %}
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-  </div>
-  <div class="result col-sm-12 col-md-12 col-xl-12" id="channel-results" style="display:none;">
-    <div class="container-fluid">
-                                    <div class="row ">
-                                        <div class="col-sm-12 col-md-12 col-xl-12">
+    <div class="result col-sm-12 col-md-12 col-xl-12" id="Revendiquer" style="display:none;">
+        <div class="card bg-dark">
+            <br>
+            <h5>Revendiquer cette chaîne</h5>
+            <p style="color: #8c5a0d">
+                vous êtes le propriétaire du contenu de cette chaîne ?<br>
+                Merci de remplir le formulaire ci-dessous, nous vous contacterons pour la validation de la propriété.
+            </p>
+          <form id="formAccountSettings" method="POST" action="{% url 'revendiquer' %}">
+          {% csrf_token %}
+          <input hidden name="id_user" value="{{ user.id }}">
+            <div class="row">
+              <div class="mb-4 col-md-6">
+                <input
+                  style="border: 2px solid #7f5a07 !important;background-color: #191C24; border-radius: 40px;"
+                  class="form-control"
+                  type="text"
+                  id="pseudonyme"
+                  name="pseudonyme"
+                  placeholder="Pseudonyme*"
+                  value="{{ profil.first_name }}"
+                  autofocus
+                />
+              </div>
+              <div class="mb-4 col-md-6">
+                <input style="border: 2px solid #7f5a07 !important;background-color: #191C24;
+                border-radius: 40px;" class="form-control" type="text" name="prénom" id="prénom"
+                placeholder="Prénom*" value="{{ profil.last_name }}" />
+              </div>
+              <div class="mb-4 col-md-6">
+                <input style="border: 2px solid #7f5a07 !important;background-color: #191C24;
+                border-radius: 40px;" class="form-control" type="text" name="nom" id="nom"
+                placeholder="Nom*"       value="{{ profil.username }}" />
+              </div>
+              <div class="mb-4 col-md-6">
+                <input
+                  class="form-control"
+                  type="text"
+                  id="email"
+                  name="email"
+                  value="{{ profil.email }}"
+                  placeholder="E-mail*"
+                  style="border: 2px solid #7f5a07 !important;background-color: #191C24; border-radius: 40px;"
+                />
+              </div>
+                <div class="mb-4 col-md-6">
+                <input
+                  class="form-control"
+                  type="date"
+                  id="date"
+                  name="date"
+                  value="{{ profil.email }}"
+                  placeholder="date*"
+                  style="border: 2px solid #7f5a07 !important;background-color: #191C24; border-radius: 40px;"
+                />
+              </div>
+              <div class="mb-2 col-md-6">
+              <select name="pays" aria-controls="pays" style="border: 2px solid #7f5a07 !important;background-color: #191C24; border-radius: 40px;" class="form-select mb-3" aria-label="Default select example" id="country-select">
+                  <option value="">Choisissez un pays</option>
+                </select>
+              </div>
+                <script>
+                    fetch('https://restcountries.com/v3.1/all')
+                    .then(response => response.json())
+                    .then(countries => {
+                    // Call a function to update the select element with the list of countries
+                    updateCountrySelect(countries);
+                    })
+                    .catch(error => console.error(error));
+                    function updateCountrySelect(countries) {
+                      const selectElement = document.getElementById('country-select');
+                      countries.sort((a, b) => a.name.common.localeCompare(b.name.common)); // Sort countries alphabetically
+                      countries.forEach(country => {
+                        const optionElement = document.createElement('option');
+                        optionElement.value = country.name.common;
+                        optionElement.textContent = country.name.common;
+                        selectElement.appendChild(optionElement);
+                      });
+                    }
 
-                                        <h5 style="color: #B88E6D">Ma chaine youtube</h5>
+                    document.getElementById('country-select').addEventListener('change', (event) => {
+                    const selectedCountry = event.target.value;
+                    // Call a function to display more information about the selected country
+                    displayCountryInfo(selectedCountry);
+                    });
 
-                                            {% for video in live_videos %}
-                                        <div class="col-6">
-                                          <!-- Code pour afficher la vidéo en direct -->
-                                               <iframe src="https://www.youtube.com/embed/{{ video.id }}"></iframe>
-                                        <h6>Title: {{ video.snippet.title }}</h6>
-                                        <p class="text-white">Description: {{ video.snippet.description }}</p>
-                                        </div>
+                </script>
 
-                                        {% endfor %}
+              <div class="mb-4 col-md-6">
+                  <input
+                    type="text"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    class="form-control"
+                    placeholder="22 5505 0111"
+                     style="border: 2px solid #7f5a07 !important;background-color: #191C24; border-radius: 40px;"
+                  />
+              </div>
+               <div class="mb-3 col-md-12">
+                   <textarea id="message" name="message" class="form-control" placeholder="Message*" style="border: 2px solid #7f5a07 !important;background-color: #191C24; border-radius: 10px;height: 100px"></textarea>
+              </div>
 
-                                            <hr style="color:  #B88E6D">
-                                            <div class="row">
-                                                {% for video in videos %}
-                                                <div class="col-sm-6 col-xl-3 mb-5">
-                                                    <div class="rounded d-flex align-items-center justify-content-between h-100">
-                                                        <div style="background-color: #191C24; " class="card h-100">
-                                                            <iframe src="https://www.youtube.com/embed/{{ video.id }}"  class="card embed-responsive embed-responsive-16by9" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                                            <span style="color: #fdecdd">{{ video.snippet.title }}</span>
-                                                            <small style="color: #fdecdd">{{ video.statistics.viewCount }} vues | {{ video.statistics.likeCount }} <i class="fa fa-heart"></i></small>
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                {% endfor %}
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-  </div>
+
+            <div class="mt-2">
+              <button type="submit" class="btn btn me-2" style="background-color: #533f03; color: white">Envoyer</button>
+            </div>
+          </form>
+        </div>
+    </div>
 </div>
-
-
-
 
 <script>
   function showResult(resultId) {
     var homeResult = document.getElementById("home-results");
     var videoResult = document.getElementById("video-results");
-    var playlistResult = document.getElementById("playlist-results");
+    var Revendiquer = document.getElementById("Revendiquer");
     var channelResult = document.getElementById("channel-results");
 
     homeResult.style.display = "none";
     videoResult.style.display = "none";
-    playlistResult.style.display = "none";
+    Revendiquer.style.display = "none";
     channelResult.style.display = "none";
 
     document.getElementById(resultId).style.display = "block";
   }
+
+  document.querySelector('#formAccountSettings').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': form.elements.namedItem('csrfmiddlewaretoken').value
+            }
+        });
+        const data = await response.json();
+        if (data.success) {
+            alert('Success! Your profile has been created.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('There was an error submitting the form. Please try again later.');
+    }
+});
+
 </script>
     </body>
 <script>

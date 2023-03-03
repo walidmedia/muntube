@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import login, logout_view, register, profile, update_user
+from .views import login, logout_view, register, profile, confirm_register
 
 urlpatterns = [
     #path("", views.homepage, name="homepage"),
@@ -9,5 +9,5 @@ urlpatterns = [
     path('login/', login, name='login'),
     path('logout_view/', logout_view, name='logout_view'),
     path('register/', register, name='register'),
-    path('update_user/<int:user_id>', update_user, name='update_user'),
+    path('confirm_register/<int:user_id>/', confirm_register, name='confirm_register'),
 ]
