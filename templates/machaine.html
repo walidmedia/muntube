@@ -385,7 +385,7 @@
 <div class="container">
   <div class="cover-image">
     {% if chaine %}
-        <img src="{{ chaine.cover_image.url }}" alt="Cover Image">
+        <img src="{% if chaine.cover_image == True %}{{ chaine.cover_image.url }}{% else %}{% static 'images/MUNTUBE-Couverture.jpg' %}{% endif %}" alt="Cover Image">
     {% else %}
         <img src="{% static 'images/ablackadabra.jpg' %}" alt="Cover Image">
     {% endif %}
@@ -402,7 +402,7 @@
   </div>
   <div class="profile">
       {% if chaine %}
-            <img  src="{% if chaine.owner.photo %}{{ chaine.owner.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="Profile Image">
+            <img  src="{% if chaine.owner.photo == True %}{{ chaine.owner.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="Profile Image">
             <h1 class="channel-name" style="color: white">{{ chaine.name }}</h1>
             <span>
             {% if user.is_authenticated %}
@@ -532,7 +532,6 @@
                                         </video>
                                     {% endif %}
 
-                                    <!--<div class="video-duration" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; bottom: 0; right: 0; padding: 0.1rem 0.5rem; color: white; font-size: 0.8rem;">{{ v.duration }}</div>-->
                                 </a>
                                 <div class="row justify-content-between ">
                                     <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-3">
@@ -544,7 +543,7 @@
 
                                     <div class="col-12">
                                         <span style="color:#A77443;">
-                                            <small class="mt-0" style="font-size: 12px">{{ v.views }} vues Il y a {{ v.date_created.date|timesince }}</small>
+                                            <small class="mt-0" style="font-size: 12px">{{ v.views }} vues {{ v.date_created.date|timesince }} ago</small>
                                         </span>
                                     </div>
                                 </div>
