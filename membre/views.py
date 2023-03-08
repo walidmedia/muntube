@@ -1477,9 +1477,25 @@ def reply_comment(request, comment_id):
                     parent=comment,
                     contenue=reply_text
                 )
-            html = render(request, 'membre/reply.html', {'reply': reply}).content.decode('utf-8')
+            html = render(request, 'membre/reply_list.html', {'reply': reply}).content.decode('utf-8')
             return JsonResponse({'success': True, 'html': html})
     return JsonResponse({'success': False})
+
+@login_required
+def get_replies(request):
+    if request.method == 'POST' and request.is_ajax():
+        comment_id = request.POST.get('comment_id')
+        comment = commentaire.objects.get(id=comment_id)
+        replies = comment.children.all()
+        context = {'replies': replies}
+        html = render(request, 'reply_list.html', context=context).content.decode('utf-8')
+        return JsonResponse({'success': True, 'html': html})
+    else:
+        return JsonResponse({'success': False})
+
+
+
+
 
 def add_stripe(request):
     user = get_object_or_404(User, id=request.user.id)

@@ -402,7 +402,7 @@
   </div>
   <div class="profile">
       {% if chaine %}
-            <img  src="{% if chaine.owner.photo == True %}{{ chaine.owner.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="Profile Image">
+            <img  src="{% if chaine.image %}{{ chaine.image.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="Profile Image">
             <h1 class="channel-name" style="color: white">{{ chaine.name }}</h1>
             <span>
             {% if user.is_authenticated %}

@@ -10,8 +10,8 @@ from .views import checkout, upload, success_upload, addvideo, mesvideos, checko
         soutenir, soutien, newvideo, chaine_profile, \
         update_user, updatevideo, confirmupdatevideo, delete_video, revendiquer, unsubscribe, subscription_status, \
         delete_comment, report_comment, report_video, reply_comment, increment_videos_watched_count, progress_view, \
-        get_playlist_videos, update_channel, publier_info_gene, stripe_connect, stripe_redirect,  \
-        add_stripe, stripe_info
+        get_playlist_videos, update_channel, publier_info_gene, stripe_connect, stripe_redirect, \
+        add_stripe, stripe_info, get_replies
 
 urlpatterns = [
         #path('pricing/', pricing, name='pricing'),
@@ -37,6 +37,7 @@ urlpatterns = [
         path('report_comment/<int:comment_id>/', report_comment, name='report_comment'),
         path('report-video/', report_video, name='report_video'),
         path('reply_comment/<int:comment_id>/', reply_comment, name='reply_comment'),
+        path('get_replies/', get_replies, name='get_replies'),
 
         path('save_video/<int:pk>', save_video, name='save_video'),
         path('monprofile/<int:user_id>', monprofile, name='monprofile'),

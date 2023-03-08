@@ -263,7 +263,7 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
                     <div class="nav-item dropdown">
                     {% if user.is_authenticated %}
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{% if user.photo == True %}{{ user.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src="{% if user.photo %}{{ user.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex"><strong class="text-white">{{ user.username }}</strong></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 ">

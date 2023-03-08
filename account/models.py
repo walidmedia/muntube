@@ -61,7 +61,7 @@ class User(AbstractUser):
     photo = models.ImageField(upload_to='users', default="/static/images/profile1.jpg", null=True, blank=True)
     country = models.CharField(max_length=256, null=True)
     bio = models.TextField(default='', blank=True)
-    id_youtube_ch = models.CharField(max_length=24, null=True,default="")
+    id_youtube_ch = models.TextField(blank=True,default='')
     Active_don = models.BooleanField(default=False)
     stripe_account_id = models.CharField(max_length=255, blank=True, null=True)
     stripe_account_holder_name = models.CharField(max_length=255, blank=True, null=True)
