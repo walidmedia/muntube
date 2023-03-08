@@ -236,14 +236,14 @@ JAZZMIN_UI_TWEAKS = {
     #"dark_mode_theme": "darkly",
     #"theme": "darkly",
 }
-STRIPE_SECRET_KEY='sk_test_51M1tNCEz9Ud4aklFxKaVwVo0kCttkNebx9foe1Qxq1CoKhS9zTqaqtmpSdM1XiTIKyUJkXyQQN5MMPVQUfYZHhFO00U2oMN6jz'
-STRIPE_PUBLISHABLE_KEY='pk_test_51M1tNCEz9Ud4aklFU5kzTrhh2VRwayYc9fZJUwYfBmjhONmU8iuR2FJlukifPLdtrcQVrOD2dTXveU35LGR1f3GH00EBAj2zaV'
+STRIPE_SECRET_KEY=''
+STRIPE_PUBLISHABLE_KEY=''
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com' # ex: smtp.gmail.com
 EMAIL_PORT = 465  # or the server PORT if non standard
-EMAIL_HOST_USER = 'merchab08@gmail.com'  # a username, usually the e-mail address
-EMAIL_HOST_PASSWORD = 'ywiwavyesxofelzb'  # the smtp user password
+EMAIL_HOST_USER = ''  # a username, usually the e-mail address
+EMAIL_HOST_PASSWORD = ''  # the smtp user password
 EMAIL_USE_TLS = False  # True if TLS should be enabled or False otherwise
 EMAIL_USE_SSL = True  # True if SSL should be enabled or False otherwise
 
