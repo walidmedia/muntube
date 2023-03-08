@@ -41,7 +41,6 @@
                   <div class="card bg-dark mb-4">
                     <h5 class="card bg-dark">Détails du profil</h5>
                     <!-- Account -->
-
                     <hr class="my-0" />
                     <div class="card bg-dark">
                       <form id="formAccountSettings" method="POST" action="{% url 'update_user' user.id %}" enctype="multipart/form-data">
@@ -155,7 +154,7 @@ document.getElementById('country-select').addEventListener('change', (event) => 
 
                           <div class="mb-3 col-md-6">
                             <label for="state" class="form-label">Code Chaine YouTube</label>
-                            <input style="border: 1px solid #7f5a07 !important;background-color: #191C24" class="form-control" value="{{ profil.id_youtube_ch }}" type="text" id="state" name="id_ytb" placeholder="Code d'fidentifiant de votre chaine yotube" />
+                            <input style="border: 1px solid #7f5a07 !important;background-color: #191C24" class="form-control" value="{% if profil.id_youtube_ch %}{{ profil.id_youtube_ch }}{% else %}{% endif %}" type="text" id="state" name="id_ytb" placeholder="Code d'fidentifiant de votre chaine yotube" />
                           </div>
                           <div class="mb-3 col-md-6">
                             <label for="zipCode" class="form-label">Dons</label>

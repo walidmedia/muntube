@@ -156,9 +156,9 @@ n’avons aucune autre source de rémunération.</p>
     </script>
 {% endblock %}
 
-
-{% block content %}
     {% include 'base.html' %}
+{% block content %}
+
 <div class="container-fluid ">
     <div class="row">
         <div class="col-xl-1"></div>
@@ -171,10 +171,10 @@ n’avons aucune autre source de rémunération.</p>
                   <div class="tab"><h6 class="mb-3">Détails </h6>
                       <hr>
                     <div class="input-group">
-                    <textarea required class="form-control mb-3" name="titre" aria-label="With textarea" placeholder="Titre"></textarea>
+                    <textarea required class="form-control mb-3" name="titre" id="id_title" aria-label="With textarea" placeholder="Titre"></textarea>
                   </div>
                  <div class="input-group">
-                    <textarea class="form-control mb-3" style="height: 180px" name="description" aria-label="With textarea" placeholder="Description"></textarea>
+                    <textarea class="form-control mb-3" style="height: 180px" name="description" id="id_description" aria-label="With textarea" placeholder="Description"></textarea>
                   </div>
                   </div>
                   <div class="tab"><h5 class="mb-3">Contenue</h5>
@@ -209,7 +209,7 @@ n’avons aucune autre source de rémunération.</p>
                     <div class="mb-3">
                          <select required style="color: white" class="form-select" name="categorie" aria-label="Default select example">
                             {% for catg in categorys %}
-                                 <option value="{{ catg.id }}">{{ catg.name }}</option>
+                                 <option id="id_category" value="{{ catg.id }}">{{ catg.name }}</option>
                              {% endfor %}
                         </select>
                          <small style="color: #9c999a">Ajoutez votre vidéo à une catégorie pour permettre aux spectateurs de la trouver plus facilement.</small>
@@ -217,7 +217,7 @@ n’avons aucune autre source de rémunération.</p>
                      <div class="mb-3">
                          <select required style="color: white" class="form-select" name="play_list" aria-label="Default select example">
                             {% for play in play_lists %}
-                                 <option value="{{ play.id }}">{{ play.nom_playlist }}</option>
+                                 <option id="id_playlist" value="{{ play.id }}">{{ play.nom_playlist }}</option>
                              {% endfor %}
                         </select>
                      <small style="color: #9c999a">Ajoutez votre vidéo à une ou plusieurs playlists. Les playlists peuvent aider les spectateurs à trouver vos contenus plus rapidement. </small>
@@ -238,12 +238,50 @@ n’avons aucune autre source de rémunération.</p>
                       <div class="form-check form-switch">
                             <input style="background-color: #664d03;" name="contenue_18" class="form-check-input" type="checkbox" role="switch"
                                 id="flexSwitchCheckChecked">
-                            <label class="form-check-label" for="flexSwitchCheckChecked">Contenue +18</label>
+                            <label class="form-check-label" for="flexSwitchCheckChecked">Contenue sensible</label>
                         </div>
                   </div>
                 <div class="tab">
-                  <h5 class="mb-3">Chargement de la vidéo</h5>
+                  <h5 class="mb-3">Confirmation</h5>
                   <hr>
+                    <!--<div>
+  <p>Title: <span id="title"></span></p>
+  <p>Description: <span id="description"></span></p>
+  <p>Video url: <span id="video-url"></span></p>
+  <p>Miniature url: <span id="miniature-url"></span></p>
+  <p>Liens: <span id="liens"></span></p>
+  <p>Documents: <span id="documents"></span></p>
+  <p>Category: <span id="category"></span></p>
+  <p>Playlist: <span id="playlist"></span></p>
+  <p>Public/Privé: <span id="visibility"></span></p>
+  <p>Contenu sensible: <span id="sensitive-content"></span></p>
+</div>-->
+                    <script>
+  // Retrieve values from the form fields
+  var title = document.getElementById('id_title').value;
+  var description = document.getElementById('id_description').value;
+  var videoUrl = document.getElementById('id_video_url').value;
+  var miniatureUrl = document.getElementById('id_miniature_url').value;
+  var liens = document.getElementById('id_liens').value;
+  var documents = document.getElementById('id_documents').value;
+  var category = document.getElementById('id_category').value;
+  var playlist = document.getElementById('id_playlist').value;
+  var visibility = document.querySelector('input[name="visibility"]:checked').value;
+  var sensitiveContent = document.querySelector('input[name="sensitive_content"]:checked').value;
+
+  // Update the content of the HTML elements
+  document.getElementById('title').textContent = title;
+  document.getElementById('description').textContent = description;
+  document.getElementById('video-url').textContent = videoUrl;
+  document.getElementById('miniature-url').textContent = miniatureUrl;
+  document.getElementById('liens').textContent = liens;
+  document.getElementById('documents').textContent = documents;
+  document.getElementById('category').textContent = category;
+  document.getElementById('playlist').textContent = playlist;
+  document.getElementById('visibility').textContent = visibility;
+  document.getElementById('sensitive-content').textContent = sensitiveContent;
+</script>
+
                 </div>
 
                   <div style="overflow:auto;">
@@ -252,7 +290,7 @@ n’avons aucune autre source de rémunération.</p>
                     border: solid 2px #ba7900;
                     background: rgba(70,40,9,0.81);" onclick="nextPrev(-1)">Précédent</button>
                       <button type="button" id="nextBtn" class="btn rounded-pill btn-outline-secondary" style="color: #ffffff;border: solid 2px #ba7900;background: rgba(70,40,9,0.81);" onclick="nextPrev(1)">Suivant</button>
-                      <button type="button" id="submitBtn" class="btn rounded-pill btn-outline-secondary" onclick="document.getElementById('regForm').submit()" style="color: #ffffff;border: solid 2px #ba7900;background: rgba(70,40,9,0.81);">Uploader</button>
+                      <button type="button" id="submitBtn" class="btn rounded-pill btn-outline-secondary" onclick="document.getElementById('regForm').submit()" style="color: #ffffff;border: solid 2px #ba7900;background: rgba(70,40,9,0.81);">Uploade</button>
                     </div>
                   </div>
                   <!-- Circles which indicates the steps of the form: -->

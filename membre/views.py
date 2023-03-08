@@ -29,7 +29,7 @@ from .forms import ChannelForm, CommentForm
 from .models import Video as vdeo, GalleryVideo, SubPlan, SubPlanFeature, Subscription, comment as commentaire, \
     savedvideo, Don, \
     VideoHistory, Notification, Channel, Like, Like_comment, soutien as Soutien, Channel, revendication as revendq, \
-    Subscription_channel, Report_comment, Report_video, Category, Video, Reclamations_Don
+    Subscription_channel, Report_comment, Report_video, Category, Video, Reclamations_Don, SavedLink
 import stripe
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -828,6 +828,27 @@ def save_video(request, pk):
         c.save()
         return HttpResponseRedirect(reverse('video', args=[str(pk)]))
 
+@login_required
+def save_video(request, pk):
+    if request.method == "POST":
+        video = get_object_or_404(vdeo, id=request.POST.get('id_video'))
+        user = User.objects.get(id=request.user.id)
+        c = savedvideo(video=video, user=user)
+        c.save()
+        return HttpResponseRedirect(reverse('video', args=[str(pk)]))
+
+@login_required
+@require_POST
+def save_link(request):
+    link = request.POST.get('link')
+    print(link)
+    print('liiiiiiiiiiiiiinkkkkkkkkkkkkkkkkkk')
+    if link:
+        SavedLink.objects.create(user=request.user, link=link)
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False})
+
 
 def vidéosjaime(request):
     vidéosjaime = vdeo.objects.filter(n_likes=request.user)
@@ -856,11 +877,15 @@ def a_regarder(request):
 def bibliothèque(request):
     chaines = UserAbonn.objects.filter(abonnements=request.user).order_by('-id')[:5]
     notifs = Notification.objects.filter(recipient_id=request.user.id)
+    abonnements = Subscription_channel.objects.filter(user=request.user)
     channels = Channel.objects.all()
+
+    links = SavedLink.objects.filter(user=request.user)[:10]
     context = {
         'chaines': chaines,
         'notifs': notifs,
-        'channels': channels,
+        'channels': abonnements,
+        'links': links,
     }
     return render(request, 'membre/bibliothèque.html', context)
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 from membre import models
-from membre.models import Channel, Like, revendication, Report_comment, Report_video, Category, VideoHistory
+from membre.models import Channel, Like, revendication, Report_comment, Report_video, Category, VideoHistory, SavedLink
 
 
 class commentAdmin(admin.ModelAdmin):
@@ -33,25 +33,8 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 admin.site.register(Category, CategoryAdmin)
 
+admin.site.register(SavedLink)
 
-class GalleryVideoAdmin(admin.ModelAdmin):
-	list_display=('alt_text','vid')
-admin.site.register(models.GalleryVideo,GalleryVideoAdmin)
-
-class SubPlanAdmin(admin.ModelAdmin):
-	list_editable=('highlight_status','max_member')
-	list_display=('title','price','max_member','validity_days','highlight_status')
-admin.site.register(models.SubPlan,SubPlanAdmin)
-
-class SubPlanFeatureAdmin(admin.ModelAdmin):
-	list_display=('title','subplans')
-	def subplans(self,obj):
-		return " | ".join([sub.title for sub in obj.subplan.all()])
-admin.site.register(models.SubPlanFeature,SubPlanFeatureAdmin)
-
-class PlanDiscountAdmin(admin.ModelAdmin):
-	list_display=('subplan','total_months','total_discount')
-admin.site.register(models.PlanDiscount,PlanDiscountAdmin)
 
 class SubscriberAdmin(admin.ModelAdmin):
 	list_display = ('user', 'image_tag', 'mobile')

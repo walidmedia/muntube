@@ -122,6 +122,13 @@ class Like(models.Model):
         except Like.DoesNotExist:
             return False
 
+class SavedLink(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    link = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return '%s - %s' % (self.user.username, self.link)
+
 class VideoHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     video = models.ForeignKey(Video, on_delete=models.CASCADE)

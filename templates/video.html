@@ -149,6 +149,29 @@ nav-link:hover {
   height: 100%;
   object-fit: cover;
 }
+
+.question_mark {
+    position: relative;
+    display: inline-block;
+}
+.question_mark .popup {
+    visibility: hidden;
+    position: absolute;
+    z-index: 1;
+    width: 200px;
+    background-color: #fff;
+    color: rgba(70, 40, 9, 0.81);
+    text-align: center;
+    padding: 10px;
+    padding-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgb(140, 90, 13);
+}
+
+
+.question_mark:hover .popup {
+    visibility: visible;
+}
 </style>
 <title>Muntube</title>
 {% block content %}
@@ -198,7 +221,30 @@ nav-link:hover {
                                         <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
                                         <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10€">
                                         <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
-                                        <p class="mb-3" style="position: absolute;right: 40px;">
+                                        <br>
+                                            <div class="question_mark">
+                                            <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
+                                            <div class="popup">
+                                                <p style="font-size: 12px">Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            // Récupération de la popup et du point d'interrogation
+                var popup = document.querySelector('.question_mark .popup');
+                var questionMark = document.querySelector('.question_mark i');
+
+                // Ajout de l'événement "mouseenter" au point d'interrogation
+                questionMark.addEventListener('mouseenter', function() {
+                    popup.style.visibility = 'visible';
+                });
+
+                // Ajout de l'événement "mouseleave" à la popup
+                popup.addEventListener('mouseleave', function() {
+                    popup.style.visibility = 'hidden';
+                });
+
+                                        </script>
+                                            <p class="mb-3" style="position: absolute;right: 40px;">
                                             <button  id="stripe-button" type="submit" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;
                                               background-color: rgba(70,40,9,0.81); padding-left: 40px;padding-right: 40px;padding-bottom: 3px;padding-top: 3px;border: 1px solid rgba(70,40,9,0.81) !important;">
                                                 <strong>Suivant</strong>
@@ -334,7 +380,30 @@ function getUrlParameter(name) {
                                         <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
                                                                             <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10€">
                                         <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
-                                        <p class="mb-3" style="position: absolute;right: 40px;">
+                                        <br>
+                                            <div class="question_mark">
+                                            <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
+                                            <div class="popup">
+                                                <p style="font-size: 12px">Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            // Récupération de la popup et du point d'interrogation
+                var popup = document.querySelector('.question_mark .popup');
+                var questionMark = document.querySelector('.question_mark i');
+
+                // Ajout de l'événement "mouseenter" au point d'interrogation
+                questionMark.addEventListener('mouseenter', function() {
+                    popup.style.visibility = 'visible';
+                });
+
+                // Ajout de l'événement "mouseleave" à la popup
+                popup.addEventListener('mouseleave', function() {
+                    popup.style.visibility = 'hidden';
+                });
+
+                                        </script>
+                                            <p class="mb-3" style="position: absolute;right: 40px;">
                                             <button  id="stripe-button" type="submit" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;
                                               background-color: rgba(70,40,9,0.81); padding-left: 40px;padding-right: 40px;padding-bottom: 3px;padding-top: 3px;border: 1px solid rgba(70,40,9,0.81) !important;">
                                                 <strong>Suivant</strong>
@@ -467,7 +536,30 @@ function getUrlParameter(name) {
                                         <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
                                                                             <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10€">
                                         <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
-                                        <p class="mb-3" style="position: absolute;right: 40px;">
+                                        <br>
+                                            <div class="question_mark">
+                                            <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
+                                            <div class="popup">
+                                                <p style="font-size: 12px">Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            // Récupération de la popup et du point d'interrogation
+                var popup = document.querySelector('.question_mark .popup');
+                var questionMark = document.querySelector('.question_mark i');
+
+                // Ajout de l'événement "mouseenter" au point d'interrogation
+                questionMark.addEventListener('mouseenter', function() {
+                    popup.style.visibility = 'visible';
+                });
+
+                // Ajout de l'événement "mouseleave" à la popup
+                popup.addEventListener('mouseleave', function() {
+                    popup.style.visibility = 'hidden';
+                });
+
+                                        </script>
+                                            <p class="mb-3" style="position: absolute;right: 40px;">
                                             <button  id="stripe-button" type="submit" class="btn btn-warning rounded-pill me-2" style="color: #f8e9c2;
                                               background-color: rgba(70,40,9,0.81); padding-left: 40px;padding-right: 40px;padding-bottom: 3px;padding-top: 3px;border: 1px solid rgba(70,40,9,0.81) !important;">
                                                 <strong>Suivant</strong>
@@ -594,8 +686,7 @@ function getUrlParameter(name) {
                                 kind="subtitles"
                                 srclang="es"
                                 src="captions/vtt/sintel-es.vtt" />
-                        </video>-->python3 -m tkinter
-
+                        </video>-->
                     <div class="col-sm-12 col-md-12 col-xl-12">
                     <div style="background-color: #191C24; " class="card mb-2">
                         <h5 class="card-header" style="color: #fdecdd">{{ v.title }}</h5>
@@ -874,7 +965,30 @@ function getUrlParameter(name) {
                                     <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
                                     <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10€">
                                     <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
-                                    <p class="mb-3" style="position: absolute;right: 40px;">
+<br>
+                        <div class="question_mark">
+                            <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
+                            <div class="popup">
+                                <p>Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
+                            </div>
+                        </div>
+                        <script>
+                            // Récupération de la popup et du point d'interrogation
+var popup = document.querySelector('.question_mark .popup');
+var questionMark = document.querySelector('.question_mark i');
+
+// Ajout de l'événement "mouseenter" au point d'interrogation
+questionMark.addEventListener('mouseenter', function() {
+    popup.style.visibility = 'visible';
+});
+
+// Ajout de l'événement "mouseleave" à la popup
+popup.addEventListener('mouseleave', function() {
+    popup.style.visibility = 'hidden';
+});
+
+                        </script>
+                                        <p class="mb-3" style="position: absolute;right: 40px;">
                                         <button id="stripe-button" type="submit" class="btn rounded-pill btn-outline-secondary" style="background-color: #B88E6D; color: white; font-size: small">
                                             <strong>Suivant</strong>
                                         </button>
@@ -932,7 +1046,60 @@ function getUrlParameter(name) {
                                         <div class="bg-secondary rounded h-100 p-4">
                                         <h6 class="border-bottom" style="color: #6e6a69">Liens Utiles</h6>
                                             {% if v.link %}
-                                                <p style="color: #ffffff "><span><i class="fa fa-link me-3 text-white"></i></span>liens pour telecharger l'outils de tuto <a style="color: #B88E6D" href="{{ v.link }}">{{ v.link }}</a>.</p>
+                                                <p style="color: #ffffff "><span><i class="fa fa-link me-3 text-white"></i></span>liens pour telecharger l'outils de tuto <a style="color: #B88E6D" href="{{ v.link }}">{{ v.link }}</a>.
+<form id="save-link-form">
+  {% csrf_token %}
+  <!-- other form fields here -->
+  <button type="submit" class="btn btn-secondary small"><i class="fa fa-save"></i>Enregistrer lien</button>
+</form>
+<script>
+document.getElementById('save-link-form').addEventListener('submit', function(event) {
+  event.preventDefault(); // prevent the form from submitting normally
+  saveLink({{ v.link }});
+});
+
+function saveLink(link) {
+  console.log('saveLink() called with link:', link);
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '{% url 'save_link' %}');
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  var csrftoken = getCookie('csrftoken');
+  xhr.setRequestHeader('X-CSRFToken', csrftoken);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      alert('Link saved!');
+    } else {
+      alert('Failed to save link');
+      console.error(xhr.statusText);
+    }
+  };
+  xhr.onerror = function() {
+    alert('Failed to save link');
+    console.error(xhr.statusText);
+  };
+  xhr.send('link=' + encodeURIComponent(link));
+}
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+
+
+
+                                                </p>
                                                 <hr>
                                             {% endif %}
                                         </div>
@@ -1537,14 +1704,15 @@ function bindReplyForm(form) {
                             <div style="background-color: #191C24; " class="card h-100">
                              <a class="v169" href="{% url 'video' v.id %}?video={{ v.vid.url }}">
                                 {% if v.miniature %}
-                                <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
+                                <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}"style="object-fit: cover;" >
                                     <source src="{{ v.vid.url }}#t={{ history.time_paused }}" type="video/mp4" />
                                 </video>
                                  {% else %}
-                                 <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{% static 'images/Playlist non classée.svg' %}" >
+                                 <video id="video" onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{% static 'images/Playlist non classée.svg' %}"style="object-fit: cover;" >
                                     <source src="{{ v.vid.url }}#t={{ history.time_paused }}" type="video/mp4" />
                                 </video>
                                  {% endif %}
+                             </a>
 
                                 <script>
                                   var video = document.getElementById("video");
@@ -1560,7 +1728,7 @@ function bindReplyForm(form) {
                                   });
                                 </script>
 
-                            </a>
+
                             <div class="row justify-content-between ">
                                 <div style="margin-left: 0.5rem !important;" class="col-11 text-right mt-1">
                                     <a href="{% url 'video' v.id %}" class="text-white" style="overflow-wrap: break-word;font-size: 13px;" title="{{ v.title }}">{{ v.title }}</a>

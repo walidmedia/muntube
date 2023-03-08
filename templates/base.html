@@ -154,7 +154,7 @@
                 </div>-->
                 <div  class="navbar-nav w-100">
                     <a href="{% url 'index' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-home me-2"></i><strong style="color: white">Accueil</strong></a>
-                    <!--<a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>-->
+                    <a href="{% url 'bibliothèque' %}" class="nav-item nav-link"><i  style="background-color: #B88E6D; color: #000"class="fa fa-book me-2"></i><strong style="color: white">Bibliothèque</strong></a>
                     <a href="{% url 'view_history' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-history me-2"></i><strong style="color: white">Historique</strong></a>
                     <a href="{% url 'a_regarder' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-eye me-2"></i><strong style="color: white">A regarder</strong></a>
                     <a href="{% url 'vidéosjaime' %}" class="nav-item nav-link"><i style="background-color: #B88E6D; color: #000" class="fa fa-star me-2"></i><strong style="color: white">Vidéos "j'aime"</strong></a>
@@ -180,7 +180,7 @@
         <div class="content">
             <!-- Navbar Start -->
             <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-                <a href="index.html" class="navbar-brand d-flex d-lg-none me-4">
+                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
                     <h2 class="text-primary mb-0"><i class="fa fa-"></i></h2>
                 </a>
             <div id="bars">
@@ -263,7 +263,7 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
                     <div class="nav-item dropdown">
                     {% if user.is_authenticated %}
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{% if user.photo %}{{ user.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="" style="width: 40px; height: 40px;">
+                            <img class="rounded-circle me-lg-2" src="{% if user.photo == True %}{{ user.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="" style="width: 40px; height: 40px;">
                             <span class="d-none d-lg-inline-flex"><strong class="text-white">{{ user.username }}</strong></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 ">
