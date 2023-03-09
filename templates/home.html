@@ -121,7 +121,7 @@
                 <!-- example.html -->
 
 
-
+{% if videos.count > 0 %}
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center mt-3">
     <li class="page-item {% if not videos.has_previous %}disabled{% endif %}">
@@ -143,8 +143,8 @@
     </li>
   </ul>
 </nav>
-
-
+{% else %}
+{% endif %}
 
 
 
