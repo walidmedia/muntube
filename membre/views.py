@@ -2,7 +2,6 @@ import json
 import time
 import uuid
 from functools import reduce
-#from idlelib import history
 import plotly.express as px
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
