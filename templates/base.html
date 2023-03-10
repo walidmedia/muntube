@@ -108,10 +108,12 @@
     left: 0;
     right: 0;
     background-color: #191C24;
+          z-index: 20; /* Add this line */
+
   }
 
   .search-open #search-input {
-    width: 100%;
+    width: 20%;
     height: 40px;
     padding: 10px;
     opacity: 1;
@@ -130,11 +132,10 @@
   background-color: dimgrey;
 }
 
+
 </style>
 
     <div class="container-fluid position-relative d-flex p-0">
-
-
 
         <!-- Sidebar Start -->
         <div id="sidebar" class="sidebar pe-4 pb-3">
@@ -290,7 +291,6 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
                                 </span>
                                 {% endif %}
                             </a>
-
                             <hr class="mt-1 mb-1">
                             <a href="{% url 'video_stats' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-star me-3"></i>Statistiques</a>
                             <hr class="mt-1 mb-1">
@@ -323,46 +323,72 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
 
         <!-- Nav Mobile -->
 
-        <div class="mobile-nav footer">
-            {% if user.is_authenticated %}
-            <a href="{% url 'index' %}" class="bloc-icon">
-                <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
-            </a>
-            <a href="{% url 'bibliothèque' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
-            </a>
-            <a href="{% url 'upload' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2"><i class="fa fa-plus"></i></button>            </a>
-            </a>
-            <a href="{% url 'chaine' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
-            </a>
-            <a href="{% url 'monprofile' user.pk %}" class="bloc-icon">
-                <button style="background-color: #B88E6D; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2">
-                    <i class="fa fa-user"></i>
-                </button>
+<div class="mobile-nav footer">
+  {% if user.is_authenticated %}
+  <a href="{% url 'index' %}" class="bloc-icon">
+    <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
+  </a>
+  <a href="{% url 'bibliothèque' %}" class="bloc-icon">
+    <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button>
+  </a>
+  <a href="#" class="bloc-icon">
+    <button id="add-btn" style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2"><i class="fa fa-plus"></i></button>
+  </a>
+  <a href="{% url 'chaine' %}" class="bloc-icon">
+    <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>
+  </a>
+  <a href="{% url 'monprofile' user.pk %}" class="bloc-icon">
+    <button style="background-color: #B88E6D; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2">
+      <i class="fa fa-user"></i>
+    </button>
+  </a>
+  {% endif %}
+  <div id="add-menu">
+    <button id="close-btn" type="button" class="btn btn-lg btn-lg-square  m-2" style="background-color: #B88E6D; color: #fdecdd;background: transparent"><i class="fa fa-times"></i></button>
+    <a href="#">Item 1</a>
+    <a href="#">Item 2</a>
+    <a href="#">Item 3</a>
+  </div>
+</div>
 
-            </a>
-            </a>
+<script>
+  const addBtn = document.querySelector("#add-btn");
+  const addMenu = document.querySelector("#add-menu");
+  const closeBtn = document.querySelector("#close-btn");
 
-            {% else %}
-            <a href="{% url 'index' %}" class="bloc-icon">
-                <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
-            </a>
-            <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button >           </a>
-            </a>
-            <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2"><i class="fa fa-plus"></i></button>            </a>
-            </a>
-            <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>            </a>
-            </a>
-            <a href="{% url 'login' %}" class="bloc-icon">
-                <button style="background-color: #B88E6D; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-user"></i></button>            </a>
-            </a>
-            {% endif %}
-        </div>
+  addBtn.addEventListener("click", () => {
+    addMenu.classList.toggle("show");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    addMenu.classList.remove("show");
+  });
+</script>
+
+<style>
+  #add-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #533f03;
+    display: none;
+    transform: translateY(100%);
+    transition: transform 0.3s ease-out;
+  }
+  #add-menu.show {
+    display: block;
+    transform: translateY(0);
+  }
+  #add-menu a {
+    display: block;
+    padding: 10px;
+    color: #fdecdd;
+    text-align: center;
+  }
+</style>
+
+
         <div class="sidebar-toggler" id="sidebarToggler">
           <span class="icon-close" onclick="closeSidebar()"></span>
         </div>

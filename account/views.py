@@ -11,6 +11,8 @@ from django.contrib.auth import login as Login_process , logout, authenticate
 from django.contrib import messages
 from membre.models import Video, Notification, Channel
 
+def maintenance(request):
+    return render(request, 'maintenance.html')
 
 def index(request):
     notifs = Notification.objects.filter(recipient_id=request.user.id)
