@@ -4,8 +4,8 @@ from .views import login, logout_view, register, profile, confirm_register
 
 urlpatterns = [
     #path("", views.homepage, name="homepage"),
-    #path("", views.index, name="index"),
-    path("", views.maintenance, name="maintenance"),
+    path("", views.index, name="index"),
+    #path("", views.maintenance, name="maintenance"),
     path("profile", profile, name="profile"),
     path('login/', login, name='login'),
     path('logout_view/', logout_view, name='logout_view'),

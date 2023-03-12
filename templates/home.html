@@ -68,6 +68,7 @@
   height: 100%;
   object-fit: cover;
 }
+
     </style>
 
     {% block content %}
@@ -75,13 +76,13 @@
        <div class="container-fluid pt-4 px-4">
             <div class="row g-4">
                 <div class="col-sm-12 col-md-12 col-xl-12">
-                <h5 style="color: #B88E6D" class="mb-1">Trending</h5>
+                <h5 style="color: #B88E6D" class="mb-1"></h5>
                 <hr style="color:  #B88E6D" class="mt-0">
                     <div id="videos" class="row g-4">
                         {% for v in videos %}
                         <div class="col-sm-6 col-xl-3">
                             <div class="rounded d-flex align-items-center justify-content-between h-100">
-                                <div style="background-color: #191C24; " class="card h-100">
+                                <div style="background-color: rgba(70,40,9,0.81); " class="card h-100">
                                 <a class="v169" href="{% url 'video' v.id %}?video={{ v.vid.url }}">
                                     {% if v.miniature %}
                                     <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
@@ -120,34 +121,31 @@
 
                 <!-- example.html -->
 
-
-{% if videos.count > 0 %}
-<nav aria-label="Page navigation">
-  <ul class="pagination justify-content-center mt-3">
-    <li class="page-item {% if not videos.has_previous %}disabled{% endif %}">
-      <a class="page-link" href="{% if videos.has_previous %}?page={{ videos.previous_page_number }}{% endif %}" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-        <span class="sr-only">Previous</span>
-      </a>
-    </li>
-    <li class="page-item active">
-      <span class="page-link">
-        Page {{ videos.number }} of {{ videos.paginator.num_pages }}
-      </span>
-    </li>
-    <li class="page-item {% if not videos.has_next %}disabled{% endif %}">
-      <a class="page-link" href="{% if videos.has_next %}?page={{ videos.next_page_number }}{% endif %}" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-        <span class="sr-only">Next</span>
-      </a>
-    </li>
-  </ul>
-</nav>
-{% else %}
-    <p class="text-muted" style="font-size: 14px">auccune video à affiché</p>
-{% endif %}
-
-
+                {% if videos.count > 0 %}
+                <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center mt-3">
+                    <li class="page-item {% if not videos.has_previous %}disabled{% endif %}">
+                      <a class="page-link" href="{% if videos.has_previous %}?page={{ videos.previous_page_number }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                    </li>
+                    <li class="page-item active">
+                      <span class="page-link">
+                        Page {{ videos.number }} of {{ videos.paginator.num_pages }}
+                      </span>
+                    </li>
+                    <li class="page-item {% if not videos.has_next %}disabled{% endif %}">
+                      <a class="page-link" href="{% if videos.has_next %}?page={{ videos.next_page_number }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+                {% else %}
+                    <p class="text-muted" style="font-size: 14px"></p>
+                {% endif %}
 
                 </div>
             </div>

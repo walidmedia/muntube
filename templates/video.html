@@ -163,7 +163,7 @@ nav-link:hover {
     color: rgba(70, 40, 9, 0.81);
     text-align: center;
     padding: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 10px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgb(140, 90, 13);
 }
@@ -223,11 +223,11 @@ nav-link:hover {
                                         <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
                                         <br>
                                             <div class="question_mark">
-                                            <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
-                                            <div class="popup">
-                                                <p style="font-size: 12px">Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
+                                                <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
+                                                <div class="popup">
+                                                    <p style="font-size: 12px">Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
+                                                </div>
                                             </div>
-                                        </div>
                                         <script>
                                             // Récupération de la popup et du point d'interrogation
                 var popup = document.querySelector('.question_mark .popup');
@@ -718,25 +718,25 @@ function getUrlParameter(name) {
                                         <script>
                                     const likeButton = document.querySelector('#like_button');
                                     likeButton.addEventListener('click', function() {
-    fetch(`{% url 'like_video' v.id %}`)
-    .then(response => response.json())
-    .then(data => {
-        const likesElement = document.querySelector('#likes');
-        likesElement.innerHTML = `${data.likes} J'aimes`;
+                                    fetch(`{% url 'like_video' v.id %}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const likesElement = document.querySelector('#likes');
+                                        likesElement.innerHTML = `${data.likes} J'aimes`;
 
-        // Update the like button based on the user's current like status
-        const likeButtonIcon = document.querySelector('#like_button i');
-        if (data.is_liked) {
-            likeButton.style.backgroundColor = "#ba7900";
-            likeButtonIcon.classList.remove('fa-heart-o');
-            likeButtonIcon.classList.add('fa-heart');
-        } else {
-            likeButton.style.backgroundColor = "#533f03";
-            likeButtonIcon.classList.remove('fa-heart');
-            likeButtonIcon.classList.add('fa-heart');
-        }
-    });
-});
+                                        // Update the like button based on the user's current like status
+                                        const likeButtonIcon = document.querySelector('#like_button i');
+                                        if (data.is_liked) {
+                                            likeButton.style.backgroundColor = "#ba7900";
+                                            likeButtonIcon.classList.remove('fa-heart-o');
+                                            likeButtonIcon.classList.add('fa-heart');
+                                        } else {
+                                            likeButton.style.backgroundColor = "#533f03";
+                                            likeButtonIcon.classList.remove('fa-heart');
+                                            likeButtonIcon.classList.add('fa-heart');
+                                        }
+                                    });
+                                });
 
                                     </script>
                                     </td>
@@ -944,7 +944,6 @@ function getUrlParameter(name) {
                                                     });
                                                 });
                                              </script>
-
                                         </td>
                                     </tr>
                                     <tr>
@@ -957,16 +956,7 @@ function getUrlParameter(name) {
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="text-center mb-4 mt-3">
-                                <script src="https://js.stripe.com/v3/"></script>
-                                    <form action="{% url 'proced_don' v.id %}" method="post">
-                                      {% csrf_token %}
-                                    <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
-                                    <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10€">
-                                    <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
-<br>
-                        <div class="question_mark">
+                        <div class="question_mark container-fluid mt-3">
                             <i class="fa fa-question-circle" aria-hidden="true" style="color: #533f03"></i>
                             <div class="popup">
                                 <p>Vos dons permettent de soutenir MunTube, la plateforme de la Communauté Noire sans publicité, sans censure et sans revente de vos données.</p>
@@ -988,6 +978,16 @@ popup.addEventListener('mouseleave', function() {
 });
 
                         </script>
+                        <div class="row">
+                            <div class="text-center mb-4 mt-3">
+                                <script src="https://js.stripe.com/v3/"></script>
+                                    <form action="{% url 'proced_don' v.id %}" method="post">
+                                      {% csrf_token %}
+                                    <input class="me-3" type="button" onclick="decrement()" style="font-size: 50px;background: transparent;border: 0;color: white" value="-" />
+                                    <input class="me-3 mb-3" style="width: 130px; font-size: 50px; height: 130px; border: 2px solid #B88E6D;background-color: #191C24;color: white;border-radius: 50%;display: inline-block;text-align: center;"  type="text" name="don" id="don" value="10€">
+                                    <input type="button" onclick="increment()" style="font-size: 50px;background: transparent;border: 0;color: white" value="+" />
+<br>
+
                                         <p class="mb-3" style="position: absolute;right: 40px;">
                                         <button id="stripe-button" type="submit" class="btn rounded-pill btn-outline-secondary" style="background-color: #B88E6D; color: white; font-size: small">
                                             <strong>Suivant</strong>

@@ -131,7 +131,93 @@
 ::-webkit-scrollbar-thumb {
   background-color: dimgrey;
 }
+.notification-badge {
+  position: relative;
+}
 
+.notification-badge .badge {
+  position: absolute;
+  top: 5px;
+  right: -5px;
+  padding: 3px 5px;
+  border-radius: 50%;
+  background-color: red;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* new */
+}
+
+.navbar-search form {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-search input[type="text"] {
+  height: 40px;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 10px;
+  width: 600px;
+  background-color: #000000;
+}
+
+
+.navbar-search button[type="submit"] {
+  height: 30px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 3px;
+  padding: 5px 10px;
+  background-color: rgba(70, 40, 9, 0.81);
+  color: #fff;
+  cursor: pointer;
+}
+.navbar-search input[type="text"]::before {
+  content: "\f002";
+  font-family: FontAwesome;
+  font-size: 16px;
+  color: #aaa;
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+}
+.input-group-text {
+  border-radius: 20px;
+    background-color: #0a0a0a;
+}
+  #navbar-search-input:focus {
+    background-color: #000000;
+  }
+
+.navbar-nav.flex-row.show-search-form .nav-item:not(#navbar-search-icon) {
+  display: none;
+}
+
+.navbar-nav.flex-row.show-search-form .navbar-search {
+  display: block;
+}
+
+.navbar-nav.flex-row.show-search-form .navbar-search input[type="text"] {
+  width: 100%;
+}
+
+
+.hidee {
+    display: none;
+}
 
 </style>
 
@@ -176,155 +262,203 @@
         </div>
         <!-- Sidebar End -->
 
-
         <!-- Content Start -->
         <div class="content">
             <!-- Navbar Start -->
-            <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0">
-                <a href="#" class="navbar-brand d-flex d-lg-none me-4">
-                    <h2 class="text-primary mb-0"><i class="fa fa-"></i></h2>
+        <nav class="navbar navbar-expand bg-secondary navbar-dark sticky-top py-0">
+          <div class="container-fluid d-flex justify-content-end">
+            <div class="navbar-nav flex-row">
+
+              <div class="navbar-search me-lg-5" id="navbar-search-form">
+               <form action="{% url 'search' %}" method="get" class="search-formm">
+                  <div class="input-group">
+                    <input type="text" name="q" class="text-muted" placeholder="  Rechercher">
+                    <a type="submit" style="color: #6C7293" class="input-group-text" id="navbar-search-submit"><i class="fa fa-search"></i></a>
+                  </div>
+                </form>
+              </div>
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  $(".search-formm").on("submit", function(e) {
+    e.preventDefault(); // Prevent the form from submitting normally
+    var query = $(this).find('input[name="q"]').val(); // Get the search query
+    var url = $(this).attr("action") + "?q=" + encodeURIComponent(query); // Construct the search URL
+    window.location.href = url; // Redirect to the search URL
+  });
+
+  $("#navbar-search-submit").on("click", function(e) {
+    e.preventDefault(); // Prevent the link from triggering a page reload
+    $(this).closest("form").submit(); // Submit the search form
+  });
+});
+</script>
+
+
+              <div class="nav-item" id="navbar-search-icon">
+                <a class="nav-link" href="#">
+                  <i class="fas fa-search"></i>
                 </a>
-            <div id="bars">
-                <a href="#" class="sidebar-toggler flex-shrink-0" style="color: #B88E6D;
-                text-decoration: none;">
-                    <i class="fa fa-bars"></i>
+              </div>
+
+              <div class="nav-item dropdown navbar-hide">
+                <a class="nav-link" href="#" data-bs-toggle="dropdown">
+                  <i class="fas fa-bell position-relative">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                      9
+                      <span class="visually-hidden">unread messages</span>
+                    </span>
+                  </i>
                 </a>
-            </div>
-
-
-                <div class="navbar-nav align-items-center ms-auto">
-
-                    <div class="search-container">
-                      <form action="{% url 'search' %}" method="get">
-                        <input type="text" name="q" id="search-input" placeholder="Rechercher">
-                      </form>
-                      <div class="search-icon" onclick="openSearch()">
-                        <i class="fa fa-search"></i>
-                      </div>
-                    </div>
-
-                    <script>
-                        function openSearch() {
-  let searchContainer = document.querySelector(".search-container");
-  let searchInput = document.getElementById("search-input");
-  searchContainer.classList.toggle("search-open");
-
-  if (searchInput.value) {
-    searchInput.form.submit();
-  }
-}
-
-function performSearch(event) {
-  if (event.type === "submit" || event.keyCode === 13) {
-    event.preventDefault();
-    let searchInput = document.getElementById("search-input").value;
-    console.log("Searching for: " + searchInput);
-
-    // Perform search and get result
-    let result = performSearch(searchInput);
-    console.log("Search result: " + result);
-  }
-}
-
-// Add the event listener to the form
-document.querySelector("form").addEventListener("submit", performSearch);
-
-// Add the event listener to the search input
-document.querySelector("#search-input").addEventListener("keyup", performSearch);
-
-// Add the event listener to the search icon
-document.querySelector(".search-icon").addEventListener("click", performSearch);
-
-                    </script>
-                    <!--<form action="{% url 'search' %}" method="get" class="navbar-nav">
-                        <input class="form-control bg-dark border-0" type="text" placeholder="Rechercher">
-                    </form>-->
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link" data-bs-toggle="dropdown">
-                            <i style="background-color: #B88E6D;color: black" class="fa fa-bell"></i>
-                            <span class="d-none d-lg-inline-flex"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            {% if notifs %}
-                            {% for n in notifs %}
-                                {% if n.recipient.id == user.id %}
-                                <a href="#" class="dropdown-item">
-                                    <h6 class="fw-normal mb-0" style="color:#B88E6D;">{{ n.subject }}</h6>
-                                    <small style="color:#72473b;">Il ya {{ n.timestamp|timesince}}</small>
-                                </a>
-                                <hr class="dropdown-divider">
-                                {% endif %}
-                            {% endfor %}
-                            <a href="{% url 'mesnotifications' %}" class="dropdown-item text-center" style="color: #B88E6D">Voir tout</a>
-                            {% else %}
-                        <a href="#" class="dropdown-item text-center" style="color: #B88E6D">Accune notification</a>
+                <ul class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0" aria-labelledby="navbarDropdown">
+                  {% if notifs %}
+                    {% for n in notifs %}
+                        {% if n.recipient.id == user.id %}
+                        <li>
+                            <a class="dropdown-item" href="#">
+                               {{ n.subject }}<br>
+                                <small style="color:#72473b;">Il ya {{ n.timestamp|timesince}}</small>
+                            </a>
+                          </li>
+                        <hr class="dropdown-divider">
                         {% endif %}
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                    {% if user.is_authenticated %}
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{% if user.photo == True %}{{ user.photo.url }}{% else %}{% static 'images/profile1.jpg' %}{% endif %}" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex"><strong class="text-white">{{ user.username }}</strong></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 ">
-                            {% if user.is_authenticated %}
-                            <a href="{% url 'monprofile' user.pk %}" class="dropdown-item text-white mb-2"><i style="color: #B88E6D;" class="fa fa-home me-3"></i>Mon Profile</a>
-                            {% endif %}
-                            <hr class="mt-1 mb-1">
-                            <a href="{% url 'chaine' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-photo-video me-3"></i>Ma chaîne</a>
-                            <hr class="mt-1 mb-1">
-                            <a href="{% url 'mescommentaires' %}" class="dropdown-item text-white">
-                                <i style="color: #B88E6D;" class="fa fa-comment me-3"></i>
-                                <span class="me-3">Commentaires</span>
-                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
-                                    +99
-                                </span>
-                            </a>
-                        <hr class="mt-1 mb-1">
-                            <a href="{% url 'mesnotifications' %}" class="dropdown-item text-white">
-                                <i style="color: #B88E6D;" class="fa fa-bell me-3"></i>
-                                <span class="me-3">Notifications</span>
-                                {% if notifs.count > 0 %}
-                                <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
-                                    {{ notifs.count }}
-                                </span>
-                                {% endif %}
-                            </a>
-                            <hr class="mt-1 mb-1">
-                            <a href="{% url 'video_stats' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-star me-3"></i>Statistiques</a>
-                            <hr class="mt-1 mb-1">
-                            <a href="{% url 'mesdons' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mes dons reçus </a>
-                            <hr class="mt-1 mb-1">
-                            <a href="{% url 'stripe_info' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mon compte Stripe</a>
-                            <hr class="mt-1 mb-1">
+                    {% endfor %}
+                    <li>
+                    <a href="{% url 'mesnotifications' %}" class="dropdown-item text-center" style="color: #B88E6D">Voir tout</a>
+                    </li>
 
-                            <a href="#mesfilleuls" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-fill me-3"></i>Mes filleuls professionnels</a>
-                            <hr class="mt-1">
-                            <a href="{% url 'logout_view' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-sign-out-alt me-3"></i>Se déconnecter</a>
-                        </div>
                     {% else %}
+                <a href="#" class="dropdown-item text-center" style="color: #B88E6D">Accune notification</a>
+                {% endif %}
+                </ul>
+              </div>
+              <div class="nav-item dropdown navbar-hide">
+                {% if user.is_authenticated %}
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                            <img class="rounded-circle me-lg-2" src="{% static 'images/profile1.jpg' %}" alt="" style="width: 40px; height: 40px;">
-                            <span class="d-none d-lg-inline-flex"><strong class="text-white">Se connecter</strong></span>
+                        <i class="fa fa-user-circle"></i>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                            {% if user.is_authenticated %}
-                            <a href="{% url 'monprofile' user.pk %}" class="dropdown-item">Mon Profile</a>
+                    <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0 ">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'monprofile' user.pk %}" class="dropdown-item text-white mb-2"><i style="color: #B88E6D;" class="fa fa-home me-3"></i>Mon Profile</a>
+                        {% endif %}
+                        <hr class="mt-1 mb-1">
+                        <a href="{% url 'chaine' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-photo-video me-3"></i>Ma chaîne</a>
+                        <hr class="mt-1 mb-1">
+                        <a href="{% url 'mescommentaires' %}" class="dropdown-item text-white">
+                            <i style="color: #B88E6D;" class="fa fa-comment me-3"></i>
+                            <span class="me-3">Commentaires</span>
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
+                                +99
+                            </span>
+                        </a>
+                    <hr class="mt-1 mb-1">
+                        <a href="{% url 'mesnotifications' %}" class="dropdown-item text-white">
+                            <i style="color: #B88E6D;" class="fa fa-bell me-3"></i>
+                            <span class="me-3">Notifications</span>
+                            {% if notifs.count > 0 %}
+                            <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">
+                                {{ notifs.count }}
+                            </span>
                             {% endif %}
+                        </a>
+                        <hr class="mt-1 mb-1">
+                        <a href="{% url 'video_stats' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-star me-3"></i>Statistiques</a>
+                        <hr class="mt-1 mb-1">
+                        <a href="{% url 'mesdons' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mes dons reçus </a>
+                        <hr class="mt-1 mb-1">
+                        <a href="{% url 'stripe_info' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-money-bill me-3"></i>Mon compte Stripe</a>
+                        <hr class="mt-1 mb-1">
 
-                            <a href="{% url 'login' %}" class="dropdown-item text-white">Se connecter</a>
-                        </div>
-                    {% endif %}
+                        <a href="#mesfilleuls" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-fill me-3"></i>Mes filleuls professionnels</a>
+                        <hr class="mt-1">
+                        <a href="{% url 'logout_view' %}" class="dropdown-item text-white"><i style="color: #B88E6D;" class="fa fa-sign-out-alt me-3"></i>Se déconnecter</a>
                     </div>
-                </div>
-            </nav>
+                {% else %}
+                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <img class="rounded-circle me-lg-2" src="{% static 'images/profile1.jpg' %}" alt="" style="width: 40px; height: 40px;">
+                        <span class="d-none d-lg-inline-flex"><strong class="text-white">Se connecter</strong></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'monprofile' user.pk %}" class="dropdown-item">Mon Profile</a>
+                        {% endif %}
+
+                        <a href="{% url 'login' %}" class="dropdown-item text-white">Se connecter</a>
+                    </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </nav>
+        <div class="search-containner hidee mb-3">
+          <form action="{% url 'search' %}" method="get" class="search-formm">
+            <div class="input-group">
+              <input type="text" name="q" class="form-control rounded-0 border-end-0" placeholder="  Rechercher">
+              <button type="submit" class="input-group-text bg-transparent border-start-0">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+        <script>
+            const searchIcon = document.querySelector('#navbar-search-icon');
+const searchContainer = document.querySelector('.search-containner');
+const searchForm = document.querySelector('.search-formm');
+
+searchIcon.addEventListener('click', function(event) {
+  event.preventDefault();
+  searchContainer.classList.toggle('hidee');
+  searchForm.querySelector('input').focus();
+});
+
+document.addEventListener('click', function(event) {
+  if (!searchContainer.contains(event.target) && !searchIcon.contains(event.target)) {
+    searchContainer.classList.add('hidee');
+  }
+});
+
+        </script>
+        <script>
+
+const navbarSearchForm = document.getElementById('navbar-search-form');
+const navbarSearchIcon = document.getElementById('navbar-search-icon');
+const smallScreenMaxWidth = 576; // The Bootstrap 5 small screen breakpoint
+const navbarHide = document.querySelectorAll('.navbar-hide');
+
+  navbarSearchIcon.addEventListener('click', () => {
+    navbarSearchForm.classList.toggle('active');
+    navbarHide.forEach(element => element.classList.toggle('hide'));
+  });
+function handleSearchVisibility() {
+  if (window.innerWidth <= smallScreenMaxWidth) {
+    navbarSearchIcon.style.display = 'block';
+    navbarSearchForm.style.display = 'none';
+  } else {
+    navbarSearchIcon.style.display = 'none';
+    navbarSearchForm.style.display = 'flex';
+  }
+}
+
+handleSearchVisibility(); // Call the function initially to set the correct visibility
+
+window.addEventListener('resize', handleSearchVisibility); // Update visibility on window resize
+
+navbarSearchForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // prevent default form submission behavior
+  // handle the search submission here, for example:
+  const searchInput = document.getElementById('navbar-search-input');
+  const searchTerm = searchInput.value;
+  alert(`You searched for "${searchTerm}"`);
+});
+
+</script>
+
             <!-- Navbar End -->
 
         <!-- Nav Mobile -->
 
-<div class="mobile-nav footer">
-  {% if user.is_authenticated %}
+    <div class="mobile-nav">
+  <!--
   <a href="{% url 'index' %}" class="bloc-icon">
     <button style="background-color: #533f03;color: #fdecdd; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-home"></i></button>
   </a>
@@ -332,7 +466,7 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
     <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-book"></i></button>
   </a>
   <a href="#" class="bloc-icon">
-    <button id="add-btn" style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2"><i class="fa fa-plus"></i></button>
+    <button id="add-btn" style="background-color: #533f03; color: #fdecdd; background: transparent" type="button" class="btn btn-lg m-2 rounded"><i class="fa fa-bars"></i></button>
   </a>
   <a href="{% url 'chaine' %}" class="bloc-icon">
     <button style="background-color: #533f03; color: #fdecdd;background: transparent" type="button" class="btn btn-lg btn-lg-square  m-2"><i class="fa fa-photo-video"></i></button>
@@ -342,12 +476,39 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
       <i class="fa fa-user"></i>
     </button>
   </a>
-  {% endif %}
-  <div id="add-menu">
-    <button id="close-btn" type="button" class="btn btn-lg btn-lg-square  m-2" style="background-color: #B88E6D; color: #fdecdd;background: transparent"><i class="fa fa-times"></i></button>
-    <a href="#">Item 1</a>
-    <a href="#">Item 2</a>
-    <a href="#">Item 3</a>
+  -->
+<button style="background-color: #B88E6D;z-index:10;position: fixed;bottom: 20px; right: 20px;border: transparent"
+        id="add-btn" class="btn btn-warning fixed btn-lg-square">
+    <i style="color: white" class="fa fa-bars"></i>
+</button>
+
+  <div style="background-color: #2B2B2BFF" id="add-menu">
+    <button id="close-btn" type="button" class="btn rounded btn-lg btn-lg-square mb-0 mt-0" style="background-color: #B88E6D; position: fixed;right: 10px ;color: #fdecdd;background: transparent">
+        <i class="fa fa-times"></i>
+    </button><br><br>
+      <table>
+          <tr >
+              <td><a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Accueil</b></button></a></td>
+              <td> <a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Vidéos "j'aime"</b></button></a></td>
+          </tr>
+          <tr>
+              <td><a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Créer une vidéo</b></button></a></td>
+              <td> <a class="pb-0" href="#"><button  class="btn btn-secondary"><b>A regarder</b></button></a></td>
+          </tr>
+          <tr>
+              <td><a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Nous soutenir</b></button></a></td>
+              <td> <a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Aide</b></button></a></td>
+          </tr>
+          <tr>
+              <td><a class="pb-0" href="#"><button  class="btn btn-secondary"><b>bibliothèque</b></button></a></td>
+              <td> <a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Historique</b></button></a></td>
+          </tr>
+          <tr>
+              <td><a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Ma chaine</b></button></a></td>
+              <td> <a class="pb-0" href="#"><button  class="btn btn-secondary"><b>Profile</b></button></a></td>
+          </tr>
+      </table>
+    <a href="#" class="mb-3"></a>
   </div>
 </div>
 
@@ -356,51 +517,101 @@ document.querySelector(".search-icon").addEventListener("click", performSearch);
   const addMenu = document.querySelector("#add-menu");
   const closeBtn = document.querySelector("#close-btn");
 
-  addBtn.addEventListener("click", () => {
+
+  addBtn.addEventListener("click", (event) => {
+    event.preventDefault(); // add this line to prevent page from scrolling to the top
     addMenu.classList.toggle("show");
+
+    addBtn.classList.toggle("hide");
   });
 
   closeBtn.addEventListener("click", () => {
     addMenu.classList.remove("show");
+    addBtn.classList.remove("hide");
   });
 </script>
 
+
 <style>
+        table {
+      margin: 0 auto;
+    }
+    tr {
+      text-align: center;
+    }
   #add-menu {
     position: fixed;
     bottom: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     background-color: #533f03;
     display: none;
     transform: translateY(100%);
     transition: transform 0.3s ease-out;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      z-index:10;
   }
   #add-menu.show {
     display: block;
     transform: translateY(0);
+      z-index:10;
   }
   #add-menu a {
     display: block;
-    padding: 10px;
+    padding: 3px;
+    margin-right: 5px;
+    margin-left: 5px;
     color: #fdecdd;
     text-align: center;
+      z-index:10;
   }
+  #add-btn.hide {
+    display: none;
+  }
+
+.btn {
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-secondary {
+  background-color: #37373a;
+  color: #828282;
+  border: 2px solid #37373AFF;
+  width: 100%;
+  border-radius: 20px;
+}
+
+.btn-secondary:hover {
+  background-color: #37373AFF;
+  color: #B88E6D;
+  border-color: #828282;
+  cursor: pointer;
+}
+.blur {
+  filter: blur(3px);
+}
 </style>
 
 
-        <div class="sidebar-toggler" id="sidebarToggler">
+        <!--<div class="sidebar-toggler" id="sidebarToggler">
           <span class="icon-close" onclick="closeSidebar()"></span>
-        </div>
+        </div>-->
 
-        <!--<a style="background-color: #B88E6D" href="#" class="ouverture_sidebar btn btn-lg btn-warning sidebar-toggler fixed btn-lg-square back-to-top"><i class="fa fa-bars"></i></a>-->
 <script>
 $(document).click(function(event) {
     if (!$(event.target).closest("#sidebar").length) {
         $("#sidebar").removeClass("show");
     }
 });
+
 </script>
     {% block content %}
-
+        <div class="main-content"></div>
     {% endblock %}
