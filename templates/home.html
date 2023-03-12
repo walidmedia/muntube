@@ -82,7 +82,7 @@
                         {% for v in videos %}
                         <div class="col-sm-6 col-xl-3">
                             <div class="rounded d-flex align-items-center justify-content-between h-100">
-                                <div style="background-color: rgba(70,40,9,0.81); " class="card h-100">
+                                <div style="background-color: rgb(21,21,21); " class="card h-100">
                                 <a class="v169" href="{% url 'video' v.id %}?video={{ v.vid.url }}">
                                     {% if v.miniature %}
                                     <video onclick="play();" width="100%" height="100%" class="card embed-responsive embed-responsive-16by9" poster="{{ v.miniature.url }}" >
